@@ -1,6 +1,6 @@
 # Negative Capabilities — Build Roadmap
 
-**Generated:** 1782137453
+**Generated:** 1782139783
 **Source:** `sources/negcaps/structured-negative-capabilities.json`
 **Purpose:** Knowing exactly what doesn't work is how we plan what to build next.
 

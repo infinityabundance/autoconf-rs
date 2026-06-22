@@ -1,6 +1,6 @@
 # FORENSIC GAP ANALYSIS — GNU Autoconf → autoconf-rs
 
-**Generated:** 1782137453
+**Generated:** 1782139783
 **Source:** `sources/gaps/master-gap-analysis.json` + `needle-metrics.json`
 **Methodology:** Clean-room, black-box forensic parity. Zero GPL code.
 
