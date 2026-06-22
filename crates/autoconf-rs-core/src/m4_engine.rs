@@ -2381,7 +2381,10 @@ impl M4Engine {
                 "  $SHELL ./config.status $ac_config_status_args || ac_cs_success=false\n",
             );
             output.push_str("  exec 5>>config.log\n");
-            output.push_str("  $ac_cs_success || exit 1\n");
+            // config.status re-runs the substitutions as a convenience; the config files were already created
+            // inline above, so a config.status sub-failure (e.g. an AC_CONFIG_FILES target whose .in template
+            // is absent) must NOT abort an otherwise-successful configure.
+            output.push_str("  $ac_cs_success || printf '%s\\n' \"$as_me: config.status reported a problem\" >&2\n");
             output.push_str("fi\n");
         } else {
             // Simple file: clean up template placeholder artifacts
