@@ -547,6 +547,17 @@ pub fn generate_configure_prologue(
         )
         .as_bytes(),
     );
+    // Open the message/log file descriptors used throughout configure: fd 5 -> config.log, fd 6 -> a copy
+    // of stdout (so `>&5` / `>&6` redirections do not fail with "Bad file descriptor").
+    h.extend_from_slice(b"exec 5>>config.log\nexec 6>&1\n\n");
+    // C try-compile/link/run helpers. Defined in the prologue so they exist before ANY feature test calls
+    // them, whatever generation path produced the checks (otherwise: "ac_fn_c_try_compile: command not
+    // found"). They reference $ac_compile/$ac_link/$ac_ext at call time, which the body sets up.
+    h.extend_from_slice(b"ac_ext=c\nac_objext=o\nac_exeext=\n");
+    h.extend_from_slice(b"ac_fn_c_try_compile () {\n  rm -f conftest.$ac_objext conftest$ac_exeext\n  if { (eval \"$ac_compile\") 2>&5; } && test -s conftest.$ac_objext; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_objext conftest.$ac_ext\n  return $ac_retval\n}\n");
+    h.extend_from_slice(b"ac_fn_c_try_link () {\n  rm -f conftest.$ac_objext conftest$ac_exeext\n  if { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_objext conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
+    h.extend_from_slice(b"ac_fn_c_try_run () {\n  if { ac_try='$ac_link'; (eval \"$ac_try\") 2>&5; } && test -s conftest$ac_exeext && { ac_try='./conftest$ac_exeext'; (eval \"$ac_try\") 2>&5; }; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
+    h.extend_from_slice(b"ac_fn_c_try_cpp () {\n  if { (eval \"$ac_cpp conftest.$ac_ext\") 2>&5; }; then ac_retval=0; else ac_retval=1; fi\n  return $ac_retval\n}\n\n");
     h
 }
 

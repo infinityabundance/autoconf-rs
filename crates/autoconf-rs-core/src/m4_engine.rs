@@ -215,7 +215,7 @@ impl M4Engine {
         // AC_CONFIG_SRCDIR — verify source directory
         self.engine.macro_table.define(
             b"AC_CONFIG_SRCDIR",
-            b"# Verify source file $1 exists\nif test ! -f \"$srcdir/$1\"; then\n  as_fn_error \"cannot find sources ($1) in $srcdir\"\nfi",
+            b"# AC_CONFIG_SRCDIR: record the source tree and sanity-check the unique file (non-fatal).\ntest \"x$srcdir\" = x && srcdir=.\nif test ! -f \"$srcdir/$1\"; then\n  printf '%s\\n' \"configure: WARNING: cannot find sources ($1) in $srcdir\" >&2\nfi",
         );
 
         // AC_ARG_WITH — package option
@@ -2368,7 +2368,7 @@ impl M4Engine {
             output.push_str("\n# VPATH srcdir verification\n");
             output.push_str("if test -n \"$srcdir\"; then\n");
             output.push_str("  if test ! -d \"$srcdir\"; then\n");
-            output.push_str("    as_fn_error \"cannot find sources in $srcdir\"\n  fi\nfi\n");
+            output.push_str("    as_fn_error $? \"cannot find sources in $srcdir\"\n  fi\nfi\n");
             // Add --recheck support to config.status
             output.push_str("\nac_clean_CONFIG_STATUS=\n");
             output.push_str("\nif test \"$no_create\" != yes; then\n");
