@@ -13,7 +13,7 @@ New here? Start with `docs/REVIEW-IN-10-MINUTES.md`.
 | Phase | 6 — Honest Assessment — 101 sealed, 6 partial, 0 missing. Prescan + template dispatch with --pure-m4 escape hatch. |
 | Overall completion | **94.4%** |
 | Oracle | GNU Autoconf 2.73 (admitted) |
-| Courts sealed | 11 |
+| Courts sealed | 12 |
 | Tests passing | 2288 |
 | Acceptance gates | 7/7 PASS |
 | Clean-room scan | 72 files, 0 GPL contamination |
@@ -32,7 +32,7 @@ New here? Start with `docs/REVIEW-IN-10-MINUTES.md`.
 - ✅ **AC.LIBRARY.FUNCTIONS.1**: 40 AC_FUNC_* delegate to AC_CHECK_FUNC. ~5 stubs. Structural divergence admitted.
 - ✅ **AC.LIBRARY.HEADERS.1**: 11 AC_HEADER_* delegate to AC_CHECK_HEADER. 25 AC_TYPE_* delegate to AC_CHECK_TYPE. ~7 stubs.
 - ✅ **AC.DIAG.1**: 30 tests. WarningCategory taxonomy, DiagnosticManager, include stack.
-- ⬜ **AC.SURVIVAL.TIER1.1**: 18/18 Tier1 + 4/4 Tier2 survive. Self-host passes. Not runtime-tested.
+- ✅ **AC.SURVIVAL.TIER1.1**: Runtime-tested on 5 distros (Ubuntu 24.04, Debian 13, Fedora 43, AlmaLinux 9.8, openSUSE Leap 16) under QEMU/KVM via cargo install: 27/27 fixtures survive (Tier1 23/23, Tier2 4/4) after the shebang-first fix. Receipts in reports/vm-survival-receipts/.
 
 ## Quick Start
 

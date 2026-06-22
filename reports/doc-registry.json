@@ -1,30 +1,30 @@
 {
   "schema": "autoconf-rs-doc-registry-v1",
-  "generated_at": "1782139783",
+  "generated_at": "1782146712",
   "documents": [
     {
       "path": "docs/negative-capabilities.md",
-      "sha256": "5bd01958893240cf9c1a28af4733028ad4ad287075aa2f395a52aa683f185275",
+      "sha256": "1ff9ce9e171e771d688cd7f4456c42fabc1930594b8318e0b712477be6572b4c",
       "sources": {
         "sources/negcaps/structured-negative-capabilities.json": "8c65e71144d03b8ca0a5b4d3a35ec80bcd53575dc6bf91e6f1b18180603512db"
       },
-      "dsse_signature": "cb17cba088d89980ebec9ce59f56c2173a1013549dce479792e3063af15570ab"
+      "dsse_signature": "601ed36a5c7f95f088db85504096dcde41ad73f88d40a669b123df687f387f06"
     },
     {
       "path": "reports/FORENSIC-GAP-ANALYSIS.md",
-      "sha256": "367840dc2b3c23f2cb49946a15685beb8da22c22a57d20dcf1c6ed374f4b5e91",
+      "sha256": "6825069e8d16574f54c34669a3bde9ec210c659d35ed6c4856d4cc250cf6cd03",
       "sources": {
         "sources/gaps/master-gap-analysis.json": "db3e51cbfe4795bb7c5aab427d0dae1647616cf46363eba478fc8056210062d9"
       },
-      "dsse_signature": "47fed80685ccd883d0c0425d730c001f69c9e3d370954114fe72c2a40f69a9b5"
+      "dsse_signature": "c88375e20b7e851a791b4728997fb28fc03cce8eb577407d6de24ce0a8978b34"
     },
     {
       "path": "reports/NEEDLE-REPORT.md",
-      "sha256": "fb95a07bc935b033ffb8c01bd36747bce5f01a97f92b778f382d692ddef14453",
+      "sha256": "aa46fb8fd9bf3284bee9fbb4bde803f8ce5ebd8a1af5e7524ce4154747992078",
       "sources": {
         "sources/gaps/needle-metrics.json": "19db6c7492b4cbfaa9fa86089b53c58882e6425ee2a61d3d721f2e9c644f4a32"
       },
-      "dsse_signature": "507533dbd41c43c8a67ba94c7ff3db4f9917fb261fcfc8c2af0d16a028df0ef9"
+      "dsse_signature": "55816f81cca662c9b1f72ccb1960038c82b48036a5356bcf00be2f07afe29808"
     },
     {
       "path": "reports/claim-ladder.json",
@@ -36,35 +36,35 @@
     },
     {
       "path": "docs/REVIEW-IN-10-MINUTES.md",
-      "sha256": "142b654f5dbd05b70f901c418efc361de2517030d8ed4e3cf202e35f389be1b1",
+      "sha256": "01e6936ba597641c649922219ed9d8a18b6bd483bde9e3654f572f6fce3da683",
       "sources": {
-        "generated": "891098eb247f0320def125043ec5cc49c32e79906b0c877d2c0dfa87b7adb8d0"
+        "generated": "d415947df447bc370f7bcfbb9773da69c15a5992293c5e320a62af30745a58a8"
       },
-      "dsse_signature": "8795d8c10418f8dc2c15c9baebd75179a0b11d337ea0471b4a62d44994890f83"
+      "dsse_signature": "e23cdd589886d91edfdbca9a9c3323c07c5768a9463302adfd98e9a9b30332f7"
     },
     {
       "path": "STATUS.md",
       "sha256": "305b7657694941d4d6c331d676f16a612ff525db3f0f2e645410f008b67288c5",
       "sources": {
-        "generated": "891098eb247f0320def125043ec5cc49c32e79906b0c877d2c0dfa87b7adb8d0"
+        "generated": "d415947df447bc370f7bcfbb9773da69c15a5992293c5e320a62af30745a58a8"
       },
       "dsse_signature": "6063a743e56ec1684d7ece34252d98e2c41d1656818e0991a8b20d388a181659"
     },
     {
       "path": "docs/forensic-atlas.md",
-      "sha256": "407b9db8dd90930f85887006cf40ec767e20617f41951b7c29a2c82de98cbbfa",
+      "sha256": "0e1964b7009cb999b95509e45b8c2f4674076cfc595c05387495a31cc4482039",
       "sources": {
         "sources/docs/forensic-atlas.json": "6376efa273a3c9f719348fa95a738eefcc656ebe510109f9e669352754647799"
       },
-      "dsse_signature": "8fda1a0a2d26c7df8b993bd5257909b2c4fc7bb420294def7a42002dbc99bd18"
+      "dsse_signature": "3b9a5d7449057a78c048ff0ef885de5ed88a2e35cac5b0d069bf80d2f3a5cde3"
     },
     {
       "path": "README.md",
-      "sha256": "534caa437f47311fd0911d8593ba619b7a7568ff9fd6101c7df5e6ebdf03c22d",
+      "sha256": "e5a6cfaf03242d1e7a9c0d0693c7a76c7fecc62cc58a05d33c57d4f499b61ff8",
       "sources": {
-        "sources/docs/status.json": "928c63d14c813a09bea299c1658abd48e8e371a36f990dccfdeea62fe86f0175"
+        "sources/docs/status.json": "529cd9f60379d56dc4732f5f69cb8bcbba83a5a48d13ce9074ea12f2fc244e3e"
       },
-      "dsse_signature": "943765e27cd48a1289f28bdaeea25a8e6295834d3d66b0beecbacbf91414c2b8"
+      "dsse_signature": "9c5b2f746f24d7990f4457f16e823d50a34258bac084710a4f46b4cfdb3ac8ad"
     }
   ]
 }

@@ -74,8 +74,8 @@
     },
     {
       "id": "AC.SURVIVAL.TIER1.1",
-      "status": "implemented",
-      "note": "18/18 Tier1 + 4/4 Tier2 survive. Self-host passes. Not runtime-tested."
+      "status": "sealed",
+      "note": "Runtime-tested on 5 distros (Ubuntu 24.04, Debian 13, Fedora 43, AlmaLinux 9.8, openSUSE Leap 16) under QEMU/KVM via cargo install: 27/27 fixtures survive (Tier1 23/23, Tier2 4/4) after the shebang-first fix. Receipts in reports/vm-survival-receipts/."
     }
   ],
   "non_claims": [
