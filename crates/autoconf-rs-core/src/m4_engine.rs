@@ -566,11 +566,11 @@ impl M4Engine {
             .define(b"AC_PROG_MKDIR_P", b"MKDIR_P='mkdir -p'");
         self.engine.macro_table.define(b"AC_CHECK_PROG", b"# Check for program $2 in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_PROGS", b"# Check for programs in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
-        self.engine.macro_table.define(b"AC_CHECK_TOOL", b"# Check for tool $2\nfor ac_tool in $2; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
+        self.engine.macro_table.define(b"AC_CHECK_TOOL", b"# Check for tool $2 (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in \"${ac_tool_prefix}$2\" \"$2\"; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
         self.engine.macro_table.define(b"AC_PATH_PROG", b"# Find path to program $2\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
         self.engine.macro_table.define(b"AC_PATH_PROGS", b"# Find paths to programs\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
         self.engine.macro_table.define(b"AC_PATH_TOOL", b"# Find path to tool $2\nfor ac_tool in $2; do ac_path=`command -v \"$ac_tool\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
-        self.engine.macro_table.define(b"AC_CHECK_TOOLS", b"# Check for tools\nfor ac_tool in $2; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
+        self.engine.macro_table.define(b"AC_CHECK_TOOLS", b"# Check for tools (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in $2; do if command -v \"${ac_tool_prefix}$ac_tool\" >/dev/null 2>&1; then $1=${ac_tool_prefix}$ac_tool; break; elif command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
 
         // --- Additional output/system macros ---
         self.engine
