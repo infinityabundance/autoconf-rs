@@ -558,6 +558,8 @@ pub fn generate_configure_prologue(
     h.extend_from_slice(b"ac_fn_c_try_link () {\n  rm -f conftest.$ac_objext conftest$ac_exeext\n  if { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_objext conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
     h.extend_from_slice(b"ac_fn_c_try_run () {\n  if { ac_try='$ac_link'; (eval \"$ac_try\") 2>&5; } && test -s conftest$ac_exeext && { ac_try='./conftest$ac_exeext'; (eval \"$ac_try\") 2>&5; }; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
     h.extend_from_slice(b"ac_fn_c_try_cpp () {\n  if { (eval \"$ac_cpp conftest.$ac_ext\") 2>&5; }; then ac_retval=0; else ac_retval=1; fi\n  return $ac_retval\n}\n\n");
+    // Exit/signal trap: clean up conftest debris on EXIT (and on INT/TERM), preserving the exit status.
+    h.extend_from_slice(b"ac_clean_files=\nac_exit_trap () { ac_status=$?; rm -f conftest* conf$$* core 2>/dev/null; exit $ac_status; }\ntrap 'ac_exit_trap' 0  # 0 = EXIT\ntrap 'ac_status=1; ac_exit_trap' 1 2 13 15\n\n");
     h
 }
 
