@@ -1,0 +1,113 @@
+{
+  "schema": "autoconf-rs-survival-vm-aggregate-v1",
+  "court": "AC.SURVIVAL.TIER1.1",
+  "purpose": "Runtime test of crates.io autoconf-rs-cli 0.1.0 across 5 distros under QEMU/KVM (the sealed receipt was 'Not runtime-tested').",
+  "install_source": "crates.io: cargo install autoconf-rs-cli --version 0.1.0 (rustup stable toolchain)",
+  "generated_utc": "2026-06-22T15:32:30Z",
+  "distros_tested": [
+    "AlmaLinux 9.8 (Olive Jaguar)",
+    "Debian GNU/Linux 13 (trixie)",
+    "Fedora Linux 43 (Cloud Edition)",
+    "openSUSE Leap 16.0",
+    "Ubuntu 24.04.4 LTS"
+  ],
+  "per_distro": [
+    {
+      "distro": "almalinux",
+      "detail": "AlmaLinux 9.8 (Olive Jaguar)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 22,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 19
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 3
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "distro": "debian",
+      "detail": "Debian GNU/Linux 13 (trixie)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 22,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 19
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 3
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "distro": "fedora",
+      "detail": "Fedora Linux 43 (Cloud Edition)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 22,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 19
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 3
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "distro": "opensuse",
+      "detail": "openSUSE Leap 16.0",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 22,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 19
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 3
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "distro": "ubuntu",
+      "detail": "Ubuntu 24.04.4 LTS",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 22,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 19
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 3
+      },
+      "verdict": "FAIL"
+    }
+  ],
+  "cross_distro_consistent": true,
+  "result": {
+    "survived": "22/27",
+    "tier1": "19/23",
+    "tier2": "3/4",
+    "identical_on_all_5": true
+  },
+  "failing_fixtures": [
+    "curl",
+    "openssl",
+    "sqlite",
+    "stress_02_nested",
+    "zlib"
+  ],
+  "root_cause": "The 5 failures generate substantial output WITH a config.status/AC_OUTPUT stage, but the script does NOT begin with '#! /bin/sh' -- autoconf-rs echoes leading comment lines from the .ac (e.g. '# configure.ac \u2014 curl (Tier 2)') before the shebang, so the shebang is not line 1.",
+  "vs_sealed_claim": "Sealed receipt claims 18/18 Tier1 + 4/4 Tier2 survive. Runtime on 5 distros: 19/23 Tier1 + 3/4 Tier2 (5 real packages -- curl, openssl, sqlite, zlib, stress_02_nested -- fail the shebang-first criterion). The 'survive' claim is NOT reproduced at runtime.",
+  "verdict": "RUNTIME-TESTED: 22/27 survive on all 5 distros (was: Not runtime-tested)"
+}
