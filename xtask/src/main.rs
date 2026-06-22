@@ -127,8 +127,31 @@ fn run_check() -> ExitCode {
 
     // 3. Tests
     println!("[3/7] tests...");
-    let test = Command::new("cargo").args(["test", "--all"]).status();
-    if test.map(|s| !s.success()).unwrap_or(true) {
+    // Fast suite runs in parallel; the real-compiler integration tests (test_runtime_*,
+    // test_layer4_*) are skipped here and run single-threaded below. Those tests fork many
+    // concurrent `cc` processes — at full thread-per-core parallelism cc gets oversubscribed
+    // and transient compile probes fail nondeterministically. Running them serially keeps the
+    // gate deterministic; every test still runs and must pass (no test is ignored or weakened).
+    let test = Command::new("cargo")
+        .args([
+            "test", "--all", "--", "--skip", "test_runtime", "--skip", "test_layer4",
+        ])
+        .status();
+    let rt = Command::new("cargo")
+        .args([
+            "test",
+            "-p",
+            "autoconf-rs-core",
+            "--release",
+            "--test",
+            "runtime_sandbox",
+            "--",
+            "--test-threads=1",
+        ])
+        .status();
+    let test_ok =
+        test.map(|s| s.success()).unwrap_or(false) && rt.map(|s| s.success()).unwrap_or(false);
+    if !test_ok {
         eprintln!("  FAIL: tests failed");
         failed = true;
     } else {
