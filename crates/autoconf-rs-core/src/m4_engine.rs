@@ -1999,6 +1999,23 @@ impl M4Engine {
     ///   5. M4-expanded output is NOT discarded
     ///
     /// Court: AC.M4.DIVERT.WIRED.1 — DiversionManager integrated into M4 expansion pipeline.
+    ///
+    /// A generated `configure` script MUST begin with `#! /bin/sh`: POSIX requires the shebang on line 1,
+    /// and GNU Autoconf drops any comment lines that lead the `configure.ac` (verified against the admitted
+    /// 2.73 oracle). Leading non-macro text from the `.ac` (e.g. a `# configure.ac — curl` banner) was being
+    /// echoed through the M4 expansion ahead of the shebang. Normalize: drop everything before the shebang,
+    /// or prepend one if it is absent.
+    fn ensure_shebang_first(s: String) -> String {
+        const SH: &str = "#! /bin/sh";
+        if s.starts_with(SH) {
+            s
+        } else if let Some(pos) = s.find(SH) {
+            s[pos..].to_string()
+        } else {
+            format!("{SH}\n{s}")
+        }
+    }
+
     pub fn process(&mut self, input: &str) -> Result<String, String> {
         // CROSS.040: check for pending signals before processing
         if self.signal_aware && crate::signal::sigint_received() {
@@ -2100,7 +2117,7 @@ impl M4Engine {
         // Skips prescan+template dispatch entirely. Enables full
         // m4_foreach/m4_if/AC_REQUIRE chain support and user macros.
         if self.pure_m4 {
-            return Ok(m4_output);
+            return Ok(Self::ensure_shebang_first(m4_output));
         }
 
         if is_known_fixture {
@@ -2118,7 +2135,7 @@ impl M4Engine {
             } else {
                 include_str!("templates/fixture_06_headers_types_template.sh")
             };
-            return Ok(template.to_string());
+            return Ok(Self::ensure_shebang_first(template.to_string()));
         }
 
         let mut output = if m4_is_configure {
@@ -2335,7 +2352,7 @@ impl M4Engine {
             output = output.replace("## Output", "");
         }
 
-        Ok(output)
+        Ok(Self::ensure_shebang_first(output))
     }
 
     /// Emit trace events from prescan state.
@@ -2760,5 +2777,28 @@ mod tests {
             output.contains("pthread"),
             "Output should contain 'pthread'"
         );
+    }
+
+    #[test]
+    fn test_leading_ac_comments_do_not_precede_shebang() {
+        // Regression: leading comment lines in configure.ac were echoed before the `#! /bin/sh` shebang,
+        // so the generated configure did not start with the shebang (GNU Autoconf 2.73 drops such leading
+        // comments). Found by the cross-distro QEMU survival run (curl/openssl/sqlite/zlib/stress_02_nested).
+        let mut engine = M4Engine::new();
+        let input = "# configure.ac banner comment\n# second leading comment\nAC_INIT([demo], [1.0])\nAC_CONFIG_HEADERS([config.h])\nAC_CHECK_HEADERS([stdio.h])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            output.starts_with("#! /bin/sh"),
+            "generated configure must begin with the shebang, got: {:?}",
+            &output[..output.len().min(60)]
+        );
+        assert!(!output.contains("banner comment"), "leading .ac comments must be dropped (oracle behaviour)");
+    }
+
+    #[test]
+    fn test_ensure_shebang_first_normalizer() {
+        assert!(M4Engine::ensure_shebang_first("#! /bin/sh\nx\n".into()).starts_with("#! /bin/sh"));
+        assert_eq!(M4Engine::ensure_shebang_first("# junk\n#! /bin/sh\ny\n".into()), "#! /bin/sh\ny\n");
+        assert!(M4Engine::ensure_shebang_first("no shebang here".into()).starts_with("#! /bin/sh\n"));
     }
 }
