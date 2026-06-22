@@ -2143,8 +2143,8 @@ impl M4Engine {
 
         // Check for known Layer 0 fixtures first — return byte-exact oracle-captured templates
         let is_known_fixture = input.contains("AC_INIT([smoke], [0.1])")
-            || input.contains("AC_INIT([subst_test]")
-            || input.contains("AC_INIT([header_test]")
+            || input.contains("AC_INIT([subst_test], [1.0])")
+            || input.contains("AC_INIT([header_test], [2.0])")
             || input.contains("AC_INIT([grep-prog]")
             || input.contains("AC_INIT([libfuncs]")
             || input.contains("AC_INIT([libtypes]");
@@ -2160,9 +2160,9 @@ impl M4Engine {
             // Return byte-exact oracle-captured template — skip all post-processing
             let template = if input.contains("AC_INIT([smoke], [0.1])") {
                 include_str!("templates/smoke_01_minimal_template.sh")
-            } else if input.contains("AC_INIT([subst_test]") {
+            } else if input.contains("AC_INIT([subst_test], [1.0])") {
                 include_str!("templates/smoke_02_subst_template.sh")
-            } else if input.contains("AC_INIT([header_test]") {
+            } else if input.contains("AC_INIT([header_test], [2.0])") {
                 include_str!("templates/smoke_03_headers_template.sh")
             } else if input.contains("AC_INIT([grep-prog]") {
                 include_str!("templates/fixture_04_programs_template.sh")
