@@ -16,6 +16,17 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
+    // Deeply-nested M4 quotes/macros expand via recursion; run on a large stack so a pathological but
+    // finite input fails gracefully (or completes) instead of overflowing the 8 MB default and aborting.
+    std::thread::Builder::new()
+        .stack_size(1024 * 1024 * 1024)
+        .spawn(run)
+        .ok()
+        .and_then(|h| h.join().ok())
+        .unwrap_or(ExitCode::from(2))
+}
+
+fn run() -> ExitCode {
     let args: Vec<String> = env::args().collect();
     let mut input_arg: Option<&str> = None;
     let mut force = false;
