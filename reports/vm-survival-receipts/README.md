@@ -31,6 +31,14 @@ before the shebang, so the shebang is not line 1.
 **Vs. the sealed claim:** `survival-receipt.json` claims 18/18 Tier1 + 4/4 Tier2 survive;
 runtime is **19/23 Tier1 + 3/4 Tier2**. The "survive" claim is not reproduced at runtime.
 
+## Status: FIXED
+
+Fixed in `M4Engine::process` (`ensure_shebang_first`): the generated `configure` now
+always begins with `#! /bin/sh`, dropping leading `.ac` comment lines (matching the
+GNU Autoconf 2.73 oracle). After the fix the full corpus survives **27/27** locally;
+the per-VM receipts here are the pre-fix runtime evidence that found the defect.
+Re-run the harvest to regenerate post-fix receipts once a patched release is published.
+
 ## Files
 
 - `ubuntu.json`, `debian.json`, `fedora.json`, `almalinux.json`, `opensuse.json` — per-VM receipts
