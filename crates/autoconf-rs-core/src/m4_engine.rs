@@ -601,9 +601,11 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_OBSOLETE", b"# $1 is obsolete: $2");
+        // Use `define` (not `m4_define`) so a user macro defined via AC_DEFUN expands even when AC_DEFUN
+        // appears before AC_INIT (a common layout). `define` is the always-available builtin.
         self.engine
             .macro_table
-            .define(b"AC_DEFUN", b"m4_define([$1], [$2])");
+            .define(b"AC_DEFUN", b"define([$1], [$2])");
         self.engine
             .macro_table
             .define(b"AC_DEFUN_ONCE", b"m4_ifdef([_m4_defun_once_$1], [], [m4_define([$1], [$2])m4_define([_m4_defun_once_$1], [1])])");
