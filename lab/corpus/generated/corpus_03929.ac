@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_EGREP
+AC_CANONICAL_TARGET
+AC_TYPE_UID_T
+AC_FUNC_ALLOCA
+AC_OUTPUT

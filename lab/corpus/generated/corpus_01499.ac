@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_INT32_T
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PRESERVE_HELP_ORDER
+AC_PROG_LEX
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

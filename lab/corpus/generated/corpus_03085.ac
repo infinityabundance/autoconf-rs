@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_PROG_CC_C_O
+AC_CANONICAL_HOST
+AC_OUTPUT

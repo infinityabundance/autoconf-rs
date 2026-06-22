@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_ST_BLOCKS
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

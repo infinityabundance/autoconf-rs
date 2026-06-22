@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_PRESERVE_HELP_ORDER
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_FUNCS([malloc realloc])
+AC_CANONICAL_TARGET
+AC_OUTPUT

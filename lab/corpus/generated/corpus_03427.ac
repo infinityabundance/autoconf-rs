@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREREQ([2.59])
+AC_TYPE_UID_T
+AC_LIBOBJ([fnmatch])
+AC_FUNC_MMAP
+AC_PROG_MKDIR_P
+AC_OUTPUT

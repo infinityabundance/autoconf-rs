@@ -1,0 +1,5 @@
+dnl G358: Replace func: memmove
+AC_INIT([gnu-repl-memmove],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([memmove])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_UID_T
+AC_PROG_LN_S
+AC_PROG_CXX
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_STDINT
+AC_OUTPUT

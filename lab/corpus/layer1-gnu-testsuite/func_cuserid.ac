@@ -1,0 +1,5 @@
+dnl G11: Single func check: cuserid
+AC_INIT([gnu-cuserid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([cuserid])
+AC_OUTPUT

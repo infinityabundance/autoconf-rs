@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_FUNC_ALLOCA
+AC_PROG_CXX
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_LIB([m], [sin])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_LN_S
+AC_OUTPUT

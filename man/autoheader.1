@@ -1,0 +1,15 @@
+.TH AUTOHEADER 1 "2026-06-20" "autoconf-rs 0.1" "User Commands"
+.SH NAME
+autoheader \- create a template file of C \fB#define\fR statements
+.SH SYNOPSIS
+.B autoheader
+[\fIOPTION\fR]... [\fITEMPLATE-FILE\fR]
+.SH DESCRIPTION
+Create a template file of C #define statements (config.h.in)
+from configure.ac. Uses trace events to track AC_DEFINE calls.
+.SH OPTIONS
+.TP
+\fB\-f\fR, \fB\-\-force\fR
+Force overwrite of existing template.
+.SH "SEE ALSO"
+\fBautoconf\fR(1)

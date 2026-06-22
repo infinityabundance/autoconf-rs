@@ -1,0 +1,5 @@
+dnl G45: Single func check: getppid
+AC_INIT([gnu-getppid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getppid])
+AC_OUTPUT

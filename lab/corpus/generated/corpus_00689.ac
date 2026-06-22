@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CANONICAL_HOST
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_ALLOCA
+AC_TYPE_OFF_T
+AC_CANONICAL_TARGET
+AC_FUNC_VPRINTF
+AC_OUTPUT

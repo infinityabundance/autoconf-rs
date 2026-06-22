@@ -1,0 +1,5 @@
+dnl G41: Single func check: getpeername
+AC_INIT([gnu-getpeername],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getpeername])
+AC_OUTPUT

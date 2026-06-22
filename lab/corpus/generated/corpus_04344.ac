@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LN_S
+AC_SUBST([PACKAGE_VERSION])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

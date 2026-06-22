@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UINT32_T
+AC_PROG_MAKE_SET
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_RANLIB
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_FUNC_VPRINTF
+AC_OUTPUT

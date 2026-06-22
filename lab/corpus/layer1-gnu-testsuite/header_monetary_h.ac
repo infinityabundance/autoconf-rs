@@ -1,0 +1,5 @@
+dnl G75: Single header check: monetary.h
+AC_INIT([gnu-hdr-monetary_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([monetary.h])
+AC_OUTPUT

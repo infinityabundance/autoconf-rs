@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UID_T
+AC_CONFIG_SUBDIRS([lib])
+AC_TYPE_UINT32_T
+AC_PREFIX_DEFAULT([/usr/local])
+AC_HEADER_STDBOOL
+AC_OUTPUT

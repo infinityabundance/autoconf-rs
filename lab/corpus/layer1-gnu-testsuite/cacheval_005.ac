@@ -1,0 +1,5 @@
+dnl G369: AC_CACHE_VAL
+AC_INIT([gnu-cv-5],[1.0])
+AC_PROG_CC
+AC_CACHE_VAL([ac_cv_test_5], [ac_cv_test_5=yes])
+AC_OUTPUT

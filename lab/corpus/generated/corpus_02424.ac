@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PREFIX_DEFAULT([/usr/local])
+AC_FUNC_FORK
+AC_PROG_MKDIR_P
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UINT32_T
+AC_STRUCT_TIMEZONE
+AC_PROG_MKDIR_P
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_CC
+AC_OUTPUT

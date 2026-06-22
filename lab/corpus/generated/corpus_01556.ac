@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_RANLIB
+AC_PROG_AWK
+AC_PROG_FGREP
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

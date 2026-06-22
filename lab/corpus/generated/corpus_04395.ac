@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MKDIR_P
+AC_CONFIG_AUX_DIR([build-aux])
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_TIME
+AC_PROG_MKDIR_P
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_AWK
+AC_CONFIG_SUBDIRS([lib])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G76: Single header check: mqueue.h
+AC_INIT([gnu-hdr-mqueue_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([mqueue.h])
+AC_OUTPUT

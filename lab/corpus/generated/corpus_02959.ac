@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CANONICAL_HOST
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_FUNC_MMAP
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_LEX
+AC_PREFIX_PROGRAM([gcc])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_YACC
+AC_OUTPUT

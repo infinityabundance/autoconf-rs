@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_OFF_T
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_ALLOCA
+AC_PROG_FGREP
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_CANONICAL_BUILD
+AC_OUTPUT

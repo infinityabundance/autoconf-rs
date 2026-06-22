@@ -1,0 +1,15 @@
+dnl Layer 1: m4_include.at — Test .m4 file loading via m4_include
+dnl Ported from autotools-mirror/autoconf/tests/m4include.at
+dnl Court: CROSS.002 — M4 file loading support
+AC_INIT([m4include-test], [1.0])
+AC_PROG_CC
+
+dnl Load custom macros from a separate file
+m4_include([../../lab/corpus/layer1-gnu-testsuite/custom_macros.m4])
+
+dnl Additional checks
+AC_CHECK_FUNC([malloc])
+AC_CHECK_HEADER([stdlib.h])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

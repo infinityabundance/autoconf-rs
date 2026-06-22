@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LIBOBJ([fnmatch])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_SUBST([LDFLAGS])
+AC_FUNC_VPRINTF
+AC_OUTPUT

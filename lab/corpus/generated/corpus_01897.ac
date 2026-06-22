@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_MMAP
+AC_STRUCT_TIMEZONE
+AC_HEADER_DIRENT
+AC_PROG_AR
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

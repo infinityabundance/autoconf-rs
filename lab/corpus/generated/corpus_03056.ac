@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AR
+AC_LIBOBJ([fnmatch])
+AC_PROG_FGREP
+AC_STRUCT_ST_BLOCKS
+AC_OUTPUT

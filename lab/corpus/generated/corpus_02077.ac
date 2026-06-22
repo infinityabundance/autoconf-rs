@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_GREP
+AC_TYPE_UINT32_T
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

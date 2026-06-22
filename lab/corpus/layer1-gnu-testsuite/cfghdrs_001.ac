@@ -1,0 +1,4 @@
+dnl G265: 1 AC_CONFIG_HEADERS
+AC_INIT([gnu-hdr-1],[1.0])
+AC_CONFIG_HEADERS([config0.h:config0.h.in])
+AC_OUTPUT

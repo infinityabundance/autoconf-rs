@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDC
+AC_SUBST([LDFLAGS])
+AC_HEADER_STDINT
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([gnu-align],[1.0])
+AC_PROG_CC
+AC_CHECK_ALIGNOF([char])
+AC_CHECK_ALIGNOF([short])
+AC_CHECK_ALIGNOF([int])
+AC_CHECK_ALIGNOF([long])
+AC_CHECK_ALIGNOF([void *])
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_LEX
+AC_CHECK_SIZEOF([long])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_OUTPUT

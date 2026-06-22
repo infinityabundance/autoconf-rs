@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CPP
+AC_PROG_AR
+AC_HEADER_STDBOOL
+AC_PROG_YACC
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDINT
+AC_CANONICAL_BUILD
+AC_TYPE_INT32_T
+AC_HEADER_TIME
+AC_LIBOBJ([fnmatch])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G58: Single header check: errno.h
+AC_INIT([gnu-hdr-errno_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([errno.h])
+AC_OUTPUT

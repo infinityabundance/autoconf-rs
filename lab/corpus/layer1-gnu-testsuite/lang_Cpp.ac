@@ -1,0 +1,4 @@
+dnl G386: Language: C++
+AC_INIT([gnu-lang-Cpp],[1.0])
+AC_LANG([C++])
+AC_OUTPUT

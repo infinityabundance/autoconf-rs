@@ -1,0 +1,4 @@
+AC_INIT([MiXeD153],[1.0])
+AC_SUBST([CamelCase],[value])
+AC_DEFINE([UPPER_CASE],[1])
+AC_OUTPUT

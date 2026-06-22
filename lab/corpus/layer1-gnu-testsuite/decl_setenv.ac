@@ -1,0 +1,5 @@
+dnl G341: Check decl: setenv
+AC_INIT([gnu-decl-setenv],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([setenv])
+AC_OUTPUT

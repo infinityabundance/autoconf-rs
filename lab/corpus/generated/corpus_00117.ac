@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UID_T
+AC_FUNC_MALLOC
+AC_FUNC_STRERROR_R
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDINT
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_MAKE_SET
+AC_CANONICAL_TARGET
+AC_TYPE_PID_T
+AC_PROG_CXX
+AC_OUTPUT

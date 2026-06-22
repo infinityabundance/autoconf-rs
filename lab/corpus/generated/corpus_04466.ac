@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_OFF_T
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_TYPE_UID_T
+AC_FUNC_MALLOC
+AC_CONFIG_MACRO_DIR([m4])
+AC_SUBST([CC])
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

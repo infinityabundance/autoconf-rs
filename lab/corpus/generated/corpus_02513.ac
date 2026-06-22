@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MALLOC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_CHECK_LIB([m], [sin])
+AC_PROG_MKDIR_P
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_EGREP
+AC_OUTPUT

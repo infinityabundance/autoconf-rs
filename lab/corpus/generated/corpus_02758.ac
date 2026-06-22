@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_CHECK_SIZEOF([long])
+AC_CANONICAL_TARGET
+AC_HEADER_SYS_WAIT
+AC_FUNC_ALLOCA
+AC_OUTPUT

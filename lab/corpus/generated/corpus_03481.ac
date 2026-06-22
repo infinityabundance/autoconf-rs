@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_FORK
+AC_LIBOBJ([fnmatch])
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

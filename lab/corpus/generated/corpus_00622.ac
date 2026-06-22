@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_RANLIB
+AC_FUNC_ALLOCA
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_CHECK_SIZEOF([long])
+AC_PROG_MKDIR_P
+AC_OUTPUT

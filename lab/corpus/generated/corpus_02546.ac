@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_HEADER_SYS_WAIT
+AC_PREREQ([2.69])
+AC_HEADER_STDINT
+AC_PROG_MKDIR_P
+AC_OUTPUT

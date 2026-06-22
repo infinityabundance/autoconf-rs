@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_GREP
+AC_TYPE_INT32_T
+AC_CONFIG_MACRO_DIR([m4])
+AC_FUNC_MMAP
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_CC
+AC_OUTPUT

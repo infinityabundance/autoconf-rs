@@ -1,0 +1,5 @@
+dnl G334: Check decl: memcpy
+AC_INIT([gnu-decl-memcpy],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([memcpy])
+AC_OUTPUT

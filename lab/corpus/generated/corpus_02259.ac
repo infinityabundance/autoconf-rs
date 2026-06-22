@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_PREREQ([2.63])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_AR
+AC_LANG_PUSH([C])
+AC_PROG_LN_S
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

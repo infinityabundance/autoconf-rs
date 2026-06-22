@@ -1,0 +1,5 @@
+dnl G339: Check decl: qsort
+AC_INIT([gnu-decl-qsort],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([qsort])
+AC_OUTPUT

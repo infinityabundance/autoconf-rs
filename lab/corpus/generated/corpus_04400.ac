@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_STRERROR_R
+AC_FUNC_FORK
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_UID_T
+AC_PROG_MKDIR_P
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

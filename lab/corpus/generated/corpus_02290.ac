@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_LIBOBJ([fnmatch])
+AC_PROG_YACC
+AC_CHECK_FUNCS([fork vfork])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_STRUCT_TIMEZONE
+AC_CANONICAL_TARGET
+AC_OUTPUT

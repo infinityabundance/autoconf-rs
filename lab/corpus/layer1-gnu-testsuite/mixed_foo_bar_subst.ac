@@ -1,0 +1,7 @@
+dnl G178: Mixed: foo,bar,subst,define
+AC_INIT([gnu-mix-foo_bar_subst],[1.0])
+AC_ARG_WITH([foo])
+AC_ARG_ENABLE([bar])
+AC_SUBST([FOO])
+AC_DEFINE([BAR])
+AC_OUTPUT

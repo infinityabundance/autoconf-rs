@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_ALLOCA
+AC_HEADER_STDBOOL
+AC_HEADER_TIME
+AC_FUNC_FORK
+AC_PROG_FGREP
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

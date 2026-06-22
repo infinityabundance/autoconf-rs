@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_HEADER_TIME
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_REVISION([$Revision: 1.0 $])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

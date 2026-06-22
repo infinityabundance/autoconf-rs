@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_DIRENT
+AC_PROG_CC_C_O
+AC_PROG_INSTALL
+AC_FUNC_MMAP
+AC_PROG_CPP
+AC_OUTPUT

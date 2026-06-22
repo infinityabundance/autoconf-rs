@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_PROG_MAKE_SET
+AC_SUBST([LIBS])
+AC_PROG_RANLIB
+AC_STRUCT_TIMEZONE
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

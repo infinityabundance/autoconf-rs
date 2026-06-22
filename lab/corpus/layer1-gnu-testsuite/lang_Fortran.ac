@@ -1,0 +1,4 @@
+dnl G387: Language: Fortran
+AC_INIT([gnu-lang-Fortran],[1.0])
+AC_LANG([Fortran])
+AC_OUTPUT

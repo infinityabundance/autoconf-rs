@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREREQ([2.59])
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_GREP
+AC_OUTPUT

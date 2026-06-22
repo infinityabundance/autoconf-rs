@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CANONICAL_BUILD
+AC_SUBST([CFLAGS])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_FUNC_VPRINTF
+AC_OUTPUT

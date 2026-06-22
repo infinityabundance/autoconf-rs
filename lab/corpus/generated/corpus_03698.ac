@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_RANLIB
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_MKDIR_P
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

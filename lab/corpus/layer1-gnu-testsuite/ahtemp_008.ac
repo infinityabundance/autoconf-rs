@@ -1,0 +1,6 @@
+dnl G382: AH_TEMPLATE
+AC_INIT([gnu-ah-8],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_8], [Description for feature 8])
+AH_VERBATIM([BOTTOM_8], [/* Bottom comment 8 */])
+AC_OUTPUT

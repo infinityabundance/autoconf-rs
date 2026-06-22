@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_MODE_T
+AC_HEADER_STDINT
+AC_STRUCT_ST_BLOCKS
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

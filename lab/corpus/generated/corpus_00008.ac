@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_STRUCT_TIMEZONE
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CANONICAL_HOST
+AC_PROG_EGREP
+AC_OUTPUT

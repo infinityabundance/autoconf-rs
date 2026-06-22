@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_STDINT
+AC_CHECK_TYPES([off_t mode_t])
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_YACC
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

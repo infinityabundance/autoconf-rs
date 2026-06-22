@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_HEADER_STDBOOL
+AC_PROG_CPP
+AC_CONFIG_MACRO_DIR([m4])
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_PROG_EGREP
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_HEADERS([config.h])
+AC_CHECK_SIZEOF([long])
+AC_PROG_RANLIB
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

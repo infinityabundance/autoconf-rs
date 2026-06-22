@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_SUBST([CFLAGS])
+AC_CONFIG_SUBDIRS([lib])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_MAKE_SET
+AC_OUTPUT

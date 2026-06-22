@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_INT32_T
+AC_PROG_EGREP
+AC_CANONICAL_HOST
+AC_REVISION([$Revision: 1.0 $])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_MKDIR_P
+AC_OUTPUT

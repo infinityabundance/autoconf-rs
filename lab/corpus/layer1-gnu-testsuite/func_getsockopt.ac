@@ -1,0 +1,5 @@
+dnl G49: Single func check: getsockopt
+AC_INIT([gnu-getsockopt],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getsockopt])
+AC_OUTPUT

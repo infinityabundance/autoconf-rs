@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UINT32_T
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_PROG_MKDIR_P
+AC_OUTPUT

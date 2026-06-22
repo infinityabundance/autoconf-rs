@@ -1,0 +1,5 @@
+dnl G350: Multi decl check
+AC_INIT([gnu-decls-6],[1.0])
+AC_PROG_CC
+AC_CHECK_DECLS([atoi atol])
+AC_OUTPUT

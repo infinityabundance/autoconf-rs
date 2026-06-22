@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_FUNCS([fork vfork])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

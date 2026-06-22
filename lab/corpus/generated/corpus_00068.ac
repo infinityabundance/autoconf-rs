@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_UID_T
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CHECK_LIB([m], [sin])
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_UINT32_T
+AC_OUTPUT

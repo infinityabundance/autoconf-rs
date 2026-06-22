@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_FUNCS([malloc realloc])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_GREP
+AC_CANONICAL_TARGET
+AC_FUNC_MALLOC
+AC_PROG_INSTALL
+AC_OUTPUT

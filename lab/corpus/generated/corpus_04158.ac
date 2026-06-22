@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_YACC
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_SUBDIRS([lib])
+AC_PREREQ([2.63])
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_PROG_RANLIB
+AC_OUTPUT

@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CHECK_TYPES([off_t mode_t])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_PROG_FGREP
+AC_TYPE_SIZE_T
+AC_STRUCT_ST_BLOCKS
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_CC_C_O
+AC_OUTPUT

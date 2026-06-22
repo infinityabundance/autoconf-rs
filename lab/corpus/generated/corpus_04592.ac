@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDC
+AC_PROG_CC
+AC_TYPE_OFF_T
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_FUNCS([malloc realloc])
+AC_PROG_CC_C_O
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

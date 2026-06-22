@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_DIRENT
+AC_SUBST([PACKAGE_VERSION])
+AC_FUNC_FORK
+AC_FUNC_VPRINTF
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

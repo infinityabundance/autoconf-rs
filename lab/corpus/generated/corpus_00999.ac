@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_MALLOC
+AC_PROG_FGREP
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_GREP
+AC_PROG_CC
+AC_TYPE_OFF_T
+AC_OUTPUT

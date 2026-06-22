@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-36],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub36_0 sub36_1])
+AC_OUTPUT

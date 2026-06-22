@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([exec_prefix])
+AC_TYPE_MODE_T
+AC_HEADER_STDBOOL
+AC_PROG_YACC
+AC_PROG_LN_S
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_TYPE_OFF_T
+AC_OUTPUT

@@ -1,0 +1,28 @@
+dnl Layer 1: m4sh.at — m4sh macro exercises
+AC_INIT([gnu-m4sh], [1.0])
+
+dnl AS_ECHO / AS_ESCAPE
+AS_ECHO(["testing m4sh output"])
+
+dnl AS_IF / AS_CASE
+AS_IF([test "x$prefix" = x/usr], [AC_MSG_NOTICE([prefix is /usr])])
+AS_CASE([$host_os], [linux*], [AC_MSG_NOTICE([Linux detected])], [darwin*], [AC_MSG_NOTICE([macOS detected])])
+
+dnl AS_MKDIR_P
+AS_MKDIR_P([/tmp/test])
+
+dnl AS_TR_SH / AS_TR_CPP
+AS_TR_SH([my-var])
+AS_TR_CPP([my-var])
+
+dnl AS_VAR_SET / AS_VAR_GET
+AS_VAR_SET([myvar], [hello])
+AS_VAR_GET([myvar])
+
+dnl AS_HELP_STRING
+AS_HELP_STRING([--with-foo], [use foo library])
+
+dnl AS_VERSION_COMPARE
+AS_VERSION_COMPARE([2.0], [1.0], [AC_DEFINE([V2_GT_V1])])
+
+AC_OUTPUT

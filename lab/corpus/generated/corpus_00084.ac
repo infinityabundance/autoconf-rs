@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_PROG_AWK
+AC_TYPE_OFF_T
+AC_LIBOBJ([fnmatch])
+AC_PREFIX_PROGRAM([gcc])
+AC_PREREQ([2.59])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

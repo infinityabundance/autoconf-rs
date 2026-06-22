@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_MALLOC
+AC_PROG_CXX
+AC_CHECK_FUNCS([malloc realloc])
+AC_STRUCT_TM
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

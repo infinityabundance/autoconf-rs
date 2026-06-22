@@ -1,0 +1,6 @@
+dnl G175: Mixed: cc,m,pthread
+AC_INIT([gnu-mix-cc_m_pthread],[1.0])
+AC_PROG_CC
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_LIB([pthread],[pthread_create])
+AC_OUTPUT

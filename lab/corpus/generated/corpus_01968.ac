@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_AWK
+AC_PROG_MKDIR_P
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_GREP
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

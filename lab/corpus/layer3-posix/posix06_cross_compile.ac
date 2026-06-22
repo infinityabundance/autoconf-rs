@@ -1,0 +1,18 @@
+dnl cross_compile_01.ac — Cross-compilation test with --host/--build/--target
+dnl Court: CROSS.020 — config.guess/config.sub integration test
+AC_INIT([cross-test], [1.0], [cross@example.com])
+AC_CANONICAL_HOST
+AC_CANONICAL_BUILD
+AC_CANONICAL_TARGET
+
+dnl Check for tools with cross-compilation prefix support
+AC_PROG_CC
+AC_CHECK_TOOL([AR], [ar])
+AC_CHECK_TOOL([RANLIB], [ranlib])
+AC_CHECK_TOOL([STRIP], [strip])
+
+dnl Feature checks that work in cross-compilation mode
+AC_CHECK_FUNC([malloc])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

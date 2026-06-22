@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_AWK
+AC_OUTPUT

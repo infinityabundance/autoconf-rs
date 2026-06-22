@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_TYPE_UID_T
+AC_TYPE_UINT32_T
+AC_PRESERVE_HELP_ORDER
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_SIZE_T
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CANONICAL_TARGET
+AC_OUTPUT

@@ -1,0 +1,3 @@
+AC_INIT([mch26],[1.0])
+AC_CONFIG_HEADERS([h26_a h26_b h26_c])
+AC_OUTPUT

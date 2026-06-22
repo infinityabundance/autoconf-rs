@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_BUILD
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+AC_CANONICAL_HOST
+AC_OUTPUT

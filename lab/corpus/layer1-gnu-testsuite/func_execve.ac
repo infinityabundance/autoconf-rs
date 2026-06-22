@@ -1,0 +1,5 @@
+dnl G21: Single func check: execve
+AC_INIT([gnu-execve],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([execve])
+AC_OUTPUT

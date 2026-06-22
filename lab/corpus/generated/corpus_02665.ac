@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_FGREP
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_TYPE_SIZE_T
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_MKDIR_P
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_OUTPUT

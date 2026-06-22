@@ -1,0 +1,4 @@
+AC_INIT([arg368],[1.0])
+AC_ARG_WITH([w368],[AS_HELP_STRING([--with-w368],[Option 368])])
+AC_ARG_ENABLE([e368],[AS_HELP_STRING([--enable-e368],[Feature 368])])
+AC_OUTPUT

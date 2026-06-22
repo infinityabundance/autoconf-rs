@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_YACC
+AC_PREFIX_DEFAULT([/usr/local])
+AC_TYPE_UID_T
+AC_TYPE_PID_T
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CANONICAL_BUILD
+AC_OUTPUT

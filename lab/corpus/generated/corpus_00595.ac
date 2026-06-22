@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_STRUCT_TM
+AC_OUTPUT

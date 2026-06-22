@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDBOOL
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_YACC
+AC_PROG_LN_S
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

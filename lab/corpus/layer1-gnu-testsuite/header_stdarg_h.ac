@@ -1,0 +1,5 @@
+dnl G90: Single header check: stdarg.h
+AC_INIT([gnu-hdr-stdarg_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([stdarg.h])
+AC_OUTPUT

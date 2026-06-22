@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_RANLIB
+AC_CHECK_TYPES([off_t mode_t])
+AC_STRUCT_TIMEZONE
+AC_FUNC_VPRINTF
+AC_OUTPUT

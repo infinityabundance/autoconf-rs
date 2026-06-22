@@ -1,0 +1,5 @@
+dnl G42: Single func check: getpgid
+AC_INIT([gnu-getpgid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getpgid])
+AC_OUTPUT

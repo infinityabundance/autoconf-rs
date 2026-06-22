@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_STRUCT_TM
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_CANONICAL_BUILD
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

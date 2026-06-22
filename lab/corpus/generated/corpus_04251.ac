@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_TIME
+AC_HEADER_SYS_WAIT
+AC_TYPE_UINT32_T
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_HEADER_STDC
+AC_PROG_LEX
+AC_OUTPUT

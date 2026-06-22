@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_LIBOBJ([fnmatch])
+AC_REVISION([$Revision: 1.0 $])
+AC_CANONICAL_HOST
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_MAKE_SET
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

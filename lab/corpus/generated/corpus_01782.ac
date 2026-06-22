@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_STRUCT_TM
+AC_PROG_CPP
+AC_PREREQ([2.71])
+AC_FUNC_FORK
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CHECK_LIB([m], [sin])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

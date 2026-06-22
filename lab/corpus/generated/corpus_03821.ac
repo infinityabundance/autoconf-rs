@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_FUNC_MALLOC
+AC_CONFIG_MACRO_DIR([m4])
+AC_TYPE_PID_T
+AC_PROG_MKDIR_P
+AC_REVISION([$Revision: 1.0 $])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

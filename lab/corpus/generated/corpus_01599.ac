@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_FORK
+AC_SUBST([LDFLAGS])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

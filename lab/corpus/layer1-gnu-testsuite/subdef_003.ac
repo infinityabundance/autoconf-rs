@@ -1,0 +1,9 @@
+dnl G414: SUBST+DEFINE combo 3
+AC_INIT([gnu-sd-3],[1.0])
+AC_SUBST([S3_0], [v3_0])
+AC_SUBST([S3_1], [v3_1])
+AC_SUBST([S3_2], [v3_2])
+AC_DEFINE([D3_0], [0])
+AC_DEFINE([D3_1], [3])
+AC_DEFINE([D3_2], [6])
+AC_OUTPUT

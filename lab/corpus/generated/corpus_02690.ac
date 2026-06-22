@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UINT32_T
+AC_CANONICAL_TARGET
+AC_FUNC_MALLOC
+AC_FUNC_FORK
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

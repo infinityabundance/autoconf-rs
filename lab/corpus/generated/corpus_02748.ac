@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_LEX
+AC_PROG_CPP
+AC_HEADER_DIRENT
+AC_PROG_INSTALL
+AC_STRUCT_TM
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

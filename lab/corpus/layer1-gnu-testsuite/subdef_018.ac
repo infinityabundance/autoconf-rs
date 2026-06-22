@@ -1,0 +1,13 @@
+dnl G429: SUBST+DEFINE combo 18
+AC_INIT([gnu-sd-18],[1.0])
+AC_SUBST([S18_0], [v18_0])
+AC_SUBST([S18_1], [v18_1])
+AC_SUBST([S18_2], [v18_2])
+AC_SUBST([S18_3], [v18_3])
+AC_SUBST([S18_4], [v18_4])
+AC_DEFINE([D18_0], [0])
+AC_DEFINE([D18_1], [18])
+AC_DEFINE([D18_2], [36])
+AC_DEFINE([D18_3], [54])
+AC_DEFINE([D18_4], [72])
+AC_OUTPUT

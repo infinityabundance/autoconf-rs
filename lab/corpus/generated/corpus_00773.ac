@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_VPRINTF
+AC_PRESERVE_HELP_ORDER
+AC_CHECK_SIZEOF([long])
+AC_PROG_AR
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

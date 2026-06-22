@@ -1,0 +1,5 @@
+dnl G361: Replace func: strncasecmp
+AC_INIT([gnu-repl-strncasecmp],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([strncasecmp])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_TYPE_INT32_T
+AC_CHECK_SIZEOF([long])
+AC_LANG_PUSH([C])
+AC_OUTPUT

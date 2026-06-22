@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CC_C_O
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_PROG_GREP
+AC_PROG_FGREP
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

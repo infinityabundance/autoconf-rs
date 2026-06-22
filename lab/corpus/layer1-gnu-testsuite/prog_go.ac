@@ -1,0 +1,4 @@
+dnl AC_PROG_GO
+AC_INIT([gnu-prog-go],[1.0])
+AC_PROG_GO
+AC_OUTPUT

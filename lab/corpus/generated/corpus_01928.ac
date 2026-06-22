@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CPP
+AC_FUNC_MALLOC
+AC_REPLACE_FUNCS([strdup getopt])
+AC_STRUCT_ST_BLOCKS
+AC_TYPE_PID_T
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

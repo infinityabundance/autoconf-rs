@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_SED
+AC_PROG_LN_S
+AC_PROG_GREP
+AC_TYPE_MODE_T
+AC_CANONICAL_BUILD
+AC_PROG_EGREP
+AC_OUTPUT

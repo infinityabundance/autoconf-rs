@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_SIZEOF([long])
+AC_PROG_INSTALL
+AC_CONFIG_AUX_DIR([build-aux])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_TYPE_UID_T
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_EGREP
+AC_CONFIG_SUBDIRS([lib])
+AC_CANONICAL_TARGET
+AC_PROG_AR
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

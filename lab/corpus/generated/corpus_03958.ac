@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

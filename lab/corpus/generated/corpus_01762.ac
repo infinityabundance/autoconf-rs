@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PRESERVE_HELP_ORDER
+AC_HEADER_STDC
+AC_LIBOBJ([fnmatch])
+AC_PREFIX_PROGRAM([gcc])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_TYPE_UINT32_T
+AC_CHECK_LIB([m], [sin])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CANONICAL_BUILD
+AC_SUBST([CC])
+AC_OUTPUT

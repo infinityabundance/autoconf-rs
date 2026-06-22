@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_SED
+AC_FUNC_STRERROR_R
+AC_PROG_LN_S
+AC_CONFIG_SRCDIR([src/main.c])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

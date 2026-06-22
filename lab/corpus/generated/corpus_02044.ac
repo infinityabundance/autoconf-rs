@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_PROG_LEX
+AC_PROG_SED
+AC_FUNC_FORK
+AC_CHECK_FUNCS([malloc realloc])
+AC_OUTPUT

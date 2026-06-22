@@ -1,0 +1,5 @@
+dnl G17: Single func check: execl
+AC_INIT([gnu-execl],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([execl])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([cond-test], [1.0])
+AC_PROG_CC
+AS_IF([test "x$CC" = xgcc], [AC_DEFINE([HAVE_GCC], [1])], [AC_DEFINE([HAVE_GCC], [0])])
+AS_CASE([$host_os], [linux*], [AC_DEFINE([OS_LINUX], [1])], [darwin*], [AC_DEFINE([OS_DARWIN], [1])])
+AC_OUTPUT

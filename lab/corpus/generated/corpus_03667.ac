@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_YACC
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_SUBST([PACKAGE_VERSION])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

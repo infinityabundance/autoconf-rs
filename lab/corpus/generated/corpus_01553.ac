@@ -1,0 +1,3 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_OUTPUT

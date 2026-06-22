@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_PROG_MKDIR_P
+AC_CHECK_SIZEOF([long])
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

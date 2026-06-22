@@ -1,0 +1,5 @@
+dnl G89: Single header check: spawn.h
+AC_INIT([gnu-hdr-spawn_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([spawn.h])
+AC_OUTPUT

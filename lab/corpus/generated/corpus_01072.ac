@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_HEADER_STDBOOL
+AC_PREFIX_PROGRAM([gcc])
+AC_CANONICAL_HOST
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

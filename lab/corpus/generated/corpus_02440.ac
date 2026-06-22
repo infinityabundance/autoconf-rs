@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_TM
+AC_FUNC_FORK
+AC_PROG_CC_C_O
+AC_PROG_LEX
+AC_PROG_INSTALL
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_CANONICAL_HOST
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_CPP
+AC_FUNC_ALLOCA
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

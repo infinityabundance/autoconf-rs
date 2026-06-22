@@ -1,0 +1,5 @@
+dnl G64: Single header check: ftw.h
+AC_INIT([gnu-hdr-ftw_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([ftw.h])
+AC_OUTPUT

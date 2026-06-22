@@ -1,0 +1,4 @@
+dnl G285: 1 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-1],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_1])
+AC_OUTPUT

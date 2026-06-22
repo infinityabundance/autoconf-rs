@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([exec_prefix])
+AC_TYPE_MODE_T
+AC_CANONICAL_HOST
+AC_PROG_RANLIB
+AC_FUNC_VPRINTF
+AC_PROG_CPP
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

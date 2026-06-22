@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_SYS_WAIT
+AC_PROG_INSTALL
+AC_CHECK_SIZEOF([long])
+AC_PROG_CPP
+AC_HEADER_TIME
+AC_TYPE_UINT32_T
+AC_OUTPUT

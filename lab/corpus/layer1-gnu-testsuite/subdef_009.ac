@@ -1,0 +1,13 @@
+dnl G420: SUBST+DEFINE combo 9
+AC_INIT([gnu-sd-9],[1.0])
+AC_SUBST([S9_0], [v9_0])
+AC_SUBST([S9_1], [v9_1])
+AC_SUBST([S9_2], [v9_2])
+AC_SUBST([S9_3], [v9_3])
+AC_SUBST([S9_4], [v9_4])
+AC_DEFINE([D9_0], [0])
+AC_DEFINE([D9_1], [9])
+AC_DEFINE([D9_2], [18])
+AC_DEFINE([D9_3], [27])
+AC_DEFINE([D9_4], [36])
+AC_OUTPUT

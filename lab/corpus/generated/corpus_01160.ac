@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_TIME
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_TYPE_SIZE_T
+AC_TYPE_MODE_T
+AC_OUTPUT

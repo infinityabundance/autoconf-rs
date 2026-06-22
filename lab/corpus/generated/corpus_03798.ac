@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

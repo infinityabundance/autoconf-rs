@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_INT32_T
+AC_HEADER_STDC
+AC_CHECK_LIB([m], [sin])
+AC_LIBOBJ([fnmatch])
+AC_REVISION([$Revision: 1.0 $])
+AC_LANG_PUSH([C])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

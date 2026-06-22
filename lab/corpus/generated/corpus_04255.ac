@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CPP
+AC_FUNC_VPRINTF
+AC_CONFIG_AUX_DIR([build-aux])
+AC_TYPE_UID_T
+AC_OUTPUT

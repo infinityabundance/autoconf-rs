@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_TYPE_UID_T
+AC_TYPE_UINT32_T
+AC_PREFIX_PROGRAM([gcc])
+AC_PREREQ([2.69])
+AC_TYPE_SIZE_T
+AC_CHECK_FUNCS([malloc realloc])
+AC_OUTPUT

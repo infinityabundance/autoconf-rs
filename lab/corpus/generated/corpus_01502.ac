@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_TYPE_UINT32_T
+AC_TYPE_UID_T
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_PROG_EGREP
+AC_OUTPUT

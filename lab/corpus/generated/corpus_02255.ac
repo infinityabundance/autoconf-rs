@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MAKE_SET
+AC_LIBOBJ([fnmatch])
+AC_PROG_AR
+AC_SUBST([exec_prefix])
+AC_PROG_SED
+AC_PROG_MKDIR_P
+AC_OUTPUT

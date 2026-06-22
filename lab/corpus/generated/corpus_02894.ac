@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_STRUCT_ST_BLOCKS
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

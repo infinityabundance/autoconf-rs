@@ -1,0 +1,9 @@
+dnl Layer 1: libs.at — Library checks
+AC_INIT([gnu-libs], [1.0])
+AC_PROG_CC
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_LIB([pthread], [pthread_create])
+AC_SEARCH_LIBS([sqrt], [m])
+AC_SEARCH_LIBS([dlopen], [dl])
+AC_HAVE_LIBRARY([cposix])
+AC_OUTPUT

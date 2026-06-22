@@ -1,0 +1,5 @@
+dnl G94: Single header check: stdio.h
+AC_INIT([gnu-hdr-stdio_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([stdio.h])
+AC_OUTPUT

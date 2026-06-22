@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_REVISION([$Revision: 1.0 $])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_SIZEOF([long])
+AC_FUNC_STRERROR_R
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

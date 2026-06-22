@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_FGREP
+AC_FUNC_ALLOCA
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_LANG_PUSH([C])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

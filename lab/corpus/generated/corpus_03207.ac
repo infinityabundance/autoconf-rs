@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_EGREP
+AC_CONFIG_MACRO_DIR([m4])
+AC_PREREQ([2.71])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

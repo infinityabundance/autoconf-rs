@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_STDBOOL
+AC_TYPE_INT32_T
+AC_PROG_MKDIR_P
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_LEX
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_PROG_GREP
+AC_TYPE_UINT32_T
+AC_FUNC_MMAP
+AC_PROG_AR
+AC_PROG_CC
+AC_OUTPUT

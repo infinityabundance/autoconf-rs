@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_OFF_T
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_SUBST([CC])
+AC_FUNC_ALLOCA
+AC_CONFIG_MACRO_DIR([m4])
+AC_HEADER_STDINT
+AC_HEADER_STDBOOL
+AC_OUTPUT

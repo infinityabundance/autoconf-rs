@@ -1,0 +1,4 @@
+dnl Fill test 7
+AC_INIT([gnu-fill-7],[1.0])
+AC_SUBST([FVAR],[fval])
+AC_OUTPUT

@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CANONICAL_TARGET
+AC_CONFIG_SUBDIRS([lib])
+AC_PREREQ([2.71])
+AC_TYPE_UID_T
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

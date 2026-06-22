@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDBOOL
+AC_REVISION([$Revision: 1.0 $])
+AC_HEADER_STDC
+AC_PREREQ([2.71])
+AC_TYPE_MODE_T
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CXX
+AC_OUTPUT

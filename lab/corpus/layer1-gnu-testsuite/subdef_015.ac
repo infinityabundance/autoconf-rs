@@ -1,0 +1,13 @@
+dnl G426: SUBST+DEFINE combo 15
+AC_INIT([gnu-sd-15],[1.0])
+AC_SUBST([S15_0], [v15_0])
+AC_SUBST([S15_1], [v15_1])
+AC_SUBST([S15_2], [v15_2])
+AC_SUBST([S15_3], [v15_3])
+AC_SUBST([S15_4], [v15_4])
+AC_DEFINE([D15_0], [0])
+AC_DEFINE([D15_1], [15])
+AC_DEFINE([D15_2], [30])
+AC_DEFINE([D15_3], [45])
+AC_DEFINE([D15_4], [60])
+AC_OUTPUT

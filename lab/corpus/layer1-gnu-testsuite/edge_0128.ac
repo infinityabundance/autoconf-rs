@@ -1,0 +1,4 @@
+AC_INIT([arg128],[1.0])
+AC_ARG_WITH([w128],[AS_HELP_STRING([--with-w128],[Option 128])])
+AC_ARG_ENABLE([e128],[AS_HELP_STRING([--enable-e128],[Feature 128])])
+AC_OUTPUT

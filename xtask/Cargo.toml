@@ -1,0 +1,21 @@
+[package]
+name = "xtask"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Project maintenance tasks for autoconf-rs: fmt, clippy, tests, receipt freshness, court replay, document generation, DSSE signing."
+
+[[bin]]
+name = "xtask"
+path = "src/main.rs"
+
+[dependencies]
+serde_json.workspace = true
+serde = { workspace = true, features = ["derive"] }
+sha2.workspace = true
+hmac = "0.12"
+regex = "1"
+autoconf-oracle-rs = { path = "../crates/autoconf-oracle-rs" }
+autoconf-casefile-rs = { path = "../crates/autoconf-casefile-rs" }
+autoconf-rs-core = { path = "../crates/autoconf-rs-core" }

@@ -1,0 +1,4 @@
+dnl Fill test 13
+AC_INIT([gnu-fill-13],[1.0])
+AC_CONFIG_FILES([fill_out])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl AC_PROG_OBJC
+AC_INIT([gnu-prog-objc],[1.0])
+AC_PROG_OBJC
+AC_OUTPUT

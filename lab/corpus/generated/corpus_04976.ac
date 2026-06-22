@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([exec_prefix])
+AC_HEADER_DIRENT
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

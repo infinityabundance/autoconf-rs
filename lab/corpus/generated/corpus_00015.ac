@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDBOOL
+AC_TYPE_MODE_T
+AC_STRUCT_TIMEZONE
+AC_TYPE_INT32_T
+AC_OUTPUT

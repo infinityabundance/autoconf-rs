@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_SIZEOF([long])
+AC_FUNC_MMAP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_OFF_T
+AC_OUTPUT

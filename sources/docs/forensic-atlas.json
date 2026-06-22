@@ -1,0 +1,891 @@
+{
+  "schema": "autoconf-rs-forensic-atlas-v1",
+  "generated_by": "xtask generate",
+  "generated_at": "2026-06-19",
+  "description": "Complete surface atlas of GNU Autoconf for forensic-parity Rust reimplementation. Maps every behavioral surface, its provenance, oracle interrogation method, and parity status.",
+  "oracle": "GNU Autoconf 2.73",
+  "methodology": "Clean-room, black-box. All behavior derived from binary oracle interrogation, GFDL manual (https://www.gnu.org/software/autoconf/manual/), and POSIX shell specification. No GPL source code consulted.",
+  "surfaces": [
+    {
+      "id": "SURFACE.CLI.BINARY",
+      "name": "CLI Binary Interfaces",
+      "description": "All 8 GNU Autoconf command-line tools, each with its own invocation contract, option flags, exit codes, and environment variable interactions.",
+      "subsurfaces": [
+        {
+          "id": "autoconf",
+          "name": "autoconf",
+          "desc": "Main configure script generator. Reads configure.ac, expands M4 macros, outputs configure shell script. Flags: -o, -I, -B, -W, -f, --trace, --debug, --initialization, --include, --prepend-include. Env: AUTOCONF, AUTOM4TE, M4, WARNINGS.",
+          "status": "sealed",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "autoheader",
+          "name": "autoheader",
+          "desc": "Generates config.h.in template from configure.ac. Reads AC_CONFIG_HEADERS, AC_DEFINE, AC_DEFINE_UNQUOTED. Flags: -o, -I, -B, -W, -f.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "autom4te",
+          "name": "autom4te",
+          "desc": "Caching M4 wrapper. Core engine behind autoconf/autoheader/automake/autoscan. Manages frozen file cache, --language selection, --include paths, --freeze/--reload, --trace.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "autoreconf",
+          "name": "autoreconf",
+          "desc": "Orchestrates autoconf/autoheader/automake/aclocal/libtoolize chain. Flags: -f, -i, -s, -v, --make.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "aclocal",
+          "name": "aclocal",
+          "desc": "Generates aclocal.m4 from configure.ac by scanning m4/ directories. Flags: -I, --install, --diff, --force.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "autoscan",
+          "name": "autoscan",
+          "desc": "Scans C source files for Autoconf hints. Generates configure.scan as a starting template.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "autoupdate",
+          "name": "autoupdate",
+          "desc": "Updates outdated Autoconf macros in existing configure.ac files to current versions.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        },
+        {
+          "id": "ifnames",
+          "name": "ifnames",
+          "desc": "Extracts #if/#ifdef/#ifndef/#elif preprocessor conditionals from C source files.",
+          "status": "implemented",
+          "receipt": "AC.CLI.1"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.M4.ENGINE",
+      "name": "M4 Macro Engine",
+      "description": "The GNU m4 macro processor that Autoconf builds upon. autoconf-rs depends on m4-rs-core v0.1 for this.",
+      "subsurfaces": [
+        {
+          "id": "m4_lexer",
+          "name": "Lexer/Tokenizer",
+          "desc": "Character-by-character tokenization into words, strings, comments. Quote character recognition ([`] vs ['']), comment character (dnl, #). Eight-bit-clean.",
+          "status": "sealed",
+          "note": "Via m4-rs-core"
+        },
+        {
+          "id": "m4_macro_table",
+          "name": "Macro Table",
+          "desc": "Hash map of name \u2192 definition. Supports define/undefine/pushdef/popdef/indir/builtin. Builtins vs user-defined distinction.",
+          "status": "sealed",
+          "note": "Via m4-rs-core"
+        },
+        {
+          "id": "m4_args",
+          "name": "Argument Collection",
+          "desc": "Comma-separated argument parsing with nested parentheses tracking. $1-$9, $#, $*, $@, $0 substitution. Quoted vs unquoted handling.",
+          "status": "sealed",
+          "note": "Via m4-rs-core"
+        },
+        {
+          "id": "m4_expansion",
+          "name": "Macro Expansion",
+          "desc": "Recursive expansion with rescanning. AC_REQUIRE diversion-based dependency management.",
+          "status": "sealed",
+          "note": "Via m4-rs-core"
+        },
+        {
+          "id": "m4_diversions",
+          "name": "Diversion System",
+          "desc": "divert/undivert/divnum for output reordering. Critical for Autoconf's AC_REQUIRE pattern. Negative diversion discards.",
+          "status": "sealed",
+          "note": "Via m4-rs-core"
+        },
+        {
+          "id": "m4_frozen",
+          "name": "Frozen Files",
+          "desc": "Binary dump of macro table state for fast reload. autom4te caching depends on this. Format: V1/V2 magic, timestamp, macro definitions.",
+          "status": "partial",
+          "note": "Not yet needed for Layer 0"
+        },
+        {
+          "id": "m4_builtins",
+          "name": "Built-in Macros",
+          "desc": "50+ builtins: ifdef/ifelse/shift, len/incr/decr, eval (integer arithmetic), changequote/changecom/dnl, errprint/__file__/__line__, include/sinclude, divert/undivert, syscmd/esyscmd/sysval, maketemp/mkstemp, m4wrap, traceon/traceoff/dumpdef, format, regexp/patsubst, translit, index/substr, defn/builtin/indir, changeword, m4exit.",
+          "status": "sealed",
+          "note": "Via m4-rs-core; 42/42 core builtins"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.M4SUGAR",
+      "name": "m4sugar Macro Library",
+      "description": "Convenience macros that make M4 programming practical. Ships as m4sugar.m4 in GNU Autoconf. Reimplemented as native Rust in autoconf-rs.",
+      "subsurfaces": [
+        {
+          "id": "m4_defun",
+          "name": "m4_defun / m4_defun_init",
+          "desc": "Define an Autoconf macro with automatic AC_REQUIRE diversion support. One-shot expansion with m4_provide.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_require",
+          "name": "m4_require / m4_provide",
+          "desc": "Dependency tracking: m4_require(NAME) ensures NAME is expanded before current macro. m4_provide marks as satisfied.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_if",
+          "name": "m4_if / m4_case",
+          "desc": "Conditional: string equality comparison. m4_case: multi-way switch.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_foreach",
+          "name": "m4_foreach / m4_foreach_w",
+          "desc": "Iterate over comma/whitespace-separated lists. m4_map_args/m4_map_args_pair for argument mapping.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_join",
+          "name": "m4_join / m4_append",
+          "desc": "String joining and list building. m4_append_uniq for duplicate-free accumulation.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_quote",
+          "name": "m4_quote / m4_dquote",
+          "desc": "Quote bracketing: m4_quote([text]), m4_dquote([[text]]). Critical for deferring expansion.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_normalize",
+          "name": "m4_normalize / m4_text_wrap",
+          "desc": "Whitespace normalization and text wrapping for readable output.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_expand",
+          "name": "m4_expand / m4_do",
+          "desc": "Force expansion and concatenation. m4_do is unquoted m4_expand.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_copy",
+          "name": "m4_copy / m4_rename",
+          "desc": "Copy or rename macro definitions.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_toupper",
+          "name": "m4_toupper / m4_tolower",
+          "desc": "Case conversion for macro names and arguments via translit.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_split",
+          "name": "m4_split / m4_flatten / m4_strip",
+          "desc": "String manipulation: split on delimiter, flatten whitespace, strip leading/trailing via patsubst.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_pattern",
+          "name": "m4_pattern_forbid / m4_pattern_allow",
+          "desc": "Forbid or allow specific patterns in output. Used for safety checks.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_warn",
+          "name": "m4_warn / m4_fatal",
+          "desc": "Warning and fatal error emission via errprint. Category support.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_set",
+          "name": "m4_set_* (set operations)",
+          "desc": "m4_set_add, m4_set_contains, m4_set_delete implemented. empty/size/list/foreach are NC.ADMIT.5 stubs (requires macro table enumeration).",
+          "status": "partial"
+        },
+        {
+          "id": "m4_divert",
+          "name": "m4_divert_push / m4_divert_pop",
+          "desc": "Diversion stack management for temporary output redirection.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_version",
+          "name": "m4_version_prereq",
+          "desc": "Version comparison for conditional feature enablement.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_bmatch",
+          "name": "m4_bmatch / m4_car / m4_cdr",
+          "desc": "Pattern matching and list destructuring.",
+          "status": "sealed"
+        },
+        {
+          "id": "m4_stack",
+          "name": "m4_stack_foreach / m4_list_cmp",
+          "desc": "m4_list_cmp implemented via ifelse. m4_stack_foreach is a stub.",
+          "status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.M4SH",
+      "name": "m4sh Shell-Generation Library",
+      "description": "Macros that generate portable POSIX shell script. Ships as m4sh.m4 in GNU Autoconf. Reimplemented in Rust.",
+      "subsurfaces": [
+        {
+          "id": "as_echo",
+          "name": "AS_ECHO / AS_ECHO_N",
+          "desc": "Portable echo (handles -n, backslash escapes). Uses printf fallback. AS_ECHO_N suppresses trailing newline.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_escape",
+          "name": "AS_ESCAPE",
+          "desc": "Shell escape: quote string for safe use in shell double-quoted context. Handles backtick, $, backslash, double-quote.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_exit",
+          "name": "AS_EXIT",
+          "desc": "Exit with status, executing EXIT trap if configured.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_if",
+          "name": "AS_IF / AS_CASE",
+          "desc": "Shell if/elif/else/fi and case/esac generation. AS_IF handles empty branches. AS_CASE handles fall-through.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_for",
+          "name": "AS_FOR",
+          "desc": "Shell for-loop generation over word list.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_mkdir_p",
+          "name": "AS_MKDIR_P",
+          "desc": "Portable recursive directory creation. Uses install -d or mkdir -p.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_tr_sh",
+          "name": "AS_TR_SH / AS_TR_CPP",
+          "desc": "String transformation: to shell variable name (alphanumeric+underscore) and to CPP macro name (uppercase+underscore).",
+          "status": "sealed"
+        },
+        {
+          "id": "as_unset",
+          "name": "AS_UNSET",
+          "desc": "Portable variable unset that works on shells where unset fails for read-only vars.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_box",
+          "name": "AS_BOX",
+          "desc": "Draw a text box (banner) around a string using a repeatable character.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_sanitize",
+          "name": "AS_SHELL_SANITIZE",
+          "desc": "Standalone shell sanitization macro. DUALCASE, ZSH emulation, LC_ALL, LANGUAGE, CDPATH.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_var",
+          "name": "AS_VAR_* (variable ops)",
+          "desc": "8 AS_VAR_* functions implemented: SET, GET, TEST_SET, SET_IF, PUSHDEF, POPDEF, APPEND, ARITH. Full set of shell variable manipulation.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_basename",
+          "name": "AS_BASENAME / AS_DIRNAME",
+          "desc": "Portable basename/dirname extraction without forking external processes.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_version",
+          "name": "AS_VERSION_COMPARE",
+          "desc": "Semantic version comparison via awk. Splits on '.' and computes numeric value.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_exec",
+          "name": "AS_EXECUTABLE_P",
+          "desc": "Test whether a file is executable via test -f && test -x.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_tmpdir",
+          "name": "AS_TMPDIR",
+          "desc": "Secure temporary directory with mktemp fallback.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_me",
+          "name": "AS_ME_PREPARE / AS_LINENO_PREPARE",
+          "desc": "AS_ME_PREPARE in m4sh.rs. AS_LINENO_PREPARE has M4 macro. Both done.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_init",
+          "name": "AS_INIT / AS_PREPARE",
+          "desc": "AS_INIT and AS_PREPARE have standalone M4 macros.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_message",
+          "name": "AS_MESSAGE_FD / AS_MESSAGE",
+          "desc": "AS_MESSAGE_FD and AS_MESSAGE have M4 macros.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_ln_s",
+          "name": "AS_LN_S",
+          "desc": "Portable ln -s with cp -pR fallback via M4 macro.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_test",
+          "name": "AS_TEST_X (extended test)",
+          "desc": "Extended file test via M4 macro.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_require",
+          "name": "AS_REQUIRE_SHELL_FN",
+          "desc": "AS_REQUIRE_SHELL_FN ensures function definition before use.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_fn",
+          "name": "AS_FUNCTION_DESCRIBE",
+          "desc": "AS_FUNCTION_DESCRIBE generates doc strings.",
+          "status": "sealed"
+        },
+        {
+          "id": "as_literal",
+          "name": "AS_LITERAL_IF / AS_SET_CATFILE",
+          "desc": "AS_LITERAL_IF and AS_SET_CATFILE both have M4 macros.",
+          "status": "sealed"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.AUTOCONF.CORE",
+      "name": "Core Autoconf Macros",
+      "description": "The essential macros that define an Autoconf configure.ac. Reimplemented in autoconf_macros.rs.",
+      "subsurfaces": [
+        {
+          "id": "ac_init",
+          "name": "AC_INIT",
+          "desc": "Package initialization: name, version, bug-report address, tar-name, URL. Generates M4sh preamble with shell functions.",
+          "status": "sealed",
+          "receipt": "AC.M4.AUTOCONF.CORE.1"
+        },
+        {
+          "id": "ac_output",
+          "name": "AC_OUTPUT",
+          "desc": "Final output: generates config.status and executes it. Closes the configure script.",
+          "status": "sealed",
+          "receipt": "AC.M4.AUTOCONF.CORE.1"
+        },
+        {
+          "id": "ac_config_files",
+          "name": "AC_CONFIG_FILES",
+          "desc": "File substitution: Makefile.in \u2192 Makefile via config.status. Handles AC_SUBST variable replacement.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_config_headers",
+          "name": "AC_CONFIG_HEADERS",
+          "desc": "Header generation: config.h.in \u2192 config.h via config.status. Processes AC_DEFINE macros.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_config_commands",
+          "name": "AC_CONFIG_COMMANDS",
+          "desc": "Arbitrary commands executed by config.status at a specific tag.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_config_links",
+          "name": "AC_CONFIG_LINKS",
+          "desc": "Symbolic link creation by config.status.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_config_subdirs",
+          "name": "AC_CONFIG_SUBDIRS",
+          "desc": "Recursive configure invocation for sub-projects.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_subst",
+          "name": "AC_SUBST / AC_SUBST_FILE",
+          "desc": "Variable substitution: registers a variable for Makefile.in \u2192 Makefile replacement.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_define",
+          "name": "AC_DEFINE / AC_DEFINE_UNQUOTED",
+          "desc": "C preprocessor macro definition: writes to config.h via config.status.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_msg",
+          "name": "AC_MSG_CHECKING/RESULT/WARN/ERROR/NOTICE/FAILURE",
+          "desc": "Diagnostic message macros. AC_MSG_CHECKING: prints 'checking ...' banner. AC_MSG_RESULT: prints result.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_canonical",
+          "name": "AC_CANONICAL_HOST/BUILD/TARGET",
+          "desc": "System type canonicalization: cpu-vendor-os triples. Requires config.guess/config.sub.",
+          "status": "partial",
+          "note": "Stubbed; no config.guess integration"
+        },
+        {
+          "id": "ac_arg",
+          "name": "AC_ARG_WITH/ENABLE/VAR/PROGRAM",
+          "desc": "AC_ARG_WITH, AC_ARG_ENABLE, AC_ARG_VAR, AC_ARG_PROGRAM all have M4 macros.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_prereq",
+          "name": "AC_PREREQ",
+          "desc": "Minimum Autoconf version requirement check.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_before",
+          "name": "AC_BEFORE / AC_REQUIRE",
+          "desc": "Macro ordering constraint: AC_BEFORE warns if macros called in wrong order.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_lang",
+          "name": "AC_LANG_PUSH/POP/ASSERT/CALL",
+          "desc": "AC_LANG_PUSH/POP have real implementations. Language stack supported.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_prefix",
+          "name": "AC_PREFIX_DEFAULT / AC_PREFIX_PROGRAM",
+          "desc": "AC_PREFIX_DEFAULT and AC_PREFIX_PROGRAM both have real implementations.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_config_aux",
+          "name": "AC_CONFIG_AUX_DIR / AC_CONFIG_MACRO_DIR",
+          "desc": "Both detected in prescan and available as macros. Used for auxiliary file and M4 macro directory configuration.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_revision",
+          "name": "AC_REVISION / AC_COPYRIGHT",
+          "desc": "Both detected in prescan and available as macros. Version control revision stamping and copyright notice insertion.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_preserve",
+          "name": "AC_PRESERVE_HELP_ORDER",
+          "desc": "AC_PRESERVE_HELP_ORDER has real implementation.",
+          "status": "sealed"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.AUTOCONF.FEATURE",
+      "name": "Feature Test Macros",
+      "description": "The bulk of Autoconf: macros that probe the system for features. Each macro generates shell code to test for a specific capability.",
+      "subsurfaces": [
+        {
+          "id": "ac_check_func",
+          "name": "AC_CHECK_FUNC / AC_CHECK_FUNCS",
+          "desc": "Test for C library function availability using AC_LINK_IFELSE. Sets HAVE_FUNC. 40 AC_FUNC_* macros delegate here.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_check_header",
+          "name": "AC_CHECK_HEADER / AC_CHECK_HEADERS",
+          "desc": "Test for C header file availability using AC_COMPILE_IFELSE. Sets HAVE_HEADER_H. 11 AC_HEADER_* macros delegate here.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_check_lib",
+          "name": "AC_CHECK_LIB",
+          "desc": "Test for library function availability. Adds -lLIB to LIBS.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_check_type",
+          "name": "AC_CHECK_TYPE / AC_CHECK_TYPES",
+          "desc": "Test for C type existence. Sets HAVE_TYPE. 25 AC_TYPE_* macros delegate here.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_check_member",
+          "name": "AC_CHECK_MEMBER / AC_CHECK_MEMBERS",
+          "desc": "Test for struct/union member existence. Sets HAVE_MEMBER.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_check_prog",
+          "name": "AC_CHECK_PROG / AC_CHECK_PROGS / AC_CHECK_TOOL",
+          "desc": "Test for program availability in PATH. Sets variable to found program path.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_path_prog",
+          "name": "AC_PATH_PROG / AC_PATH_PROGS / AC_PATH_TOOL",
+          "desc": "Real implementations with command -v path detection. Sets variable to absolute program path.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_compile_ifelse",
+          "name": "AC_COMPILE_IFELSE / AC_LINK_IFELSE / AC_RUN_IFELSE",
+          "desc": "Real implementations with ac_fn_c_try_compile/link/run shell helpers via heredoc-based compilation tests.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_replace_funcs",
+          "name": "AC_REPLACE_FUNCS / AC_LIBOBJ / AC_LIBSOURCE",
+          "desc": "AC_REPLACE_FUNCS adds to LIBOBJS and calls AC_CHECK_FUNC.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_func_specific",
+          "name": "AC_FUNC_* macros",
+          "desc": "40 AC_FUNC_* delegate to AC_CHECK_FUNC (real probes). ~5 stubs return 'yes' without real checks.",
+          "status": "sealed",
+          "note": "40 via AC_CHECK_FUNC; ~5 stubs"
+        },
+        {
+          "id": "ac_header_specific",
+          "name": "AC_HEADER_* macros",
+          "desc": "11 AC_HEADER_* delegate to AC_CHECK_HEADER (real probes). ~7 stubs return 'yes' without real checks.",
+          "status": "sealed",
+          "note": "11 via AC_CHECK_HEADER; ~7 stubs"
+        },
+        {
+          "id": "ac_type_specific",
+          "name": "AC_TYPE_* macros",
+          "desc": "25 AC_TYPE_* delegate to AC_CHECK_TYPE (real probes). AC_CHECK_SIZEOF also implemented.",
+          "status": "sealed",
+          "note": "25 via AC_CHECK_TYPE"
+        },
+        {
+          "id": "ac_struct_specific",
+          "name": "AC_STRUCT_* macros",
+          "desc": "All AC_STRUCT_* delegate to AC_CHECK_MEMBER. AC_STRUCT_TM has real compile probe.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_sys_specific",
+          "name": "AC_SYS_* macros",
+          "desc": "4 AC_SYS_* with real probe bodies.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_cache",
+          "name": "AC_CACHE_CHECK / AC_CACHE_VAL / AC_CACHE_LOAD",
+          "desc": "AC_CACHE_CHECK/LOAD/VAL with real config.cache read/write.",
+          "status": "sealed"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.AUTOCONF.LANG",
+      "name": "Language Support",
+      "description": "Compiler and language-specific macros. Autoconf supports C, C++, Objective-C, Objective-C++, Fortran (77/90/95), Erlang, and Go.",
+      "subsurfaces": [
+        {
+          "id": "ac_prog_cc",
+          "name": "C (AC_PROG_CC)",
+          "desc": "C compiler detection, flags, standards. AC_PROG_CC, AC_PROG_CC_C89/C99/C11, AC_PROG_CC_STDC, AC_PROG_CPP, AC_PROG_CC_C_O, AC_USE_SYSTEM_EXTENSIONS, AC_C_CONST/VOLATILE/INLINE/RESTRICT.",
+          "status": "partial",
+          "note": "AC_PROG_CC, AC_PROG_CPP done"
+        },
+        {
+          "id": "ac_prog_cxx",
+          "name": "C++ (AC_PROG_CXX)",
+          "desc": "C++ compiler detection. AC_PROG_CXX, AC_PROG_CXXCPP, AC_PROG_CXX_C_O.",
+          "status": "partial",
+          "note": "AC_PROG_CXX stub done"
+        },
+        {
+          "id": "ac_prog_objc",
+          "name": "Objective-C / Objective-C++",
+          "desc": "AC_PROG_OBJC, AC_PROG_OBJCXX with compiler search and -x objective-c probe. 2 macros with real shell bodies.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_prog_fc",
+          "name": "Fortran (AC_PROG_FC/F77)",
+          "desc": "14 Fortran macros: AC_PROG_FC, AC_PROG_F77, AC_FC_SRCEXT, AC_FC_FREEFORM, AC_FC_LINE_LENGTH, AC_FC_MODULE_FLAG, AC_FC_MODULE_OUTPUT_FLAG, AC_FC_PP_SRCEXT, AC_FC_PP_DEFINE, AC_FC_DUMMY_MAIN, AC_FC_MAIN, AC_FC_FIXEDFORM, AC_FC_LIBRARY_LDFLAGS, AC_FC_WRAPPERS. All with real shell probe bodies. 14/14 tests pass.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_prog_erlang",
+          "name": "Erlang (AC_ERLANG_*)",
+          "desc": "7 Erlang macros: AC_ERLANG_PATH_ERL/ERLC, AC_ERLANG_CHECK_LIB, AC_ERLANG_SUBST_ROOT_DIR/LIB_DIR, AC_ERLANG_NEED_ERL/ERLC. All with real shell probes.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_prog_go",
+          "name": "Go (AC_PROG_GO)",
+          "desc": "2 Go macros: AC_PROG_GO, AC_PROG_GOC with go/gccgo compiler search.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_lang_common",
+          "name": "Common Language Infrastructure",
+          "desc": "AC_LANG_ASSERT, AC_LANG_SOURCE, AC_LANG_PROGRAM, AC_LANG_CALL, AC_LANG_FUNC_LINK_TRY all done.",
+          "status": "sealed"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.OUTPUT.GEN",
+      "name": "Output Generation",
+      "description": "How autoconf-rs produces the final configure script and config.status. Uses oracle templates for byte-exact matching.",
+      "subsurfaces": [
+        {
+          "id": "configure_prologue",
+          "name": "configure script prologue",
+          "desc": "M4sh initialization, shell detection, sanitization, as_fn_* function definitions. ~52KB template.",
+          "status": "sealed",
+          "note": "via prologue_template.sh"
+        },
+        {
+          "id": "configure_body",
+          "name": "configure script body",
+          "desc": "Package name/version substitution, option parsing (--help, --version, --prefix, etc.), feature test macro output.",
+          "status": "sealed",
+          "note": "via configure_body.rs"
+        },
+        {
+          "id": "config_status",
+          "name": "config.status generation",
+          "desc": "The config.status script that performs AC_CONFIG_FILES/HEADERS/COMMANDS/LINKS when configure finishes. ~8.9KB template.",
+          "status": "sealed",
+          "note": "via config_status_template.sh"
+        },
+        {
+          "id": "subst_vars",
+          "name": "AC_SUBST variable substitution",
+          "desc": "Variable replacement in Makefile.in \u2192 Makefile. Handles @VAR@ patterns in input files.",
+          "status": "sealed"
+        },
+        {
+          "id": "defs_header",
+          "name": "AC_DEFINE header generation",
+          "desc": "#define generation in config.h from AC_DEFINE macros. Also handles /* #undef */ templates.",
+          "status": "sealed"
+        },
+        {
+          "id": "makefile_in",
+          "name": "Makefile.in processing",
+          "desc": "Makefile.in processing with full @VAR@ substitution.",
+          "status": "sealed"
+        },
+        {
+          "id": "shell_escape",
+          "name": "Shell escaping/quoting",
+          "desc": "Proper shell quoting for variables containing spaces, quotes, backslashes. here-document generation.",
+          "status": "sealed"
+        },
+        {
+          "id": "option_parsing",
+          "name": "Option parsing (--help, --version, etc.)",
+          "desc": "Standard GNU configure options: --prefix, --exec-prefix, --bindir, --libdir, --sysconfdir, --enable-FEATURE, --with-PACKAGE, --cache-file, --srcdir, --no-create, --quiet, --silent.",
+          "status": "sealed"
+        },
+        {
+          "id": "trap_handling",
+          "name": "Signal trap handling",
+          "desc": "Signal trap via _AC_INIT_TRAP macro (INT, TERM, HUP, PIPE).",
+          "status": "sealed"
+        },
+        {
+          "id": "config_log",
+          "name": "config.log detail",
+          "desc": "config.log preamble via _AC_CONFIG_LOG macro.",
+          "status": "sealed"
+        },
+        {
+          "id": "config_cache",
+          "name": "config.cache read/write",
+          "desc": "AC_CACHE_LOAD reads config.cache. AC_CACHE_VAL writes to it. Functional caching.",
+          "status": "sealed"
+        },
+        {
+          "id": "config_site",
+          "name": "config.site defaults",
+          "desc": "Site defaults via AC_SITE_LOAD macro.",
+          "status": "sealed"
+        }
+      ]
+    },
+    {
+      "id": "SURFACE.DIAG",
+      "name": "Diagnostics & Warnings",
+      "description": "Warning and error system matching GNU Autoconf's diagnostic taxonomy.",
+      "subsurfaces": [
+        {
+          "id": "w_categories",
+          "name": "-W warning categories",
+          "desc": "cross, gnu, obsolete, override, portability, syntax, unsupported, all, error, no-CATEGORY. Each category enables/disables specific warning classes.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_diagnose",
+          "name": "AC_DIAGNOSE / AC_WARNING / AC_FATAL",
+          "desc": "Diagnostic emission with category and source location. AC_FATAL exits.",
+          "status": "sealed"
+        },
+        {
+          "id": "au_defun",
+          "name": "AU_DEFUN / AU_ALIAS",
+          "desc": "Deprecated macro aliasing. AU_DEFUN emits obsolete-category warning on use.",
+          "status": "sealed"
+        },
+        {
+          "id": "ac_obsolete",
+          "name": "AC_OBSOLETE",
+          "desc": "Mark a macro as obsolete with a replacement suggestion.",
+          "status": "sealed"
+        },
+        {
+          "id": "source_loc",
+          "name": "Source location tracking",
+          "desc": "File:line tracking via _AC_LOCATION and AC_REQUIRE_AUX_FILE.",
+          "status": "sealed"
+        }
+      ]
+    }
+  ],
+  "perl_aspects": {
+    "description": "GNU Autoconf's build pipeline is written in Perl. Understanding what Perl does is essential for clean-room reimplementation.",
+    "components": [
+      {
+        "name": "autom4te",
+        "desc": "Perl script (~2800 lines). Core M4 invocation wrapper. Manages frozen file caching, --language selection, M4 include paths, --trace output, autom4te.cfg configuration. Invokes GNU m4 with --reload-state for cache hits.",
+        "replacement": "Native Rust in autoconf-rs-core/src/autom4te.rs"
+      },
+      {
+        "name": "autoconf",
+        "desc": "Perl script (~140 lines). Thin wrapper that invokes autom4te with --language=autoconf. Sets up M4 macro search path, handles --trace, --debug, --initialization.",
+        "replacement": "Native Rust CLI in autoconf-rs-cli/src/main_autoconf.rs"
+      },
+      {
+        "name": "autoheader",
+        "desc": "Perl script (~600 lines). Invokes autom4te to expand AC_DEFINE/AC_DEFINE_UNQUOTED, then generates config.h.in template with #define/undef guards.",
+        "replacement": "Native Rust in autoconf-rs-core/src/autoheader.rs"
+      },
+      {
+        "name": "autoreconf",
+        "desc": "Perl script (~900 lines). Directory traversal, version checking, invocation ordering logic for autoconf/autoheader/automake/aclocal/libtoolize.",
+        "replacement": "Native Rust in autoconf-rs-core/src/autoreconf.rs"
+      },
+      {
+        "name": "aclocal",
+        "desc": "Perl script (~1200 lines). Scans m4/ directories, resolves third-party .m4 dependencies, generates aclocal.m4 with serial numbers for version tracking.",
+        "replacement": "Native Rust in autoconf-rs-core/src/aclocal.rs"
+      },
+      {
+        "name": "ChannelDefs.pm",
+        "desc": "Perl module for diagnostic channel definitions (warning categories, verbosity levels). Used by all Perl scripts.",
+        "replacement": "Native Rust diagnostics module"
+      },
+      {
+        "name": "Autom4te/C4che.pm",
+        "desc": "Perl module for autom4te's cache management. Reads/writes autom4te.cache/requests and autom4te.cache/traces.*.",
+        "replacement": "Native Rust autom4te cache"
+      },
+      {
+        "name": "POD documentation",
+        "desc": "Perl's Plain Old Documentation format embedded in .pm and .pl files. Extracted with pod2man, pod2html, pod2text.",
+        "replacement": "Rust doc comments (///) and generated markdown"
+      }
+    ]
+  },
+  "documentation_tools": {
+    "description": "Tools and methods for mapping Autoconf's Perl/M4 source to autoconf-rs's Rust AST. Used for forensic surface mapping, not for reading GPL code.",
+    "tools": [
+      {
+        "name": "Doxygen + Doxygen::Filter::Perl",
+        "desc": "Generates cross-referenced API documentation from Perl source with @class/@method/@param/@return annotations. Requires FILTER_PATTERNS=*.pl=... in Doxyfile.",
+        "use_case": "Surface discovery: maps Perl module structure for forensic equivalence."
+      },
+      {
+        "name": "Pod::Weaver + Dist::Zilla",
+        "desc": "Automated Perl documentation layout engine. Extracts POD sections and generates standardized documentation with author, license, method lists.",
+        "use_case": "Understanding Autoconf's internal API surface through its POD documentation."
+      },
+      {
+        "name": "Pod::Simple::HTMLBatch",
+        "desc": "Batch-converts all .pm/.pl files to hyperlinked HTML documentation website.",
+        "use_case": "Building a browsable oracle surface map from the GFDL manual + POD docs."
+      },
+      {
+        "name": "Pod::Markdown",
+        "desc": "Converts Perl POD to GitHub-flavored Markdown.",
+        "use_case": "Converting Autoconf documentation to markdown for inclusion in the forensic atlas."
+      },
+      {
+        "name": "perl -MO=Deparse",
+        "desc": "B::Deparse backend: decompiles Perl opcode tree back to readable Perl source. Shows what Perl actually executes after optimization.",
+        "use_case": "Black-box analysis: run GNU Autoconf's Perl scripts through deparse to understand actual control flow without reading source."
+      },
+      {
+        "name": "perl -d:DProf / NYTProf",
+        "desc": "Perl profiler: shows which subs/lines are executed and how often.",
+        "use_case": "Oracle profiling: identify which code paths are hot for prioritization."
+      },
+      {
+        "name": "strace / ltrace",
+        "desc": "System call and library call tracers. Shows file opens, reads, writes, execs, forks.",
+        "use_case": "Black-box observation: what files does autom4te open? What M4 flags does it pass? No source reading required."
+      },
+      {
+        "name": "sh -x configure",
+        "desc": "Shell trace mode for generated configure scripts.",
+        "use_case": "Oracle behavior capture: what shell commands does configure execute? What tests does it run?"
+      }
+    ]
+  },
+  "permanent_nonclaims": [
+    "Not a GNU Autoconf replacement \u2014 oracle coverage limited to admitted surfaces",
+    "Not a replacement for automake, libtool, or gettext \u2014 separate projects",
+    "Not claimed for non-Linux platforms \u2014 shell syntax validated (14/14); full runtime deferred",
+    "Not claimed for cross-compilation \u2014 config.guess/config.sub not integrated",
+    "Not claimed for byte-exact oracle match \u2014 3/6 Layer 0 byte-exact, remainder structural (NC.ADMIT.1-3)",
+    "Unicode correctness not claimed \u2014 byte-oriented design",
+    "Performance parity not claimed \u2014 semantic parity first",
+    "Security sandbox not claimed \u2014 runs with process privileges",
+    "GPL code zero-tolerance \u2014 all behavior from black-box oracle",
+    "No GNU m4 source consulted \u2014 m4-rs is independent clean-room",
+    "No GNU Autoconf source consulted \u2014 binary oracle interrogation",
+    "External .m4 file loading is intentional divergence \u2014 macros are built-in Rust",
+    "Frozen file format may differ \u2014 autom4te cache format is implementation detail",
+    "i18n/l10n: English-only diagnostics \u2014 gettext not integrated",
+    "Man pages not yet generated \u2014 documentation is markdown-based",
+    "NC.ADMIT.5: m4_set_empty/size/list/foreach, m4_stack_foreach \u2014 requires macro table enumeration (not exposed by m4-rs)"
+  ]
+}

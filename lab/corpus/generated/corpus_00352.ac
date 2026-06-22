@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CC
+AC_HEADER_SYS_WAIT
+AC_SUBST([PACKAGE_VERSION])
+AC_TYPE_MODE_T
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_OUTPUT

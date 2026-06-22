@@ -1,0 +1,5 @@
+dnl G164: Mixed: subst,define
+AC_INIT([gnu-mix-subst_define],[1.0])
+AC_SUBST
+AC_DEFINE
+AC_OUTPUT

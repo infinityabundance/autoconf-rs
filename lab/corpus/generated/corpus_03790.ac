@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_LN_S
+AC_FUNC_VPRINTF
+AC_SUBST([exec_prefix])
+AC_PROG_CC
+AC_OUTPUT

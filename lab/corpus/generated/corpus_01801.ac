@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_TYPE_UID_T
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_CC_C_O
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_FUNC_MALLOC
+AC_OUTPUT

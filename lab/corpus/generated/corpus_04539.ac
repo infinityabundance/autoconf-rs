@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TM
+AC_PROG_SED
+AC_HEADER_SYS_WAIT
+AC_PROG_INSTALL
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

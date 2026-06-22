@@ -1,0 +1,5 @@
+dnl G46: Single func check: getpriority
+AC_INIT([gnu-getpriority],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getpriority])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_CC_C_O
+AC_HEADER_TIME
+AC_FUNC_ALLOCA
+AC_FUNC_VPRINTF
+AC_PROG_CXX
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

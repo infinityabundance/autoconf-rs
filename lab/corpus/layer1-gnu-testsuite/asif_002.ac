@@ -1,0 +1,8 @@
+dnl G403: AS_IF nesting depth 2
+AC_INIT([gnu-asif-{i}],[1.0])
+AS_IF([test 0 = 0], [
+AS_IF([test 1 = 1], [
+AC_DEFINE([DEEP_2])
+])
+])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDINT
+AC_PREREQ([2.71])
+AC_HEADER_STDC
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_SIZE_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

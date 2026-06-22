@@ -1,0 +1,5 @@
+dnl G54: Single header check: cpio.h
+AC_INIT([gnu-hdr-cpio_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([cpio.h])
+AC_OUTPUT

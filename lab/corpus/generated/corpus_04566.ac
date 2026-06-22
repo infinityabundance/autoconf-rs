@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CANONICAL_BUILD
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_INSTALL
+AC_OUTPUT

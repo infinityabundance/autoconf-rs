@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_FUNC_MMAP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LN_S
+AC_HEADER_SYS_WAIT
+AC_TYPE_INT32_T
+AC_OUTPUT

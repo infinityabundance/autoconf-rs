@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_MALLOC
+AC_HEADER_STDC
+AC_CONFIG_SUBDIRS([lib])
+AC_TYPE_INT32_T
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

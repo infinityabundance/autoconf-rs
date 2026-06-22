@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_INT32_T
+AC_PROG_EGREP
+AC_PROG_YACC
+AC_PROG_AWK
+AC_CHECK_SIZEOF([long])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_MKDIR_P
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_LEX
+AC_PREFIX_PROGRAM([gcc])
+AC_HEADER_TIME
+AC_OUTPUT

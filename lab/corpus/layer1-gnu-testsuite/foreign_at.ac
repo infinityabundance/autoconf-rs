@@ -1,0 +1,30 @@
+dnl Layer 1: foreign.at — Cross-platform and non-GNU platform tests
+AC_INIT([gnu-foreign], [1.0])
+AC_PROG_CC
+
+dnl Platform detection
+AC_CANONICAL_HOST
+
+dnl Check for non-standard tools
+AC_CHECK_PROG([PERL], [perl])
+AC_CHECK_PROG([PYTHON], [python3 python])
+AC_PATH_PROG([BASH], [bash])
+
+dnl Cross-compilation aware checks
+AC_CHECK_TOOL([AR], [ar])
+AC_CHECK_TOOL([RANLIB], [ranlib])
+AC_CHECK_TOOL([STRIP], [strip])
+AC_CHECK_TOOL([NM], [nm])
+AC_CHECK_TOOL([OBJDUMP], [objdump])
+
+dnl Large file support
+AC_SYS_LARGEFILE
+
+dnl Signal handling type
+AC_TYPE_SIGNAL
+
+dnl Library checks that work cross-platform
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_LIB([dl], [dlopen])
+
+AC_OUTPUT

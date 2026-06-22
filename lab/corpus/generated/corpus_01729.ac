@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_LIBOBJ([fnmatch])
+AC_CHECK_LIB([m], [sin])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CONFIG_HEADERS([config.h])
+AC_FUNC_MALLOC
+AC_OUTPUT

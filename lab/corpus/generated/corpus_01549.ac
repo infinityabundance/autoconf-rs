@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_TYPE_OFF_T
+AC_FUNC_MMAP
+AC_STRUCT_ST_BLOCKS
+AC_TYPE_UID_T
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_OUTPUT

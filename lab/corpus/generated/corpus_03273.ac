@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_EGREP
+AC_PREFIX_PROGRAM([gcc])
+AC_STRUCT_TM
+AC_PRESERVE_HELP_ORDER
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_INSTALL
+AC_OUTPUT

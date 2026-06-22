@@ -1,0 +1,5 @@
+dnl G266: 2 AC_CONFIG_HEADERS
+AC_INIT([gnu-hdr-2],[1.0])
+AC_CONFIG_HEADERS([config0.h:config0.h.in])
+AC_CONFIG_HEADERS([config1.h:config1.h.in])
+AC_OUTPUT

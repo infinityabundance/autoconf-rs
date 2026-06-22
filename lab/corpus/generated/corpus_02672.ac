@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UINT32_T
+AC_PROG_EGREP
+AC_CANONICAL_TARGET
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_SED
+AC_OUTPUT

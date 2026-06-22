@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PRESERVE_HELP_ORDER
+AC_PREREQ([2.63])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_CXX
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_FGREP
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_FUNC_VPRINTF
+AC_PREFIX_PROGRAM([gcc])
+AC_STRUCT_TM
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PROG_CPP
+AC_HEADER_STDINT
+AC_FUNC_VPRINTF
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

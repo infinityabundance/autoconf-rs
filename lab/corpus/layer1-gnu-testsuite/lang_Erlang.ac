@@ -1,0 +1,4 @@
+dnl G388: Language: Erlang
+AC_INIT([gnu-lang-Erlang],[1.0])
+AC_LANG([Erlang])
+AC_OUTPUT

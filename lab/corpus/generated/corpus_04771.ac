@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_TYPE_OFF_T
+AC_HEADER_STDBOOL
+AC_PROG_INSTALL
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

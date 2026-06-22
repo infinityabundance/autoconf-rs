@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PROG_LN_S
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_TYPES([off_t mode_t])
+AC_HEADER_STDBOOL
+AC_REVISION([$Revision: 1.0 $])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

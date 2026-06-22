@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_STRUCT_TM
+AC_PROG_AWK
+AC_PROG_CPP
+AC_OUTPUT

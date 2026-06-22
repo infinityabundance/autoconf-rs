@@ -1,0 +1,4 @@
+dnl G395: AC_PREREQ(4.40)
+AC_PREREQ([4.40])
+AC_INIT([gnu-prq-4],[1.0])
+AC_OUTPUT

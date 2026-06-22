@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_YACC
+AC_PROG_CXX
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

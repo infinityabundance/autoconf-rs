@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REVISION([$Revision: 1.0 $])
+AC_TYPE_UID_T
+AC_FUNC_MALLOC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

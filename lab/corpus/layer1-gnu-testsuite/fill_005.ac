@@ -1,0 +1,4 @@
+dnl Fill test 5
+AC_INIT([gnu-fill-5],[1.0])
+AC_CHECK_FUNC([testfunc])
+AC_OUTPUT

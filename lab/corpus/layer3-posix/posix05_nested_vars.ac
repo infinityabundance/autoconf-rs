@@ -1,0 +1,7 @@
+AC_INIT([nested-test], [1.0])
+AC_SUBST([BASE], [prefix])
+AC_SUBST([PATH1], ['${BASE}/bin'])
+AC_SUBST([PATH2], ['${prefix}/share'])
+AC_SUBST([PATH3], ['${exec_prefix}/lib'])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

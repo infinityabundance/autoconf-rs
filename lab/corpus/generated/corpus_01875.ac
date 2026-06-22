@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TM
+AC_TYPE_INT32_T
+AC_PROG_MAKE_SET
+AC_PROG_SED
+AC_FUNC_VPRINTF
+AC_PROG_MKDIR_P
+AC_OUTPUT

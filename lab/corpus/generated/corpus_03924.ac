@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LIBOBJ([fnmatch])
+AC_TYPE_MODE_T
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CXX
+AC_TYPE_UID_T
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

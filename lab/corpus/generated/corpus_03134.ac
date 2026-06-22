@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CANONICAL_HOST
+AC_PROG_YACC
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_CC
+AC_OUTPUT

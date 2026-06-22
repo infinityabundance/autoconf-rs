@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CANONICAL_TARGET
+AC_PROG_CXX
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_OUTPUT

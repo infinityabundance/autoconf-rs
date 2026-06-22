@@ -1,0 +1,8 @@
+dnl G303: 5 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-19],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_19])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_19])
+AC_CONFIG_COMMANDS([cmd2], [echo command_2_19])
+AC_CONFIG_COMMANDS([cmd3], [echo command_3_19])
+AC_CONFIG_COMMANDS([cmd4], [echo command_4_19])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CC_C_O
+AC_PROG_CPP
+AC_PROG_MKDIR_P
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UID_T
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

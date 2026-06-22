@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_DIRENT
+AC_CONFIG_MACRO_DIR([m4])
+AC_PREREQ([2.59])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_TYPE_UID_T
+AC_OUTPUT

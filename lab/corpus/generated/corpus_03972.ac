@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_CONFIG_AUX_DIR([build-aux])
+AC_STRUCT_TIMEZONE
+AC_TYPE_OFF_T
+AC_CONFIG_SRCDIR([src/main.c])
+AC_FUNC_MALLOC
+AC_OUTPUT

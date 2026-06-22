@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_MALLOC
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_STRUCT_ST_BLOCKS
+AC_TYPE_UINT32_T
+AC_PROG_CC
+AC_OUTPUT

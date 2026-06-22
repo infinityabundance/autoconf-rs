@@ -1,0 +1,5 @@
+dnl G28: Single func check: fork
+AC_INIT([gnu-fork],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fork])
+AC_OUTPUT

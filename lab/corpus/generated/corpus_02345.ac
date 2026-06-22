@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_FUNC_FORK
+AC_PREREQ([2.63])
+AC_OUTPUT

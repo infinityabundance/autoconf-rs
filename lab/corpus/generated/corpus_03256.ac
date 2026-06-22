@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_FGREP
+AC_TYPE_INT32_T
+AC_HEADER_DIRENT
+AC_PRESERVE_HELP_ORDER
+AC_FUNC_STRERROR_R
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

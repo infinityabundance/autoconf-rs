@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_STRUCT_TM
+AC_TYPE_UID_T
+AC_CONFIG_SUBDIRS([lib])
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl AC_PROG_FGREP
+AC_INIT([gnu-prog-fgrep],[1.0])
+AC_PROG_FGREP
+AC_OUTPUT

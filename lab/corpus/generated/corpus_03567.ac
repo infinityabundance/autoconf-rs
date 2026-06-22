@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_TYPE_UID_T
+AC_TYPE_UINT32_T
+AC_HEADER_DIRENT
+AC_OUTPUT

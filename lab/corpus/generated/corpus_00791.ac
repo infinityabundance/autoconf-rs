@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDINT
+AC_PROG_LEX
+AC_FUNC_MALLOC
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

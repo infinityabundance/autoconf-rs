@@ -1,0 +1,5 @@
+dnl G22: Single func check: execvp
+AC_INIT([gnu-execvp],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([execvp])
+AC_OUTPUT

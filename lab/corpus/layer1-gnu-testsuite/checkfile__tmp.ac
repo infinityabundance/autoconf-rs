@@ -1,0 +1,4 @@
+dnl Check file: /tmp
+AC_INIT([gnu-chkf-7],[1.0])
+AC_CHECK_FILE([/tmp], [AC_DEFINE([HAVE__TMP])])
+AC_OUTPUT

@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDINT
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_HEADER_STDBOOL
+AC_TYPE_UID_T
+AC_CANONICAL_TARGET
+AC_PROG_GREP
+AC_PROG_CC_C_O
+AC_OUTPUT

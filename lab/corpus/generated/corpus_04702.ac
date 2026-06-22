@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREREQ([2.69])
+AC_CHECK_SIZEOF([long])
+AC_HEADER_DIRENT
+AC_PROG_MAKE_SET
+AC_PROG_FGREP
+AC_OUTPUT

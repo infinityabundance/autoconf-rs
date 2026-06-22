@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_CHECK_SIZEOF([long])
+AC_CANONICAL_HOST
+AC_TYPE_UID_T
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_SUBST([exec_prefix])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_INT32_T
+AC_PROG_SED
+AC_PROG_CPP
+AC_PREFIX_PROGRAM([gcc])
+AC_PRESERVE_HELP_ORDER
+AC_CANONICAL_TARGET
+AC_PROG_AWK
+AC_OUTPUT

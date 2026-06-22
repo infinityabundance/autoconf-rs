@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_MODE_T
+AC_PRESERVE_HELP_ORDER
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_TYPE_OFF_T
+AC_CONFIG_HEADERS([config.h])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

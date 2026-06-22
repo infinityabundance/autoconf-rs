@@ -1,0 +1,18 @@
+.TH AUTORECONF 1 "2026-06-20" "autoconf-rs 0.1" "User Commands"
+.SH NAME
+autoreconf \- update generated configuration files
+.SH SYNOPSIS
+.B autoreconf
+[\fIOPTION\fR]... [\fIDIRECTORY\fR]...
+.SH DESCRIPTION
+Run autoconf, autoheader, aclocal, and automake to regenerate
+a GNU Build System directory tree.
+.SH OPTIONS
+.TP
+\fB\-f\fR, \fB\-\-force\fR
+Consider all generated files obsolete.
+.TP
+\fB\-i\fR, \fB\-\-install\fR
+Copy missing auxiliary files.
+.SH "SEE ALSO"
+\fBautoconf\fR(1), \fBautoheader\fR(1)

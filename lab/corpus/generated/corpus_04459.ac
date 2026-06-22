@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CC_C_O
+AC_TYPE_INT32_T
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_TYPE_MODE_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

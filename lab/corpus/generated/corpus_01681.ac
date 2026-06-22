@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDINT
+AC_CONFIG_SUBDIRS([lib])
+AC_PRESERVE_HELP_ORDER
+AC_FUNC_MALLOC
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

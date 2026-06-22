@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_PROG_EGREP
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_SUBST([PACKAGE_VERSION])
+AC_PROG_GREP
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_VPRINTF
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

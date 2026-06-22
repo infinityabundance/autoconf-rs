@@ -1,0 +1,5 @@
+dnl G95: Single header check: stdlib.h
+AC_INIT([gnu-hdr-stdlib_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([stdlib.h])
+AC_OUTPUT

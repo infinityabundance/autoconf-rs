@@ -1,0 +1,4 @@
+dnl Check file: /sys
+AC_INIT([gnu-chkf-9],[1.0])
+AC_CHECK_FILE([/sys], [AC_DEFINE([HAVE__SYS])])
+AC_OUTPUT

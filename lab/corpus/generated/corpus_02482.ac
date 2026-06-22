@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_AR
+AC_CONFIG_AUX_DIR([build-aux])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_LEX
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_LIB([m], [sin])
+AC_FUNC_VPRINTF
+AC_OUTPUT

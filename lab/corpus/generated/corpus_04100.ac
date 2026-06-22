@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_LEX
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CANONICAL_HOST
+AC_OUTPUT

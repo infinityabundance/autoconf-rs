@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_CC_C_O
+AC_STRUCT_TIMEZONE
+AC_PROG_EGREP
+AC_PROG_AR
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CPP
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_LEX
+AC_HEADER_STDC
+AC_CANONICAL_TARGET
+AC_FUNC_FORK
+AC_OUTPUT

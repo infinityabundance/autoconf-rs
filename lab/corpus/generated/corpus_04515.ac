@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_FORK
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_UINT32_T
+AC_OUTPUT

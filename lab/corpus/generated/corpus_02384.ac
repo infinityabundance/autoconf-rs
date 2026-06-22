@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_FGREP
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_SIZEOF([long])
+AC_PREREQ([2.63])
+AC_OUTPUT

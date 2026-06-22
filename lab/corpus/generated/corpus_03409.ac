@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_STDINT
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_SUBDIRS([lib])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_UID_T
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

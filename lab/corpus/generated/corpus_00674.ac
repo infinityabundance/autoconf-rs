@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_AR
+AC_REPLACE_FUNCS([strdup getopt])
+AC_SUBST([LIBS])
+AC_TYPE_SIZE_T
+AC_CHECK_TYPES([off_t mode_t])
+AC_FUNC_MALLOC
+AC_OUTPUT

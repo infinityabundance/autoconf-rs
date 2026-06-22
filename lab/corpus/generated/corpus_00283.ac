@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_SUBST([LIBS])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_FGREP
+AC_PROG_CPP
+AC_TYPE_UINT32_T
+AC_OUTPUT

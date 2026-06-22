@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_CC_C_O
+AC_PROG_EGREP
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_FUNC_ALLOCA
+AC_HEADER_STDC
+AC_TYPE_UINT32_T
+AC_OUTPUT

@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PRESERVE_HELP_ORDER
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_HEADERS([config.h])
+AC_PROG_YACC
+AC_TYPE_PID_T
+AC_SUBST([LIBS])
+AC_OUTPUT

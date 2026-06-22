@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UINT32_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_INSTALL
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_LN_S
+AC_PROG_RANLIB
+AC_PREFIX_DEFAULT([/usr/local])
+AC_SUBST([PACKAGE_VERSION])
+AC_PROG_LEX
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

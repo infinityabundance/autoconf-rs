@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

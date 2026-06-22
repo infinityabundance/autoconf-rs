@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([exec_prefix])
+AC_PROG_GREP
+AC_FUNC_STRERROR_R
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PRESERVE_HELP_ORDER
+AC_CONFIG_SUBDIRS([lib])
+AC_FUNC_MALLOC
+AC_OUTPUT

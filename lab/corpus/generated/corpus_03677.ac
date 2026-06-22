@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REVISION([$Revision: 1.0 $])
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_AR
+AC_HEADER_TIME
+AC_TYPE_UINT32_T
+AC_LIBOBJ([fnmatch])
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

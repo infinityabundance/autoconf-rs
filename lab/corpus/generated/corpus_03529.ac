@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UID_T
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_TIME
+AC_HEADER_DIRENT
+AC_PRESERVE_HELP_ORDER
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

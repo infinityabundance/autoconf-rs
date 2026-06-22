@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_STDBOOL
+AC_PROG_CPP
+AC_HEADER_STDC
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_STRUCT_ST_BLOCKS
+AC_OUTPUT

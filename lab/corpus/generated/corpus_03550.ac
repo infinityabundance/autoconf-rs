@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_FORK
+AC_HEADER_STDBOOL
+AC_CANONICAL_HOST
+AC_PROG_MAKE_SET
+AC_PREREQ([2.71])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

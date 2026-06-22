@@ -1,0 +1,6 @@
+AC_INIT([check-funcs], [1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([malloc])
+AC_CHECK_FUNCS([realloc calloc strdup])
+AC_CHECK_FUNC([getopt_long], [], [AC_MSG_ERROR([getopt_long required])])
+AC_OUTPUT

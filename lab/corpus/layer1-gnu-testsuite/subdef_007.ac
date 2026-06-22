@@ -1,0 +1,13 @@
+dnl G418: SUBST+DEFINE combo 7
+AC_INIT([gnu-sd-7],[1.0])
+AC_SUBST([S7_0], [v7_0])
+AC_SUBST([S7_1], [v7_1])
+AC_SUBST([S7_2], [v7_2])
+AC_SUBST([S7_3], [v7_3])
+AC_SUBST([S7_4], [v7_4])
+AC_DEFINE([D7_0], [0])
+AC_DEFINE([D7_1], [7])
+AC_DEFINE([D7_2], [14])
+AC_DEFINE([D7_3], [21])
+AC_DEFINE([D7_4], [28])
+AC_OUTPUT

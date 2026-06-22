@@ -1,0 +1,4 @@
+AC_INIT([arg48],[1.0])
+AC_ARG_WITH([w48],[AS_HELP_STRING([--with-w48],[Option 48])])
+AC_ARG_ENABLE([e48],[AS_HELP_STRING([--enable-e48],[Feature 48])])
+AC_OUTPUT

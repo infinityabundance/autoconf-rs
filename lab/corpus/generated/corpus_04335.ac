@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_INSTALL
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_LN_S
+AC_PROG_CC
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G33: Single func check: getegid
+AC_INIT([gnu-getegid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getegid])
+AC_OUTPUT

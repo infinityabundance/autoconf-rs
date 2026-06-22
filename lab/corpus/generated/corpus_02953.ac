@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_LIB([m], [sin])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_CPP
+AC_HEADER_SYS_WAIT
+AC_PREREQ([2.71])
+AC_PROG_LN_S
+AC_OUTPUT

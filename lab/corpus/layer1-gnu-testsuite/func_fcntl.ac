@@ -1,0 +1,5 @@
+dnl G26: Single func check: fcntl
+AC_INIT([gnu-fcntl],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fcntl])
+AC_OUTPUT

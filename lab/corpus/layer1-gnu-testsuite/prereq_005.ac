@@ -1,0 +1,4 @@
+dnl G396: AC_PREREQ(5.50)
+AC_PREREQ([5.50])
+AC_INIT([gnu-prq-5],[1.0])
+AC_OUTPUT

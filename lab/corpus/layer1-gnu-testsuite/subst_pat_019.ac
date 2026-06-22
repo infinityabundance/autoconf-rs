@@ -1,0 +1,13 @@
+dnl G118: 10 AC_SUBST calls
+AC_INIT([gnu-subst-19],[1.0])
+AC_SUBST([SVAR_0], [sval_0_19])
+AC_SUBST([SVAR_1], [sval_1_19])
+AC_SUBST([SVAR_2], [sval_2_19])
+AC_SUBST([SVAR_3], [sval_3_19])
+AC_SUBST([SVAR_4], [sval_4_19])
+AC_SUBST([SVAR_5], [sval_5_19])
+AC_SUBST([SVAR_6], [sval_6_19])
+AC_SUBST([SVAR_7], [sval_7_19])
+AC_SUBST([SVAR_8], [sval_8_19])
+AC_SUBST([SVAR_9], [sval_9_19])
+AC_OUTPUT

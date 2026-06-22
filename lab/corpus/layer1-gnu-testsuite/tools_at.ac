@@ -1,0 +1,22 @@
+dnl Layer 1: Port GNU Autoconf test suite — first 5 critical tests
+dnl These are direct ports from autotools-mirror/autoconf/tests/
+dnl Court: CROSS.051 — Layer 1 GNU test suite (first 5 ported)
+
+dnl Test 1: tools.at — AC_PROG_CC and friends
+AC_INIT([gnu-tools], [1.0])
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_AWK
+AC_PROG_GREP
+AC_PROG_EGREP
+AC_PROG_FGREP
+AC_PROG_SED
+AC_PROG_LEX
+AC_PROG_YACC
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+AC_PROG_INSTALL
+AC_PROG_MKDIR_P
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

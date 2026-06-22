@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_CPP
+AC_TYPE_OFF_T
+AC_LANG_PUSH([C])
+AC_FUNC_VPRINTF
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

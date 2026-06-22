@@ -1,0 +1,8 @@
+dnl G274: 5 AC_CONFIG_HEADERS
+AC_INIT([gnu-hdr-10],[1.0])
+AC_CONFIG_HEADERS([config0.h:config0.h.in])
+AC_CONFIG_HEADERS([config1.h:config1.h.in])
+AC_CONFIG_HEADERS([config2.h:config2.h.in])
+AC_CONFIG_HEADERS([config3.h:config3.h.in])
+AC_CONFIG_HEADERS([config4.h:config4.h.in])
+AC_OUTPUT

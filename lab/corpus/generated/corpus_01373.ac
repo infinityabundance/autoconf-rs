@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_FUNC_ALLOCA
+AC_OUTPUT

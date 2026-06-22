@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_YACC
+AC_OUTPUT

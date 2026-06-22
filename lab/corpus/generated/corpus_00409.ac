@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_ALLOCA
+AC_CHECK_LIB([m], [sin])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

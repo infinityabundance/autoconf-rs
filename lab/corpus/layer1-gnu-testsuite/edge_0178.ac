@@ -1,0 +1,4 @@
+AC_INIT([arg178],[1.0])
+AC_ARG_WITH([w178],[AS_HELP_STRING([--with-w178],[Option 178])])
+AC_ARG_ENABLE([e178],[AS_HELP_STRING([--enable-e178],[Feature 178])])
+AC_OUTPUT

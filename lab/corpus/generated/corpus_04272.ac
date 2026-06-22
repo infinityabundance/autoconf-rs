@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_INSTALL
+AC_PRESERVE_HELP_ORDER
+AC_TYPE_OFF_T
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_AR
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

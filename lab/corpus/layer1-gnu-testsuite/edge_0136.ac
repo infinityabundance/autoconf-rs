@@ -1,0 +1,3 @@
+AC_INIT([mch136],[1.0])
+AC_CONFIG_HEADERS([h136_a h136_b h136_c])
+AC_OUTPUT

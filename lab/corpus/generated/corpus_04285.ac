@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MAKE_SET
+AC_LIBOBJ([fnmatch])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

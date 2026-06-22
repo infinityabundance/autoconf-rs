@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_INT32_T
+AC_PROG_EGREP
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CONFIG_HEADERS([config.h])
+AC_OUTPUT

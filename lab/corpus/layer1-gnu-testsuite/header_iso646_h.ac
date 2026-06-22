@@ -1,0 +1,5 @@
+dnl G69: Single header check: iso646.h
+AC_INIT([gnu-hdr-iso646_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([iso646.h])
+AC_OUTPUT

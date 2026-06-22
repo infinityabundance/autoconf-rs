@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_RANLIB
+AC_LIBOBJ([fnmatch])
+AC_PROG_INSTALL
+AC_CONFIG_SUBDIRS([lib])
+AC_TYPE_UINT32_T
+AC_PROG_SED
+AC_PROG_CC
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G34: Single func check: geteuid
+AC_INIT([gnu-geteuid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([geteuid])
+AC_OUTPUT

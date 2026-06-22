@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_FORK
+AC_PROG_CC
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_LIBOBJ([fnmatch])
+AC_PROG_FGREP
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_PROG_GREP
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_OUTPUT

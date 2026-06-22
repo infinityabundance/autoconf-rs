@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_INT32_T
+AC_FUNC_MALLOC
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CHECK_TYPES([off_t mode_t])
+AC_HEADER_TIME
+AC_OUTPUT

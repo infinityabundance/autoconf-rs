@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_STRUCT_ST_BLOCKS
+AC_STRUCT_TIMEZONE
+AC_PROG_CC_C_O
+AC_PRESERVE_HELP_ORDER
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_SUBDIRS([lib])
+AC_OUTPUT

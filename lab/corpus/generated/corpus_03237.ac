@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_SYS_WAIT
+AC_CONFIG_MACRO_DIR([m4])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

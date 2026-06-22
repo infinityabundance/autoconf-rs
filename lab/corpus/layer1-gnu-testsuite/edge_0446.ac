@@ -1,0 +1,3 @@
+AC_INIT([mch446],[1.0])
+AC_CONFIG_HEADERS([h446_a h446_b h446_c])
+AC_OUTPUT

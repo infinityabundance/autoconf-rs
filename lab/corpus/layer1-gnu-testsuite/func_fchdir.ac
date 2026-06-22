@@ -1,0 +1,5 @@
+dnl G23: Single func check: fchdir
+AC_INIT([gnu-fchdir],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fchdir])
+AC_OUTPUT

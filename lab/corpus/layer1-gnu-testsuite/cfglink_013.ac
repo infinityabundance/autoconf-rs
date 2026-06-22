@@ -1,0 +1,8 @@
+dnl G317: 5 AC_CONFIG_LINKS
+AC_INIT([gnu-link-13],[1.0])
+AC_CONFIG_LINKS([dest0:src0])
+AC_CONFIG_LINKS([dest1:src1])
+AC_CONFIG_LINKS([dest2:src2])
+AC_CONFIG_LINKS([dest3:src3])
+AC_CONFIG_LINKS([dest4:src4])
+AC_OUTPUT

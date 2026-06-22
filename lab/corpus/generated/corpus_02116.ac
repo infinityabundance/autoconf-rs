@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PREREQ([2.63])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_TYPE_UID_T
+AC_STRUCT_TM
+AC_HEADER_DIRENT
+AC_OUTPUT

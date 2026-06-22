@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AWK
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_MKDIR_P
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_PROG_LEX
+AC_TYPE_UID_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

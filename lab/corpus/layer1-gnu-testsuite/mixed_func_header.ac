@@ -1,0 +1,5 @@
+dnl G160: Mixed: func,header
+AC_INIT([gnu-mix-func_header],[1.0])
+AC_CHECK_FUNC
+AC_CHECK_HEADER
+AC_OUTPUT

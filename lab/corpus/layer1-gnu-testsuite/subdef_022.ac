@@ -1,0 +1,13 @@
+dnl G433: SUBST+DEFINE combo 22
+AC_INIT([gnu-sd-22],[1.0])
+AC_SUBST([S22_0], [v22_0])
+AC_SUBST([S22_1], [v22_1])
+AC_SUBST([S22_2], [v22_2])
+AC_SUBST([S22_3], [v22_3])
+AC_SUBST([S22_4], [v22_4])
+AC_DEFINE([D22_0], [0])
+AC_DEFINE([D22_1], [22])
+AC_DEFINE([D22_2], [44])
+AC_DEFINE([D22_3], [66])
+AC_DEFINE([D22_4], [88])
+AC_OUTPUT

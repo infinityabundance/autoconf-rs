@@ -1,0 +1,5 @@
+dnl G362: Replace func: getopt
+AC_INIT([gnu-repl-getopt],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([getopt])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_HEADERS([config.h])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_SUBST([PACKAGE_NAME])
+AC_PROG_LN_S
+AC_OUTPUT

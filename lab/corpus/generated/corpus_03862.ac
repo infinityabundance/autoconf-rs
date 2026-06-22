@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_SIZEOF([long])
+AC_CANONICAL_TARGET
+AC_HEADER_SYS_WAIT
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_LIB([m], [sin])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

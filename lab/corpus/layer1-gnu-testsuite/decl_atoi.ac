@@ -1,0 +1,5 @@
+dnl G337: Check decl: atoi
+AC_INIT([gnu-decl-atoi],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([atoi])
+AC_OUTPUT

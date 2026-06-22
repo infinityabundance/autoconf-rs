@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_GREP
+AC_PROG_YACC
+AC_TYPE_INT32_T
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

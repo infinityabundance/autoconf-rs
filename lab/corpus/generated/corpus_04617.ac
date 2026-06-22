@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_INSTALL
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_CHECK_TYPES([off_t mode_t])
+AC_HEADER_SYS_WAIT
+AC_CANONICAL_HOST
+AC_PROG_EGREP
+AC_OUTPUT

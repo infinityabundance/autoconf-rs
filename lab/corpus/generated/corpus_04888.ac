@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_PROG_RANLIB
+AC_PRESERVE_HELP_ORDER
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_MKDIR_P
+AC_TYPE_SIZE_T
+AC_OUTPUT

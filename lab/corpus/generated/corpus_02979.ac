@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PRESERVE_HELP_ORDER
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_UINT32_T
+AC_TYPE_PID_T
+AC_CANONICAL_TARGET
+AC_PROG_LN_S
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

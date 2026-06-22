@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LEX
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_CC_C_O
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

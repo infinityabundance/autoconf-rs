@@ -1,0 +1,4 @@
+dnl Check file: /proc/self
+AC_INIT([gnu-chkf-8],[1.0])
+AC_CHECK_FILE([/proc/self], [AC_DEFINE([HAVE__PROC_SELF])])
+AC_OUTPUT

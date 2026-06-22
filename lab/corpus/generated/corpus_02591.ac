@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_CXX
+AC_PROG_CC
+AC_LIBOBJ([fnmatch])
+AC_PROG_AWK
+AC_OUTPUT

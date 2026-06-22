@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_MKDIR_P
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_PROG_SED
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_TYPE_INT32_T
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_HEADER_STDINT
+AC_FUNC_ALLOCA
+AC_PROG_AWK
+AC_PROG_RANLIB
+AC_REVISION([$Revision: 1.0 $])
+AC_CANONICAL_BUILD
+AC_OUTPUT

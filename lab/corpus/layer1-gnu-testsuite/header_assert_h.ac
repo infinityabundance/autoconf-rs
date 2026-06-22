@@ -1,0 +1,5 @@
+dnl G52: Single header check: assert.h
+AC_INIT([gnu-hdr-assert_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([assert.h])
+AC_OUTPUT

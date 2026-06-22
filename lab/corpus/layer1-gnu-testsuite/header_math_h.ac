@@ -1,0 +1,5 @@
+dnl G74: Single header check: math.h
+AC_INIT([gnu-hdr-math_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([math.h])
+AC_OUTPUT

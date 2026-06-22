@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_SUBDIRS([lib])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_INSTALL
+AC_PRESERVE_HELP_ORDER
+AC_PROG_CXX
+AC_OUTPUT

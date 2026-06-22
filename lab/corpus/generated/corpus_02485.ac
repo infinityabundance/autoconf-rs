@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_AR
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

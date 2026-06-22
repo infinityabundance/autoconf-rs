@@ -1,0 +1,4 @@
+dnl Check file: /dev/zero
+AC_INIT([gnu-chkf-6],[1.0])
+AC_CHECK_FILE([/dev/zero], [AC_DEFINE([HAVE__DEV_ZERO])])
+AC_OUTPUT

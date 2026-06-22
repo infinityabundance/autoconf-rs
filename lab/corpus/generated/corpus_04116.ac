@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LN_S
+AC_PROG_LEX
+AC_OUTPUT

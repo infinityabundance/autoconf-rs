@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_VPRINTF
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PREREQ([2.71])
+AC_PROG_AR
+AC_HEADER_STDINT
+AC_PROG_SED
+AC_OUTPUT

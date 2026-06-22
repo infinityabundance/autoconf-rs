@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_STRUCT_ST_BLOCKS
+AC_TYPE_INT32_T
+AC_PROG_MAKE_SET
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

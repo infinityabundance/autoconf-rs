@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_AWK
+AC_HEADER_STDBOOL
+AC_PREREQ([2.63])
+AC_HEADER_STDINT
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_MKDIR_P
+AC_TYPE_MODE_T
+AC_OUTPUT

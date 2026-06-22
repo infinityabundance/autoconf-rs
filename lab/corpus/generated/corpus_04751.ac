@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_TYPE_INT32_T
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_FUNC_STRERROR_R
+AC_OUTPUT

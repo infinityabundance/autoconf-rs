@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_YACC
+AC_FUNC_MALLOC
+AC_CHECK_TYPES([off_t mode_t])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

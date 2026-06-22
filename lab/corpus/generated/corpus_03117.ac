@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_STRUCT_ST_BLOCKS
+AC_HEADER_STDBOOL
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_MKDIR_P
+AC_OUTPUT

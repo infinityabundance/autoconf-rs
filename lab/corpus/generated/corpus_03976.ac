@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_AR
+AC_CANONICAL_TARGET
+AC_PROG_YACC
+AC_OUTPUT

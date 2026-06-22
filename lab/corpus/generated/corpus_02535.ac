@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TIMEZONE
+AC_CHECK_LIB([m], [sin])
+AC_PROG_AR
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PRESERVE_HELP_ORDER
+AC_PROG_INSTALL
+AC_OUTPUT

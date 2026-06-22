@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_PID_T
+AC_PROG_CPP
+AC_FUNC_STRERROR_R
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_FUNC_MMAP
+AC_OUTPUT

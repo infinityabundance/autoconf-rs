@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_SUBST([LIBS])
+AC_PROG_INSTALL
+AC_OUTPUT

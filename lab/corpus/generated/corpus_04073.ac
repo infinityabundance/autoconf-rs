@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_INSTALL
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_FGREP
+AC_OUTPUT

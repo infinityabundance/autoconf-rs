@@ -1,0 +1,5 @@
+dnl G327: Check decl: free
+AC_INIT([gnu-decl-free],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([free])
+AC_OUTPUT

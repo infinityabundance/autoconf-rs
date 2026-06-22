@@ -1,0 +1,7 @@
+AC_INIT([GNU Hello], [2.12], [bug-hello@gnu.org])
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_HEADERS([config.h])
+AC_SUBST([PACKAGE], [hello])
+AC_SUBST([VERSION], [2.12])
+AC_DEFINE([HAVE_FOO], [1], [Define if foo is available])
+AC_OUTPUT

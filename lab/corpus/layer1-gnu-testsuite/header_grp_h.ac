@@ -1,0 +1,5 @@
+dnl G66: Single header check: grp.h
+AC_INIT([gnu-hdr-grp_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([grp.h])
+AC_OUTPUT

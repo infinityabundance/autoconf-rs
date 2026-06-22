@@ -1,0 +1,6 @@
+dnl G383: AH_TEMPLATE
+AC_INIT([gnu-ah-9],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_9], [Description for feature 9])
+AH_VERBATIM([BOTTOM_9], [/* Bottom comment 9 */])
+AC_OUTPUT

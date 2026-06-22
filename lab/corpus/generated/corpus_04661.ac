@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_ALLOCA
+AC_PREREQ([2.59])
+AC_OUTPUT

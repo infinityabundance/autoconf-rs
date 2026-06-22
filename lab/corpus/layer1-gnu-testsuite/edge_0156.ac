@@ -1,0 +1,3 @@
+AC_INIT([mch156],[1.0])
+AC_CONFIG_HEADERS([h156_a h156_b h156_c])
+AC_OUTPUT

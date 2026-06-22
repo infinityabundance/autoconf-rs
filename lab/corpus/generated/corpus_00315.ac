@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_MACRO_DIR([m4])
+AC_TYPE_INT32_T
+AC_TYPE_MODE_T
+AC_PROG_MKDIR_P
+AC_OUTPUT

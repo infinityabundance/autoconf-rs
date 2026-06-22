@@ -1,0 +1,5 @@
+dnl G336: Check decl: strcmp
+AC_INIT([gnu-decl-strcmp],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([strcmp])
+AC_OUTPUT

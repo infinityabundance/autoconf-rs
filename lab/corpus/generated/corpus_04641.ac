@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_CHECK_SIZEOF([long])
+AC_LIBOBJ([fnmatch])
+AC_CANONICAL_TARGET
+AC_OUTPUT

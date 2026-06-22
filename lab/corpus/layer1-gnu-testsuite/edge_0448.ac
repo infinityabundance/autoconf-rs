@@ -1,0 +1,4 @@
+AC_INIT([arg448],[1.0])
+AC_ARG_WITH([w448],[AS_HELP_STRING([--with-w448],[Option 448])])
+AC_ARG_ENABLE([e448],[AS_HELP_STRING([--enable-e448],[Feature 448])])
+AC_OUTPUT

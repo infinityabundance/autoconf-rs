@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_GREP
+AC_STRUCT_ST_BLOCKS
+AC_PREFIX_DEFAULT([/usr/local])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_OUTPUT

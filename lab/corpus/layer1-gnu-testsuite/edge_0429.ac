@@ -1,0 +1,3 @@
+AC_INIT([asif429],[1.0])
+AS_IF([test 9 = 0],[AC_SUBST([V429],[v429])],[AC_DEFINE([D429],[3003])])
+AC_OUTPUT

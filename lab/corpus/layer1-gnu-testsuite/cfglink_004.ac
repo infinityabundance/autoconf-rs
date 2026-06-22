@@ -1,0 +1,7 @@
+dnl G308: 4 AC_CONFIG_LINKS
+AC_INIT([gnu-link-4],[1.0])
+AC_CONFIG_LINKS([dest0:src0])
+AC_CONFIG_LINKS([dest1:src1])
+AC_CONFIG_LINKS([dest2:src2])
+AC_CONFIG_LINKS([dest3:src3])
+AC_OUTPUT

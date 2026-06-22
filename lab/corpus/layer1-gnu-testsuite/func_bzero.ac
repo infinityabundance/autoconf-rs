@@ -1,0 +1,5 @@
+dnl G5: Single func check: bzero
+AC_INIT([gnu-bzero],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([bzero])
+AC_OUTPUT

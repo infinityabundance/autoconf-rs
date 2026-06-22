@@ -1,0 +1,5 @@
+dnl G85: Single header check: search.h
+AC_INIT([gnu-hdr-search_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([search.h])
+AC_OUTPUT

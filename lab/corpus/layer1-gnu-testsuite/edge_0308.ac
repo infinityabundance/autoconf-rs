@@ -1,0 +1,4 @@
+AC_INIT([arg308],[1.0])
+AC_ARG_WITH([w308],[AS_HELP_STRING([--with-w308],[Option 308])])
+AC_ARG_ENABLE([e308],[AS_HELP_STRING([--enable-e308],[Feature 308])])
+AC_OUTPUT

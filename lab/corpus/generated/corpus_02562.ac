@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_AR
+AC_HEADER_STDBOOL
+AC_PROG_LN_S
+AC_PROG_CXX
+AC_OUTPUT

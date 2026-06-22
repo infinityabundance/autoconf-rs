@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UINT32_T
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_TARGET
+AC_CONFIG_HEADERS([config.h])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_SUBST([CFLAGS])
+AC_PROG_CXX
+AC_OUTPUT

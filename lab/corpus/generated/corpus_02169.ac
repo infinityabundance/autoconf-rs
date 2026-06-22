@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_GREP
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_HEADER_STDINT
+AC_PREREQ([2.59])
+AC_OUTPUT

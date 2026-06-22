@@ -1,0 +1,6 @@
+dnl G375: AH_TEMPLATE
+AC_INIT([gnu-ah-1],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_1], [Description for feature 1])
+AH_VERBATIM([BOTTOM_1], [/* Bottom comment 1 */])
+AC_OUTPUT

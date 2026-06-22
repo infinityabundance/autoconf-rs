@@ -1,0 +1,5 @@
+dnl G36: Single func check: getgroups
+AC_INIT([gnu-getgroups],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getgroups])
+AC_OUTPUT

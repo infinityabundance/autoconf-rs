@@ -1,0 +1,5 @@
+dnl G30: Single func check: fsync
+AC_INIT([gnu-fsync],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fsync])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDINT
+AC_TYPE_MODE_T
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_FGREP
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

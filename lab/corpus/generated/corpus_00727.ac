@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TIMEZONE
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_PROG_YACC
+AC_PROG_MKDIR_P
+AC_OUTPUT

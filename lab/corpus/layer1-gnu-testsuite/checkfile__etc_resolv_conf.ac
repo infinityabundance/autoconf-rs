@@ -1,0 +1,4 @@
+dnl Check file: /etc/resolv.conf
+AC_INIT([gnu-chkf-2],[1.0])
+AC_CHECK_FILE([/etc/resolv.conf], [AC_DEFINE([HAVE__ETC_RESOLV_CONF])])
+AC_OUTPUT

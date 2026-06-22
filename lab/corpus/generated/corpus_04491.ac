@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_SIZEOF([long])
+AC_PROG_EGREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

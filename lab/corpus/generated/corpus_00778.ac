@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_CC
+AC_CANONICAL_BUILD
+AC_PROG_AR
+AC_SUBST([PACKAGE_NAME])
+AC_PREREQ([2.63])
+AC_TYPE_OFF_T
+AC_OUTPUT

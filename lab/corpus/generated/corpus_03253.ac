@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_MALLOC
+AC_PROG_CC_C_O
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_PID_T
+AC_OUTPUT

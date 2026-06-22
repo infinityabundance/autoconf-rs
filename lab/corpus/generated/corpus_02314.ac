@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_MODE_T
+AC_HEADER_SYS_WAIT
+AC_FUNC_STRERROR_R
+AC_OUTPUT

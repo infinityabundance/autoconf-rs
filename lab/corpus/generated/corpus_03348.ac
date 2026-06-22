@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_LANG_PUSH([C])
+AC_PREREQ([2.63])
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_UINT32_T
+AC_CANONICAL_TARGET
+AC_STRUCT_ST_BLOCKS
+AC_OUTPUT

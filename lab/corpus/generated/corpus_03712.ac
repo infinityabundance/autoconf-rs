@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_CC_C_O
+AC_LIBOBJ([fnmatch])
+AC_HEADER_TIME
+AC_OUTPUT

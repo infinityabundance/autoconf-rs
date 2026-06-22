@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_HEADERS([config.h])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_LIB([m], [sin])
+AC_FUNC_VPRINTF
+AC_CONFIG_SUBDIRS([lib])
+AC_OUTPUT

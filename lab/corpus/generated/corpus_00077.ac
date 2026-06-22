@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MALLOC
+AC_TYPE_UINT32_T
+AC_PROG_LN_S
+AC_TYPE_INT32_T
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

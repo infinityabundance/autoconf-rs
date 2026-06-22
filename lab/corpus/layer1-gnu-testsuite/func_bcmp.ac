@@ -1,0 +1,5 @@
+dnl G3: Single func check: bcmp
+AC_INIT([gnu-bcmp],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([bcmp])
+AC_OUTPUT

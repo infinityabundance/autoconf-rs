@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_INSTALL
+AC_PROG_CC
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

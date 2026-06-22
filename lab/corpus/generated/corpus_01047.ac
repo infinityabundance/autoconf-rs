@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_FORK
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

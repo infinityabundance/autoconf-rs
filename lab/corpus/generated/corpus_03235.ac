@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_HEADER_STDBOOL
+AC_CHECK_SIZEOF([long])
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([malloc realloc])
+AC_FUNC_STRERROR_R
+AC_OUTPUT

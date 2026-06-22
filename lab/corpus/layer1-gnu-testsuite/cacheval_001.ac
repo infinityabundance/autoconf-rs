@@ -1,0 +1,5 @@
+dnl G365: AC_CACHE_VAL
+AC_INIT([gnu-cv-1],[1.0])
+AC_PROG_CC
+AC_CACHE_VAL([ac_cv_test_1], [ac_cv_test_1=yes])
+AC_OUTPUT

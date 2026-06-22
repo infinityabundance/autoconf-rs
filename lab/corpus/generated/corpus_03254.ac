@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LIBOBJ([fnmatch])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_SED
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_SUBST([PACKAGE_VERSION])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_STDBOOL
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CXX
+AC_PROG_EGREP
+AC_HEADER_STDINT
+AC_CHECK_LIB([m], [sin])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

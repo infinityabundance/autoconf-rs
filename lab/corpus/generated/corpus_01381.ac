@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_FUNC_MALLOC
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_MKDIR_P
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_AR
+AC_HEADER_TIME
+AC_OUTPUT

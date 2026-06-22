@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_STRUCT_ST_BLOCKS
+AC_LANG_PUSH([C])
+AC_SUBST([exec_prefix])
+AC_OUTPUT

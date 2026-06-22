@@ -1,0 +1,5 @@
+dnl G344: Check decl: getopt
+AC_INIT([gnu-decl-getopt],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([getopt])
+AC_OUTPUT

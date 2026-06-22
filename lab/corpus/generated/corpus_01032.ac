@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_PREREQ([2.63])
+AC_STRUCT_TM
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_REVISION([$Revision: 1.0 $])
+AC_HEADER_STDINT
+AC_CHECK_FUNCS([fork vfork])
+AC_OUTPUT

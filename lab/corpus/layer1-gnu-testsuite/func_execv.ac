@@ -1,0 +1,5 @@
+dnl G20: Single func check: execv
+AC_INIT([gnu-execv],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([execv])
+AC_OUTPUT

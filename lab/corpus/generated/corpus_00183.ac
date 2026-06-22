@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_TYPE_INT32_T
+AC_PROG_LN_S
+AC_FUNC_ALLOCA
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

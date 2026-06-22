@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_RANLIB
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_PID_T
+AC_FUNC_FORK
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

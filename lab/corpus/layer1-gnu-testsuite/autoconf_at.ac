@@ -1,0 +1,29 @@
+dnl Layer 1: autoconf.at — Autoconf self-test patterns
+AC_INIT([gnu-autoconf], [2.73], [bug-autoconf@gnu.org])
+AC_COPYRIGHT([Copyright (C) 2024 Free Software Foundation, Inc.])
+AC_REVISION([$Revision: 1.1 $])
+
+dnl Standard initialization
+AC_CONFIG_SRCDIR([configure.ac])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PREFIX_DEFAULT([/usr/local])
+
+dnl Version checks
+AC_PREREQ([2.69])
+
+dnl Package metadata
+AC_SUBST([PACKAGE], [autoconf-rs])
+AC_SUBST([VERSION], [0.1.0])
+
+dnl Canonical system
+AC_CANONICAL_HOST
+AC_CANONICAL_BUILD
+
+dnl Compiler
+AC_PROG_CC
+AC_PROG_MAKE_SET
+
+dnl Output
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

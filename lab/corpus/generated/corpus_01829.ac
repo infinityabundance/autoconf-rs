@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_HEADER_DIRENT
+AC_PROG_LN_S
+AC_CONFIG_MACRO_DIR([m4])
+AC_CANONICAL_TARGET
+AC_OUTPUT

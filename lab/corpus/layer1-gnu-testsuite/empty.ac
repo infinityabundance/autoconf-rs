@@ -1,0 +1,2 @@
+AC_INIT([gnu-empty],[1.0])
+AC_OUTPUT

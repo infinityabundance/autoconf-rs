@@ -1,0 +1,5 @@
+dnl G342: Check decl: unsetenv
+AC_INIT([gnu-decl-unsetenv],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([unsetenv])
+AC_OUTPUT

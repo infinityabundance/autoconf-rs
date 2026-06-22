@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CXX
+AC_CHECK_TYPES([off_t mode_t])
+AC_PRESERVE_HELP_ORDER
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CANONICAL_HOST
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

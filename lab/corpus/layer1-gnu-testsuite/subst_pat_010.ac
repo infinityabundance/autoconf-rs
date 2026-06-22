@@ -1,0 +1,13 @@
+dnl G109: 10 AC_SUBST calls
+AC_INIT([gnu-subst-10],[1.0])
+AC_SUBST([SVAR_0], [sval_0_10])
+AC_SUBST([SVAR_1], [sval_1_10])
+AC_SUBST([SVAR_2], [sval_2_10])
+AC_SUBST([SVAR_3], [sval_3_10])
+AC_SUBST([SVAR_4], [sval_4_10])
+AC_SUBST([SVAR_5], [sval_5_10])
+AC_SUBST([SVAR_6], [sval_6_10])
+AC_SUBST([SVAR_7], [sval_7_10])
+AC_SUBST([SVAR_8], [sval_8_10])
+AC_SUBST([SVAR_9], [sval_9_10])
+AC_OUTPUT

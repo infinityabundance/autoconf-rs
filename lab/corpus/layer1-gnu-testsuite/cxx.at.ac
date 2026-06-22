@@ -1,0 +1,6 @@
+AC_INIT([gnu-cxx],[1.0])
+AC_PROG_CXX
+AC_LANG([C++])
+AC_CHECK_FUNC([malloc])
+AC_CHECK_HEADER([iostream])
+AC_OUTPUT

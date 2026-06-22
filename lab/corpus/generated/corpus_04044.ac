@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_FUNC_MALLOC
+AC_HEADER_TIME
+AC_FUNC_MMAP
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_TYPE_UID_T
+AC_OUTPUT

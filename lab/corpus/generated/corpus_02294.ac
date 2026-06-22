@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UID_T
+AC_PROG_CPP
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_HEADER_STDINT
+AC_CANONICAL_TARGET
+AC_TYPE_INT32_T
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_OUTPUT

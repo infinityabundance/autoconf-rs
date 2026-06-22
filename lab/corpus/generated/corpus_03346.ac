@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_EGREP
+AC_STRUCT_TM
+AC_PREFIX_DEFAULT([/usr/local])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_FUNC_ALLOCA
+AC_OUTPUT

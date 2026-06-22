@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_RANLIB
+AC_TYPE_UID_T
+AC_PROG_MKDIR_P
+AC_PROG_EGREP
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_FORK
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

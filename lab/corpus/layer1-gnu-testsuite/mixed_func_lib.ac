@@ -1,0 +1,5 @@
+dnl G161: Mixed: func,lib
+AC_INIT([gnu-mix-func_lib],[1.0])
+AC_CHECK_FUNC
+AC_CHECK_LIB
+AC_OUTPUT

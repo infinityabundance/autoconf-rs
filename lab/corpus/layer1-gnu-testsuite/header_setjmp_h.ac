@@ -1,0 +1,5 @@
+dnl G87: Single header check: setjmp.h
+AC_INIT([gnu-hdr-setjmp_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([setjmp.h])
+AC_OUTPUT

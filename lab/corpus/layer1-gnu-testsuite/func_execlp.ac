@@ -1,0 +1,5 @@
+dnl G19: Single func check: execlp
+AC_INIT([gnu-execlp],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([execlp])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TM
+AC_PROG_INSTALL
+AC_PROG_LEX
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_OUTPUT

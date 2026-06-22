@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_GREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_LIBOBJ([fnmatch])
+AC_LANG_PUSH([C])
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_CPP
+AC_CANONICAL_BUILD
+AC_OUTPUT

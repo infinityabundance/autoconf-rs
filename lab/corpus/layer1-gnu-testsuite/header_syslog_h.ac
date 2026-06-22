@@ -1,0 +1,5 @@
+dnl G99: Single header check: syslog.h
+AC_INIT([gnu-hdr-syslog_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([syslog.h])
+AC_OUTPUT

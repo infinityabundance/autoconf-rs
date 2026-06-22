@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDBOOL
+AC_PROG_CC_C_O
+AC_PROG_AR
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

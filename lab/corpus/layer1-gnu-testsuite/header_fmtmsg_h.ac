@@ -1,0 +1,5 @@
+dnl G62: Single header check: fmtmsg.h
+AC_INIT([gnu-hdr-fmtmsg_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([fmtmsg.h])
+AC_OUTPUT

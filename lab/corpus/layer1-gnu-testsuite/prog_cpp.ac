@@ -1,0 +1,4 @@
+dnl AC_PROG_CPP
+AC_INIT([gnu-prog-cpp],[1.0])
+AC_PROG_CPP
+AC_OUTPUT

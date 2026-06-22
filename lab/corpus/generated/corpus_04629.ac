@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_YACC
+AC_FUNC_STRERROR_R
+AC_TYPE_INT32_T
+AC_CONFIG_MACRO_DIR([m4])
+AC_SUBST([LDFLAGS])
+AC_PROG_INSTALL
+AC_OUTPUT

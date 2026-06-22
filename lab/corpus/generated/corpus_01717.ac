@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_GREP
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_FORK
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_FUNC_STRERROR_R
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_OUTPUT

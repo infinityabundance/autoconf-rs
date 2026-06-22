@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_ALLOCA
+AC_TYPE_INT32_T
+AC_CONFIG_SRCDIR([src/main.c])
+AC_FUNC_FORK
+AC_PROG_MKDIR_P
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REVISION([$Revision: 1.0 $])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_EGREP
+AC_PROG_MAKE_SET
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_TYPE_OFF_T
+AC_HEADER_TIME
+AC_OUTPUT

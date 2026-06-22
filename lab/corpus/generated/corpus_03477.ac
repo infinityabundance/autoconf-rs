@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_FGREP
+AC_FUNC_VPRINTF
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_REVISION([$Revision: 1.0 $])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_FUNC_MALLOC
+AC_CHECK_LIB([m], [sin])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

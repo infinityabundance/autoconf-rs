@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CXX
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_YACC
+AC_HEADER_STDINT
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

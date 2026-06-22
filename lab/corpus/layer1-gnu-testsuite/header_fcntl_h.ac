@@ -1,0 +1,5 @@
+dnl G59: Single header check: fcntl.h
+AC_INIT([gnu-hdr-fcntl_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([fcntl.h])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CANONICAL_HOST
+AC_HEADER_STDINT
+AC_OUTPUT

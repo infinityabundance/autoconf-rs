@@ -1,0 +1,4 @@
+AC_INIT([gnu-go],[1.0])
+AC_PROG_GO
+AC_LANG([Go])
+AC_OUTPUT

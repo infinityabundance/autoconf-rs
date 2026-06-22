@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_OFF_T
+AC_PROG_AR
+AC_PROG_CXX
+AC_LIBOBJ([fnmatch])
+AC_HEADER_TIME
+AC_HEADER_STDBOOL
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_TYPE_MODE_T
+AC_OUTPUT

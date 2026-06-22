@@ -1,0 +1,4 @@
+dnl G397: AC_PREREQ(6.60)
+AC_PREREQ([6.60])
+AC_INIT([gnu-prq-6],[1.0])
+AC_OUTPUT

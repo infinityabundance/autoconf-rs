@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_LIB([m], [sin])
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_CXX
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

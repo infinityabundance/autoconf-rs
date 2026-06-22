@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_INT32_T
+AC_CANONICAL_BUILD
+AC_FUNC_MMAP
+AC_CHECK_LIB([m], [sin])
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_CANONICAL_HOST
+AC_OUTPUT

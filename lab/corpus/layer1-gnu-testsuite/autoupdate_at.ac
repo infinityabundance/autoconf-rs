@@ -1,0 +1,8 @@
+dnl Layer 1: autoupdate.at — Obsolete macro handling
+AC_INIT([gnu-autoupdate], [1.0])
+AC_PROG_CC
+dnl Use obsolete macros that should trigger warnings
+AC_TRY_COMPILE([#include <stdio.h>], [printf("test");], [AC_DEFINE([COMPILE_OK])])
+AC_TRY_LINK([#include <stdlib.h>], [malloc(1);], [AC_DEFINE([LINK_OK])])
+AC_HEADER_EGREP([stdlib], [stdlib.h], [AC_DEFINE([EGREP_OK])])
+AC_OUTPUT

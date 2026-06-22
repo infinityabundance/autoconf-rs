@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CXX
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_FUNC_MMAP
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_OUTPUT

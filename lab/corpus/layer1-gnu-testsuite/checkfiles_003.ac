@@ -1,0 +1,4 @@
+dnl Check files: /usr/bin/env /dev/null
+AC_INIT([gnu-chkfs-3],[1.0])
+AC_CHECK_FILES([/usr/bin/env /dev/null])
+AC_OUTPUT

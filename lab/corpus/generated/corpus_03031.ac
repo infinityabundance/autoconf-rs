@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_HEADER_SYS_WAIT
+AC_PROG_SED
+AC_PROG_LEX
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_LN_S
+AC_OUTPUT

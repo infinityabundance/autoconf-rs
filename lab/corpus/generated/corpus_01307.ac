@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CC
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

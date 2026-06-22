@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UID_T
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_LEX
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

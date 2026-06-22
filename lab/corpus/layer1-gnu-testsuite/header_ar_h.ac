@@ -1,0 +1,5 @@
+dnl G51: Single header check: ar.h
+AC_INIT([gnu-hdr-ar_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([ar.h])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+dnl Layer 1: args.at — AC_ARG_WITH/ENABLE/VAR
+AC_INIT([gnu-args], [1.0])
+AC_ARG_WITH([foo], [AS_HELP_STRING([--with-foo], [use foo])])
+AC_ARG_WITH([bar], [AS_HELP_STRING([--with-bar=DIR], [bar directory])], [], [with_bar=no])
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug], [enable debugging])])
+AC_ARG_ENABLE([optimize], [AS_HELP_STRING([--disable-optimize], [disable optimization])], [], [enable_optimize=yes])
+AC_ARG_VAR([CFLAGS_EXTRA], [Extra C compiler flags])
+AC_OUTPUT

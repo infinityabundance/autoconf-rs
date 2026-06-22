@@ -1,0 +1,4 @@
+AC_INIT([gnu-objc],[1.0])
+AC_PROG_OBJC
+AC_LANG([Objective C])
+AC_OUTPUT

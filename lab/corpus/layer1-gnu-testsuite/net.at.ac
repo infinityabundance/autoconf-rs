@@ -1,0 +1,6 @@
+AC_INIT([gnu-net],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADERS([sys/socket.h netinet/in.h arpa/inet.h netdb.h])
+AC_CHECK_FUNCS([socket connect bind listen accept])
+AC_CHECK_FUNCS([gethostbyname gethostbyaddr getservbyname])
+AC_OUTPUT

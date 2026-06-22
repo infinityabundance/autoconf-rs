@@ -1,0 +1,6 @@
+dnl G376: AH_TEMPLATE
+AC_INIT([gnu-ah-2],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_2], [Description for feature 2])
+AH_VERBATIM([BOTTOM_2], [/* Bottom comment 2 */])
+AC_OUTPUT

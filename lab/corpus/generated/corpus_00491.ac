@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_PROG_YACC
+AC_PROG_CXX
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_LN_S
+AC_PROG_CC
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_STRUCT_TIMEZONE
+AC_LANG_PUSH([C])
+AC_TYPE_UID_T
+AC_FUNC_VPRINTF
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_HEADER_TIME
+AC_TYPE_UINT32_T
+AC_OUTPUT

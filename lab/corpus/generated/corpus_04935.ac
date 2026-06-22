@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_FUNC_MMAP
+AC_PROG_GREP
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UINT32_T
+AC_OUTPUT

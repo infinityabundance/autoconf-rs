@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_ALLOCA
+AC_SUBST([PACKAGE_VERSION])
+AC_TYPE_OFF_T
+AC_FUNC_VPRINTF
+AC_TYPE_SIZE_T
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_OUTPUT

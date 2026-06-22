@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_MODE_T
+AC_PROG_AR
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_MACRO_DIR([m4])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_MKDIR_P
+AC_FUNC_VPRINTF
+AC_STRUCT_TIMEZONE
+AC_PROG_SED
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

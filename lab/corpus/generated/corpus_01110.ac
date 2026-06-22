@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_YACC
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_LN_S
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_RANLIB
+AC_OUTPUT

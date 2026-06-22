@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_AR
+AC_STRUCT_TM
+AC_PROG_EGREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_TYPE_MODE_T
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

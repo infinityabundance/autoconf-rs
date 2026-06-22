@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_CC
+AC_PROG_SED
+AC_FUNC_ALLOCA
+AC_FUNC_MMAP
+AC_PROG_LEX
+AC_CANONICAL_TARGET
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_SIZEOF([long])
+AC_FUNC_VPRINTF
+AC_STRUCT_TIMEZONE
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CXX
+AC_STRUCT_TM
+AC_OUTPUT

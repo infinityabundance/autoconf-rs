@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_TYPE_OFF_T
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_HEADER_STDBOOL
+AC_TYPE_INT32_T
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_MAKE_SET
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_CPP
+AC_HEADER_SYS_WAIT
+AC_TYPE_MODE_T
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_PROG_MKDIR_P
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_SUBST([exec_prefix])
+AC_CANONICAL_BUILD
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

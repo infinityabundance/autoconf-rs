@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC
+AC_LIBOBJ([fnmatch])
+AC_CHECK_FUNCS([malloc realloc])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_FUNC_VPRINTF
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

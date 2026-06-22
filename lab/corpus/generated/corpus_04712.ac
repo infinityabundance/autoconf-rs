@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CC
+AC_REVISION([$Revision: 1.0 $])
+AC_TYPE_MODE_T
+AC_TYPE_SIZE_T
+AC_OUTPUT

@@ -1,0 +1,12 @@
+dnl Layer 1: transform.at — AC_SUBST/AC_DEFINE transformation edge cases
+AC_INIT([gnu-transform], [1.0])
+AC_PROG_CC
+AC_SUBST([VAR1], ['value with $dollar and backticks'])
+AC_SUBST([VAR2], ["value with quotes and spaces"])
+AC_SUBST([VAR3], [value_with_@_atsigns])
+AC_DEFINE([QUOTED], ["string with spaces"])
+AC_DEFINE([NUMERIC], [42])
+AC_DEFINE([ZERO], [0])
+AC_DEFINE([EMPTY])
+AC_CONFIG_FILES([Makefile src/test.sh])
+AC_OUTPUT

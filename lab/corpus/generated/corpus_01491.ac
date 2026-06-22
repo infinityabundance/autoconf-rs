@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_CPP
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_TYPE_PID_T
+AC_OUTPUT

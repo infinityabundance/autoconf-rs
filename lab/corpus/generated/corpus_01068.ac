@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_FORK
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PREREQ([2.63])
+AC_PROG_LN_S
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

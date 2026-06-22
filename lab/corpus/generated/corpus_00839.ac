@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_ALLOCA
+AC_STRUCT_TIMEZONE
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CHECK_FUNCS([malloc realloc])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

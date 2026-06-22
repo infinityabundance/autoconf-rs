@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MMAP
+AC_STRUCT_TM
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_FUNC_ALLOCA
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_SUBST([PACKAGE_VERSION])
+AC_OUTPUT

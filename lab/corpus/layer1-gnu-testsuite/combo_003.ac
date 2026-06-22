@@ -1,0 +1,17 @@
+dnl G444: Max combo 3
+AC_INIT([gnu-combo-3],[1.0])
+AC_PROG_CC
+AC_CANONICAL_HOST
+AC_ARG_WITH([pkg3], [AS_HELP_STRING([--with-pkg3], [Package 3])])
+AC_ARG_ENABLE([feat3], [AS_HELP_STRING([--enable-feat3], [Feature 3])])
+AC_CHECK_FUNC([malloc3])
+AC_CHECK_HEADER([stdlib.h])
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_TYPE([pid_t])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_MEMBER([struct stat.st_mode])
+AC_SUBST([COMBO_VAR_3], [combo_3])
+AC_DEFINE([COMBO_DEF_3], [3])
+AC_CONFIG_FILES([Makefile3])
+AC_CONFIG_HEADERS([config3.h])
+AC_OUTPUT

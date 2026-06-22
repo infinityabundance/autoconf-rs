@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_GREP
+AC_FUNC_MMAP
+AC_STRUCT_TIMEZONE
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

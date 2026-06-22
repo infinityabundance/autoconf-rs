@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AWK
+AC_CANONICAL_BUILD
+AC_CHECK_LIB([m], [sin])
+AC_PROG_LN_S
+AC_OUTPUT

@@ -1,0 +1,6 @@
+dnl G380: AH_TEMPLATE
+AC_INIT([gnu-ah-6],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_6], [Description for feature 6])
+AH_VERBATIM([BOTTOM_6], [/* Bottom comment 6 */])
+AC_OUTPUT

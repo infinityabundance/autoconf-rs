@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_YACC
+AC_SUBST([CFLAGS])
+AC_PROG_MKDIR_P
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

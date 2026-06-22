@@ -1,0 +1,4 @@
+dnl G394: AC_PREREQ(3.30)
+AC_PREREQ([3.30])
+AC_INIT([gnu-prq-3],[1.0])
+AC_OUTPUT

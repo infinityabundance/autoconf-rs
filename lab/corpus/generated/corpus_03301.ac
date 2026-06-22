@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_MKDIR_P
+AC_PROG_GREP
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_AR
+AC_OUTPUT

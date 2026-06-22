@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_GREP
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

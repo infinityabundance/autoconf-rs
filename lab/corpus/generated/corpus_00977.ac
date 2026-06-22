@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CPP
+AC_FUNC_STRERROR_R
+AC_PROG_LEX
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

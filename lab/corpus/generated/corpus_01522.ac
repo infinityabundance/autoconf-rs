@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_INT32_T
+AC_FUNC_FORK
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_SUBDIRS([lib])
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PREREQ([2.63])
+AC_PROG_CPP
+AC_FUNC_MALLOC
+AC_OUTPUT

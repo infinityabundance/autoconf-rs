@@ -1,0 +1,5 @@
+dnl G2: Single func check: atexit
+AC_INIT([gnu-atexit],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([atexit])
+AC_OUTPUT

@@ -1,0 +1,14 @@
+dnl Layer 1: acdiag.at — AC_DIAGNOSE, AC_WARNING, AC_FATAL, AC_MSG_ERROR, AC_MSG_WARN
+AC_INIT([gnu-diag], [1.0])
+
+dnl Diagnostic macros
+AC_DIAGNOSE([syntax], [This is a syntax diagnostic])
+AC_WARNING([This is a warning message])
+
+dnl Message macros
+AC_MSG_CHECKING([whether diagnostics work])
+AC_MSG_RESULT([yes])
+AC_MSG_NOTICE([This is a notice message])
+AC_MSG_WARN([This is a warning via MSG_WARN])
+
+AC_OUTPUT

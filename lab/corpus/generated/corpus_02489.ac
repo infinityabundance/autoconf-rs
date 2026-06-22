@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_SYS_WAIT
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CONFIG_SUBDIRS([lib])
+AC_OUTPUT

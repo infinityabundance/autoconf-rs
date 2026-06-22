@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_MODE_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_ALLOCA
+AC_HEADER_TIME
+AC_PROG_CC
+AC_OUTPUT

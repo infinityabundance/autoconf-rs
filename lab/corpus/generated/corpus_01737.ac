@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_FGREP
+AC_CHECK_FUNCS([malloc realloc])
+AC_FUNC_VPRINTF
+AC_TYPE_INT32_T
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_TYPE_SIZE_T
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_MAKE_SET
+AC_OUTPUT

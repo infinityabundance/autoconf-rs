@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_STRUCT_ST_BLOCKS
+AC_HEADER_DIRENT
+AC_CHECK_LIB([m], [sin])
+AC_PROG_LN_S
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

@@ -1,0 +1,13 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_TYPE_INT32_T
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_GREP
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CC_C_O
+AC_OUTPUT

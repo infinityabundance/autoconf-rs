@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_SUBDIRS([lib])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_FGREP
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

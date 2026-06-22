@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_TYPE_MODE_T
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CXX
+AC_PROG_CPP
+AC_CANONICAL_HOST
+AC_TYPE_UID_T
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CANONICAL_HOST
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_CHECK_SIZEOF([long])
+AC_PROG_GREP
+AC_OUTPUT

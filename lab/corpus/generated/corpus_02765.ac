@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LN_S
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

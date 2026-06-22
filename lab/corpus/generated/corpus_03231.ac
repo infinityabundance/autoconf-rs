@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDC
+AC_CANONICAL_BUILD
+AC_PROG_YACC
+AC_CHECK_TYPES([off_t mode_t])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_SUBST([LDFLAGS])
+AC_OUTPUT

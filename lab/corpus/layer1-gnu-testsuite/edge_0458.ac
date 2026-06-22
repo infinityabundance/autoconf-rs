@@ -1,0 +1,4 @@
+AC_INIT([arg458],[1.0])
+AC_ARG_WITH([w458],[AS_HELP_STRING([--with-w458],[Option 458])])
+AC_ARG_ENABLE([e458],[AS_HELP_STRING([--enable-e458],[Feature 458])])
+AC_OUTPUT

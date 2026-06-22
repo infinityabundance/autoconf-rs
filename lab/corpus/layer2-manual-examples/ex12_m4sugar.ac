@@ -1,0 +1,5 @@
+AC_INIT([m4sugar-demo], [1.0])
+m4_define([MY_LIST], [foo, bar, baz])
+m4_foreach([item], [MY_LIST], [AC_SUBST(item)])
+m4_ifdef([__GNUC__], [AC_DEFINE([HAVE_GCC])])
+AC_OUTPUT

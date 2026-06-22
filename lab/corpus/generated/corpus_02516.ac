@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_SIZEOF([long])
+AC_PROG_CC_C_O
+AC_PREFIX_PROGRAM([gcc])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_PROG_AR
+AC_TYPE_INT32_T
+AC_OUTPUT

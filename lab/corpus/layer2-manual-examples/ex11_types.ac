@@ -1,0 +1,8 @@
+AC_INIT([type-check], [1.0])
+AC_PROG_CC
+AC_CHECK_TYPE([pid_t])
+AC_CHECK_TYPES([size_t, ssize_t, off_t])
+AC_CHECK_MEMBER([struct stat.st_blksize])
+AC_CHECK_SIZEOF([void *])
+AC_TYPE_SIGNAL
+AC_OUTPUT

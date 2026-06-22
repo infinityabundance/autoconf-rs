@@ -1,0 +1,6 @@
+dnl G176: Mixed: host,cc,gethostname
+AC_INIT([gnu-mix-host_cc_gethostname],[1.0])
+AC_CANONICAL_HOST
+AC_PROG_CC
+AC_CHECK_FUNC([gethostname])
+AC_OUTPUT

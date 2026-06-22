@@ -1,0 +1,11 @@
+dnl G415: SUBST+DEFINE combo 4
+AC_INIT([gnu-sd-4],[1.0])
+AC_SUBST([S4_0], [v4_0])
+AC_SUBST([S4_1], [v4_1])
+AC_SUBST([S4_2], [v4_2])
+AC_SUBST([S4_3], [v4_3])
+AC_DEFINE([D4_0], [0])
+AC_DEFINE([D4_1], [4])
+AC_DEFINE([D4_2], [8])
+AC_DEFINE([D4_3], [12])
+AC_OUTPUT

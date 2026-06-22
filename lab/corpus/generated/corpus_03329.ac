@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_TARGET
+AC_PROG_CC
+AC_PROG_AWK
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CHECK_LIB([m], [sin])
+AC_FUNC_MALLOC
+AC_OUTPUT

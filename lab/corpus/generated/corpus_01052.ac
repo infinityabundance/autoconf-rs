@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_SUBST([CFLAGS])
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CHECK_SIZEOF([long])
+AC_LIBOBJ([fnmatch])
+AC_PROG_AWK
+AC_OUTPUT

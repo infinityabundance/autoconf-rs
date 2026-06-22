@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TM
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_HEADER_STDC
+AC_PROG_EGREP
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([fork vfork])
+AC_OUTPUT

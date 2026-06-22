@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TIMEZONE
+AC_HEADER_SYS_WAIT
+AC_CONFIG_MACRO_DIR([m4])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

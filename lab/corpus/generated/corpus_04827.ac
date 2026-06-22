@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_SUBST([prefix])
+AC_HEADER_STDBOOL
+AC_OUTPUT

@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_ST_BLOCKS
+AC_SUBST([PACKAGE_NAME])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CANONICAL_BUILD
+AC_PROG_AWK
+AC_OUTPUT

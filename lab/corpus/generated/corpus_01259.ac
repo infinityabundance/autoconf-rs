@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TM
+AC_CHECK_TYPES([off_t mode_t])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

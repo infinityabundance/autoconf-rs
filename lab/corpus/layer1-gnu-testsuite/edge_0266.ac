@@ -1,0 +1,3 @@
+AC_INIT([mch266],[1.0])
+AC_CONFIG_HEADERS([h266_a h266_b h266_c])
+AC_OUTPUT

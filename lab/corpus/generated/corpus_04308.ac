@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_CPP
+AC_TYPE_UID_T
+AC_PROG_INSTALL
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

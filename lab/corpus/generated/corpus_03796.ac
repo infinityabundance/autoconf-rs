@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_MODE_T
+AC_HEADER_STDBOOL
+AC_PROG_CPP
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_PROG_INSTALL
+AC_OUTPUT

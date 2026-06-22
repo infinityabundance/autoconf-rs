@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_GREP
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PROG_SED
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_SUBST([PACKAGE_NAME])
+AC_FUNC_VPRINTF
+AC_OUTPUT

@@ -1,0 +1,4 @@
+AC_INIT([arg318],[1.0])
+AC_ARG_WITH([w318],[AS_HELP_STRING([--with-w318],[Option 318])])
+AC_ARG_ENABLE([e318],[AS_HELP_STRING([--enable-e318],[Feature 318])])
+AC_OUTPUT

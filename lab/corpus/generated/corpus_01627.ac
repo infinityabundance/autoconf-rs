@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CPP
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_LANG_PUSH([C])
+AC_PROG_MKDIR_P
+AC_PROG_CXX
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

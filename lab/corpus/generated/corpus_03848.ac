@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CC
+AC_CHECK_SIZEOF([long])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

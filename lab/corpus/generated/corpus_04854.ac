@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_HEADER_TIME
+AC_LANG_PUSH([C])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CANONICAL_HOST
+AC_PROG_AR
+AC_OUTPUT

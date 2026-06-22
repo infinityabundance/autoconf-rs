@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_FUNC_MMAP
+AC_PROG_MAKE_SET
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_STRERROR_R
+AC_FUNC_MMAP
+AC_PROG_LEX
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

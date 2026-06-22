@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UID_T
+AC_PROG_LN_S
+AC_CANONICAL_TARGET
+AC_HEADER_TIME
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_CXX
+AC_OUTPUT

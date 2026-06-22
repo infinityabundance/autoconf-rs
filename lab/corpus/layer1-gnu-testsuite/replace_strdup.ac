@@ -1,0 +1,5 @@
+dnl G355: Replace func: strdup
+AC_INIT([gnu-repl-strdup],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([strdup])
+AC_OUTPUT

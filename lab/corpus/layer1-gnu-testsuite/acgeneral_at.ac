@@ -1,0 +1,21 @@
+dnl Layer 1: acgeneral.at — Core macro tests: AC_INIT, AC_OUTPUT, AC_CONFIG_*, AC_SUBST, AC_DEFINE
+AC_INIT([gnu-general], [2.0], [bug@gnu.org])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([m4])
+
+AC_SUBST([GENERAL_VAR], [general_value])
+AC_SUBST([EMPTY_VAR])
+
+AC_DEFINE([GENERAL_DEFINE], [1])
+AC_DEFINE([VERSION_DEFINE], ["2.0"])
+
+AC_CONFIG_FILES([Makefile src/lib/Makefile])
+AC_CONFIG_HEADERS([config.h])
+
+AC_ARG_WITH([general-feature], [AS_HELP_STRING([--with-general-feature], [Enable general feature])])
+AC_ARG_ENABLE([general-debug], [AS_HELP_STRING([--enable-general-debug], [Enable debug])])
+
+AC_PREFIX_DEFAULT([/usr/local])
+
+AC_OUTPUT

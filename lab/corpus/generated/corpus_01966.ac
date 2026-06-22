@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_TIMEZONE
+AC_PRESERVE_HELP_ORDER
+AC_CANONICAL_HOST
+AC_TYPE_MODE_T
+AC_STRUCT_TM
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

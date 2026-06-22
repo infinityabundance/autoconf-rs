@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_MODE_T
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_MALLOC
+AC_PROG_GREP
+AC_STRUCT_TM
+AC_FUNC_ALLOCA
+AC_OUTPUT

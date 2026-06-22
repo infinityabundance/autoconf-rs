@@ -1,0 +1,5 @@
+dnl G38: Single func check: gethostname
+AC_INIT([gnu-gethostname],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([gethostname])
+AC_OUTPUT

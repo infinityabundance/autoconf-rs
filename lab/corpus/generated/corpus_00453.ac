@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_MAKE_SET
+AC_CANONICAL_TARGET
+AC_PROG_RANLIB
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G329: Check decl: strerror
+AC_INIT([gnu-decl-strerror],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([strerror])
+AC_OUTPUT

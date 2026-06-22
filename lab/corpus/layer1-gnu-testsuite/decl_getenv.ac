@@ -1,0 +1,5 @@
+dnl G328: Check decl: getenv
+AC_INIT([gnu-decl-getenv],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([getenv])
+AC_OUTPUT

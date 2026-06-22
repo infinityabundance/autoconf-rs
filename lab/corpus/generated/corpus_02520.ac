@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

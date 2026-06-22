@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PRESERVE_HELP_ORDER
+AC_HEADER_STDBOOL
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_HEADER_DIRENT
+AC_TYPE_OFF_T
+AC_OUTPUT

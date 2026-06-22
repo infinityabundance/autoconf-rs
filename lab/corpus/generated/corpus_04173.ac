@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_YACC
+AC_PROG_GREP
+AC_HEADER_DIRENT
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

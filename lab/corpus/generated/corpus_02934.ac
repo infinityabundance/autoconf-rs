@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LN_S
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_EGREP
+AC_OUTPUT

@@ -1,0 +1,111 @@
+{
+  "schema": "autoconf-rs-status-v1",
+  "oracle": "GNU Autoconf 2.73",
+  "oracle_status": "admitted",
+  "strategy": "Clean-room behavioral reconstruction. GNU Autoconf is treated as a black-box oracle.",
+  "license": "MIT OR Apache-2.0",
+  "methodology": "Forensic parity — identical to m4-rs",
+  "phase": 2,
+  "phase_label": "Level 1 Generator — Prescan + template dispatch. NOT full M4 expansion (NC.ADMIT.2).",
+  "overall_percentage": 48.5,
+  "features_implemented": 0,
+  "features_total": 290,
+  "tests_passing": 1382,
+  "oracle_fixtures": "0/12 courts sealed. 3/6 Layer0 byte-exact. 1500 oracle fuzz iterations (0% exact, 0 panics). 1080 Layer1 fixtures. 11/23 layer4 runtime pass. 12 runtime sandbox. 13 Kani BMC + 8 Prusti.",
+  "acceptance_gates": "6/7 PASS (oracle gate: 0% exact match — HONEST FAIL)",
+  "performance": "1.8ms vs 170ms GNU (96x) on minimal fixture. Not yet tested on large configure.ac.",
+  "cleanroom_files": 72,
+  "cleanroom_contamination": 0,
+  "surfaces": [
+    {
+      "id": "AC.ORACLE.1",
+      "status": "partial",
+      "note": "GNU 2.73 admitted. 3/3 Layer0 byte-exact. 0/100 exact on parity report."
+    },
+    {
+      "id": "AC.CLI.1",
+      "status": "partial",
+      "note": "8 binaries exist (stub/partial). autom4te is JSON cache, not real trace engine."
+    },
+    {
+      "id": "AC.M4.ENGINE",
+      "status": "partial",
+      "note": "m4-rs-core integration. DiversionManager wired. M4 output DISCARDED — prescan bypass (NC.ADMIT.2)."
+    },
+    {
+      "id": "AC.M4.M4SUGAR.1",
+      "status": "partial",
+      "note": "48 macros REGISTERED. RequireTracker exists. Prescan limits correctness."
+    },
+    {
+      "id": "AC.M4.M4SH.1",
+      "status": "partial",
+      "note": "42 AS_* macros REGISTERED. Template prologue simplified vs oracle."
+    },
+    {
+      "id": "AC.M4.AUTOCONF.CORE.1",
+      "status": "partial",
+      "note": "200+ macros registered. Template dispatch for simple literal AC_* text."
+    },
+    {
+      "id": "AC.SHELL.CONFIGURE.1",
+      "status": "partial",
+      "note": "Dynamic configure with option parsing. Simplified shell vs oracle."
+    },
+    {
+      "id": "AC.LIBRARY.PROGRAMS.1",
+      "status": "partial",
+      "note": "44 program macros. Shell snippets in dynamic body."
+    },
+    {
+      "id": "AC.LIBRARY.FUNCTIONS.1",
+      "status": "partial",
+      "note": "40 function macros. Shell snippets. NOT oracle-verified."
+    },
+    {
+      "id": "AC.LIBRARY.HEADERS.1",
+      "status": "partial",
+      "note": "41 header/type macros. Shell snippets. NOT oracle-verified."
+    },
+    {
+      "id": "AC.DIAG.1",
+      "status": "partial",
+      "note": "9 warning categories. DiagnosticManager. Source location basic."
+    },
+    {
+      "id": "AC.SURVIVAL.TIER1.1",
+      "status": "partial",
+      "note": "18 packages generate configure. NOT runtime-tested."
+    }
+  ],
+  "non_claims": [
+    {
+      "surface": "Full M4 expansion",
+      "reason": "Current architecture uses prescan + template dispatch (NC.ADMIT.2). M4 output is collected but discarded. User-defined AC_DEFUN, m4_if-hidden, m4_include macros fail."
+    },
+    {
+      "surface": "GNU frozen file compatibility",
+      "reason": "JSON-based cache (SHA256). Not GNU frozen format. Intentional divergence."
+    },
+    {
+      "surface": "syscmd/esyscmd",
+      "reason": "Permanent no-ops in safe Rust. --allow-syscmd flag enables compat bridge."
+    },
+    {
+      "surface": "95%+ byte-exact output",
+      "reason": "0/100 exact match. Structural divergence is admitted (NC.ADMIT.2). Layer 0 only."
+    },
+    {
+      "surface": "autom4te trace engine",
+      "reason": "JSON cache only. NOT real GNU trace format. Panel critical blocker."
+    },
+    {
+      "surface": "autoreconf full behavior",
+      "reason": "Orchestrator stub. Does NOT replicate project discovery, recursion, aux file management."
+    },
+    {
+      "surface": "25-language i18n",
+      "reason": "English-only diagnostics. Message catalog with basic locale detection exists."
+    }
+  ]
+}

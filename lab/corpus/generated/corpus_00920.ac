@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_FORK
+AC_HEADER_SYS_WAIT
+AC_PROG_CC
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_CXX
+AC_PROG_SED
+AC_OUTPUT

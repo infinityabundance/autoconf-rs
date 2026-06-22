@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PROG_CPP
+AC_PROG_CC_C_O
+AC_HEADER_TIME
+AC_PROG_LN_S
+AC_CHECK_FUNCS([malloc realloc])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

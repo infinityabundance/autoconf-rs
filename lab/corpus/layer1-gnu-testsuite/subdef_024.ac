@@ -1,0 +1,13 @@
+dnl G435: SUBST+DEFINE combo 24
+AC_INIT([gnu-sd-24],[1.0])
+AC_SUBST([S24_0], [v24_0])
+AC_SUBST([S24_1], [v24_1])
+AC_SUBST([S24_2], [v24_2])
+AC_SUBST([S24_3], [v24_3])
+AC_SUBST([S24_4], [v24_4])
+AC_DEFINE([D24_0], [0])
+AC_DEFINE([D24_1], [24])
+AC_DEFINE([D24_2], [48])
+AC_DEFINE([D24_3], [72])
+AC_DEFINE([D24_4], [96])
+AC_OUTPUT

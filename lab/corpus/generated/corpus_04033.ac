@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_SUBDIRS([lib])
+AC_CHECK_LIB([m], [sin])
+AC_CANONICAL_TARGET
+AC_STRUCT_ST_BLOCKS
+AC_PROG_AR
+AC_OUTPUT

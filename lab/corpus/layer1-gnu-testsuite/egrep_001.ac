@@ -1,0 +1,5 @@
+dnl EGREP pattern: ^#include
+AC_INIT([gnu-egrep-1],[1.0])
+AC_PROG_CC
+AC_EGREP_HEADER([^#include], [stdlib.h], [AC_DEFINE([EGREP_OK_1])])
+AC_OUTPUT

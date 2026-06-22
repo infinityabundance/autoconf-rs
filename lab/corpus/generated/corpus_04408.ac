@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_SUBST([LDFLAGS])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G14: Single func check: endgrent
+AC_INIT([gnu-endgrent],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([endgrent])
+AC_OUTPUT

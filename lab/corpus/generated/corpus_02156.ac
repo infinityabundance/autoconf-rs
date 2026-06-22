@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_STRUCT_ST_BLOCKS
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PREREQ([2.71])
+AC_FUNC_VPRINTF
+AC_PROG_RANLIB
+AC_TYPE_UINT32_T
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_OUTPUT

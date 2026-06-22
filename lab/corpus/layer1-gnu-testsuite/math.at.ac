@@ -1,0 +1,6 @@
+AC_INIT([gnu-math],[1.0])
+AC_PROG_CC
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_FUNCS([sin cos tan sqrt pow exp log])
+AC_CHECK_FUNCS([floor ceil round trunc fabs])
+AC_OUTPUT

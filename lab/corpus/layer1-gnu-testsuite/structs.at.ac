@@ -1,0 +1,11 @@
+AC_INIT([gnu-structs],[1.0])
+AC_PROG_CC
+AC_STRUCT_DIRENT_D_TYPE
+AC_STRUCT_ST_BLOCKS
+AC_STRUCT_TIMEZONE
+AC_STRUCT_TM
+AC_CHECK_MEMBER([struct stat.st_blksize])
+AC_CHECK_MEMBER([struct stat.st_rdev])
+AC_CHECK_MEMBER([struct stat.st_blocks])
+AC_CHECK_MEMBER([struct tm.tm_zone])
+AC_OUTPUT

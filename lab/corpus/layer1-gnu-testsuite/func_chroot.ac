@@ -1,0 +1,5 @@
+dnl G8: Single func check: chroot
+AC_INIT([gnu-chroot],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([chroot])
+AC_OUTPUT

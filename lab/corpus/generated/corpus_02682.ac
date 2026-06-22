@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_SIZEOF([long])
+AC_FUNC_MALLOC
+AC_FUNC_ALLOCA
+AC_FUNC_MMAP
+AC_FUNC_VPRINTF
+AC_OUTPUT

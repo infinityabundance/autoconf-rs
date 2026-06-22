@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_PROG_AWK
+AC_TYPE_UID_T
+AC_SUBST([prefix])
+AC_TYPE_OFF_T
+AC_CHECK_TYPES([off_t mode_t])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CC
+AC_OUTPUT

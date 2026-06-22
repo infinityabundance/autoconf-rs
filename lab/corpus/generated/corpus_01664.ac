@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_MALLOC
+AC_PROG_RANLIB
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_INT32_T
+AC_PREFIX_DEFAULT([/usr/local])
+AC_HEADER_STDC
+AC_FUNC_ALLOCA
+AC_OUTPUT

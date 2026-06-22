@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AWK
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CANONICAL_TARGET
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

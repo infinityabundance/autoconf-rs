@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_HEADERS([config.h])
+AC_PRESERVE_HELP_ORDER
+AC_PREFIX_PROGRAM([gcc])
+AC_PROG_YACC
+AC_OUTPUT

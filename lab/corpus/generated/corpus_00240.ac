@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_SIZEOF([long])
+AC_HEADER_STDC
+AC_PROG_MAKE_SET
+AC_OUTPUT

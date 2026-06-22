@@ -1,0 +1,5 @@
+dnl G44: Single func check: getpid
+AC_INIT([gnu-getpid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getpid])
+AC_OUTPUT

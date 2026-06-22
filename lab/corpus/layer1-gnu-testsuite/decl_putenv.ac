@@ -1,0 +1,5 @@
+dnl G343: Check decl: putenv
+AC_INIT([gnu-decl-putenv],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([putenv])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SUBDIRS([lib])
+AC_FUNC_VPRINTF
+AC_FUNC_ALLOCA
+AC_CONFIG_MACRO_DIR([m4])
+AC_STRUCT_ST_BLOCKS
+AC_TYPE_INT32_T
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

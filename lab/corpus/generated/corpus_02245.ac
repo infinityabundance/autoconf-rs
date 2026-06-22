@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CXX
+AC_FUNC_STRERROR_R
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_AR
+AC_HEADER_STDINT
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G331: Check decl: fopen
+AC_INIT([gnu-decl-fopen],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([fopen])
+AC_OUTPUT

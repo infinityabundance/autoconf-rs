@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_FGREP
+AC_PROG_MKDIR_P
+AC_LIBOBJ([fnmatch])
+AC_TYPE_UID_T
+AC_FUNC_MALLOC
+AC_HEADER_STDC
+AC_OUTPUT

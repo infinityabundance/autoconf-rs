@@ -1,0 +1,5 @@
+dnl G55: Single header check: ctype.h
+AC_INIT([gnu-hdr-ctype_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([ctype.h])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_INT32_T
+AC_PROG_CPP
+AC_PROG_CXX
+AC_PROG_LEX
+AC_PROG_AR
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

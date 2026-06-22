@@ -1,0 +1,12 @@
+[package]
+name = "autoconf-oracle-rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Oracle admission crate for autoconf-rs — locates, fingerprints, and smoke-tests GNU Autoconf binaries"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true

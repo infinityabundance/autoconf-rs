@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_DIRENT
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_UINT32_T
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

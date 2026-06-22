@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_ST_BLOCKS
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_CHECK_SIZEOF([long])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

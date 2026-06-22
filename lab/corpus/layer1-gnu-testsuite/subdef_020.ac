@@ -1,0 +1,13 @@
+dnl G431: SUBST+DEFINE combo 20
+AC_INIT([gnu-sd-20],[1.0])
+AC_SUBST([S20_0], [v20_0])
+AC_SUBST([S20_1], [v20_1])
+AC_SUBST([S20_2], [v20_2])
+AC_SUBST([S20_3], [v20_3])
+AC_SUBST([S20_4], [v20_4])
+AC_DEFINE([D20_0], [0])
+AC_DEFINE([D20_1], [20])
+AC_DEFINE([D20_2], [40])
+AC_DEFINE([D20_3], [60])
+AC_DEFINE([D20_4], [80])
+AC_OUTPUT

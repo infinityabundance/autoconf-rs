@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-34],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub34_0 sub34_1 sub34_2 sub34_3 sub34_4])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([arg-demo], [1.0])
+AC_ARG_WITH([foo], [AS_HELP_STRING([--with-foo], [use foo])], [], [with_foo=no])
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug], [enable debug])], [], [enable_debug=no])
+AC_SUBST([FOO], [$with_foo])
+AC_SUBST([DEBUG], [$enable_debug])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_FORK
+AC_PROG_FGREP
+AC_PROG_RANLIB
+AC_OUTPUT

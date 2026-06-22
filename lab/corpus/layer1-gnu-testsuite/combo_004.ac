@@ -1,0 +1,17 @@
+dnl G445: Max combo 4
+AC_INIT([gnu-combo-4],[1.0])
+AC_PROG_CC
+AC_CANONICAL_HOST
+AC_ARG_WITH([pkg4], [AS_HELP_STRING([--with-pkg4], [Package 4])])
+AC_ARG_ENABLE([feat4], [AS_HELP_STRING([--enable-feat4], [Feature 4])])
+AC_CHECK_FUNC([malloc4])
+AC_CHECK_HEADER([stdlib.h])
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_TYPE([pid_t])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_MEMBER([struct stat.st_mode])
+AC_SUBST([COMBO_VAR_4], [combo_4])
+AC_DEFINE([COMBO_DEF_4], [4])
+AC_CONFIG_FILES([Makefile4])
+AC_CONFIG_HEADERS([config4.h])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G165: Mixed: func,subst
+AC_INIT([gnu-mix-func_subst],[1.0])
+AC_CHECK_FUNC
+AC_SUBST
+AC_OUTPUT

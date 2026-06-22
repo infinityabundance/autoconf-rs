@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_MALLOC
+AC_TYPE_MODE_T
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl Check files: /etc/passwd /etc/hosts
+AC_INIT([gnu-chkfs-1],[1.0])
+AC_CHECK_FILES([/etc/passwd /etc/hosts])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_YACC
+AC_HEADER_TIME
+AC_PROG_GREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_CC_C_O
+AC_CANONICAL_HOST
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

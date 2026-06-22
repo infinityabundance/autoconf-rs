@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_CPP
+AC_STRUCT_TIMEZONE
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

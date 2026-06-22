@@ -1,0 +1,16 @@
+dnl temp_fd_test.ac — Temp file creation and FD 5 config.log verification
+dnl Court: CROSS.042 (temp files) + CROSS.043 (FD inheritance)
+AC_INIT([temp-fd-test], [1.0])
+AC_PROG_CC
+AC_CANONICAL_HOST
+
+dnl Checks that create temp files
+AC_CHECK_FUNC([malloc])
+AC_CHECK_HEADER([stdlib.h])
+AC_CHECK_SIZEOF([int])
+
+dnl Substitutions that exercise file creation
+AC_CONFIG_FILES([Makefile])
+AC_SUBST([TMP_VAR], [tmp_value])
+
+AC_OUTPUT

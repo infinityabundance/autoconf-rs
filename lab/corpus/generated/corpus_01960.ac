@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_BUILD
+AC_STRUCT_TM
+AC_PROG_AWK
+AC_CONFIG_AUX_DIR([build-aux])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CANONICAL_HOST
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G65: Single header check: glob.h
+AC_INIT([gnu-hdr-glob_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([glob.h])
+AC_OUTPUT

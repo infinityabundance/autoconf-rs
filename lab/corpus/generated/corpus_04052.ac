@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PREFIX_PROGRAM([gcc])
+AC_CANONICAL_TARGET
+AC_HEADER_STDC
+AC_TYPE_INT32_T
+AC_SUBST([LDFLAGS])
+AC_OUTPUT

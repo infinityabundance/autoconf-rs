@@ -1,0 +1,26 @@
+dnl Layer 1: semantics.at — AC_CHECK_FUNC/HEADER/LIB/TYPE semantic checks
+dnl Direct port from autotools-mirror/autoconf/tests/semantics.at
+AC_INIT([gnu-semantics], [1.0])
+AC_PROG_CC
+
+AC_CHECK_FUNCS([malloc realloc free strdup memset])
+AC_CHECK_FUNCS([gettimeofday clock_gettime])
+
+AC_CHECK_HEADERS([stdlib.h stdio.h string.h unistd.h fcntl.h])
+AC_CHECK_HEADERS([sys/types.h sys/stat.h sys/time.h])
+
+AC_CHECK_LIB([m], [sin])
+AC_SEARCH_LIBS([sqrt], [m])
+
+AC_CHECK_TYPES([pid_t, size_t, ssize_t, off_t, mode_t])
+AC_CHECK_TYPE([struct tm])
+AC_CHECK_SIZEOF([short])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([void *])
+
+AC_CHECK_MEMBER([struct stat.st_blksize])
+AC_CHECK_MEMBER([struct stat.st_mode])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

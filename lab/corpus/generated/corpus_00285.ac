@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_SUBST([LDFLAGS])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_PROG_FGREP
+AC_HEADER_TIME
+AC_PROG_LN_S
+AC_PROG_MKDIR_P
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

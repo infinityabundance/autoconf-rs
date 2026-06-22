@@ -1,0 +1,5 @@
+dnl G4: Single func check: bcopy
+AC_INIT([gnu-bcopy],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([bcopy])
+AC_OUTPUT

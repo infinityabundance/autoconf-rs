@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CXX
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

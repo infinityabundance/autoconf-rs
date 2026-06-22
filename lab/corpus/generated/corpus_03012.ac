@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PREREQ([2.71])
+AC_HEADER_STDINT
+AC_CONFIG_SUBDIRS([lib])
+AC_OUTPUT

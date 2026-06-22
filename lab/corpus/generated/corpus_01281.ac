@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UID_T
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_LIBOBJ([fnmatch])
+AC_STRUCT_TM
+AC_PROG_YACC
+AC_TYPE_UINT32_T
+AC_OUTPUT

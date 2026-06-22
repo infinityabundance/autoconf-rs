@@ -1,0 +1,5 @@
+dnl G32: Single func check: getcwd
+AC_INIT([gnu-getcwd],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getcwd])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CPP
+AC_PROG_EGREP
+AC_PROG_SED
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_FUNC_ALLOCA
+AC_OUTPUT

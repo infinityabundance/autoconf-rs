@@ -1,0 +1,5 @@
+dnl G50: Single header check: a.out.h
+AC_INIT([gnu-hdr-a_out_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([a.out.h])
+AC_OUTPUT

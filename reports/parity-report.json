@@ -1,0 +1,199 @@
+{
+  "corpus_size": 100,
+  "divergence_samples": [
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00000.ac",
+      "oracle_size": 132684,
+      "oracle_version": "2.73",
+      "rust_size": 78026,
+      "size_ratio": 0.5880588465828586
+    },
+    {
+      "first_diff_byte": 16078,
+      "fixture": "corpus_00001.ac",
+      "oracle_size": 118298,
+      "oracle_version": "2.73",
+      "rust_size": 77564,
+      "size_ratio": 0.655666198921368
+    },
+    {
+      "first_diff_byte": 5806,
+      "fixture": "corpus_00002.ac",
+      "oracle_size": 145068,
+      "oracle_version": "2.73",
+      "rust_size": 77899,
+      "size_ratio": 0.536982656409408
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00003.ac",
+      "oracle_size": 139533,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.6112675854457369
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00004.ac",
+      "oracle_size": 118399,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.7203777058927863
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00005.ac",
+      "oracle_size": 138867,
+      "oracle_version": "2.73",
+      "rust_size": 77899,
+      "size_ratio": 0.5609612074862999
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00006.ac",
+      "oracle_size": 124525,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.6849387673158001
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00007.ac",
+      "oracle_size": 131875,
+      "oracle_version": "2.73",
+      "rust_size": 85540,
+      "size_ratio": 0.6486445497630332
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00008.ac",
+      "oracle_size": 148076,
+      "oracle_version": "2.73",
+      "rust_size": 77802,
+      "size_ratio": 0.5254193792376888
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00009.ac",
+      "oracle_size": 138003,
+      "oracle_version": "2.73",
+      "rust_size": 85937,
+      "size_ratio": 0.622718346702608
+    },
+    {
+      "first_diff_byte": 13,
+      "fixture": "corpus_00010.ac",
+      "oracle_size": 125531,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.6794496976842374
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00011.ac",
+      "oracle_size": 129692,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.6576504333343615
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00012.ac",
+      "oracle_size": 135000,
+      "oracle_version": "2.73",
+      "rust_size": 78189,
+      "size_ratio": 0.5791777777777778
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00013.ac",
+      "oracle_size": 138339,
+      "oracle_version": "2.73",
+      "rust_size": 85835,
+      "size_ratio": 0.620468559119265
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00014.ac",
+      "oracle_size": 121187,
+      "oracle_version": "2.73",
+      "rust_size": 77553,
+      "size_ratio": 0.6399448785760848
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00015.ac",
+      "oracle_size": 133823,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.637349334568796
+    },
+    {
+      "first_diff_byte": 16078,
+      "fixture": "corpus_00016.ac",
+      "oracle_size": 123853,
+      "oracle_version": "2.73",
+      "rust_size": 85292,
+      "size_ratio": 0.688655099190169
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00017.ac",
+      "oracle_size": 129950,
+      "oracle_version": "2.73",
+      "rust_size": 86109,
+      "size_ratio": 0.6626317814544055
+    },
+    {
+      "first_diff_byte": 13,
+      "fixture": "corpus_00018.ac",
+      "oracle_size": 117681,
+      "oracle_version": "2.73",
+      "rust_size": 77564,
+      "size_ratio": 0.6591038485396963
+    },
+    {
+      "first_diff_byte": 128,
+      "fixture": "corpus_00019.ac",
+      "oracle_size": 129099,
+      "oracle_version": "2.73",
+      "rust_size": 85689,
+      "size_ratio": 0.6637464271605512
+    }
+  ],
+  "generated_at": "1781907968",
+  "oracle_versions": [
+    {
+      "path": "autoconf",
+      "version": "2.73"
+    }
+  ],
+  "schema": "autoconf-rs-parity-report-v1",
+  "summary": {
+    "duration_secs": 42.382287694,
+    "exact_matches": 0,
+    "exact_pct": 0.0,
+    "high_match_95pct": 1,
+    "panics": 0,
+    "reasonable_50pct": 98,
+    "total_comparisons": 100
+  },
+  "surface_gaps": [
+    {
+      "count": 96,
+      "pct": 96.0,
+      "surface": "PARTIAL_MATCH_50"
+    },
+    {
+      "count": 2,
+      "pct": 2.0,
+      "surface": "LOW_MATCH_10"
+    },
+    {
+      "count": 2,
+      "pct": 2.0,
+      "surface": "NEAR_MATCH_90"
+    }
+  ]
+}

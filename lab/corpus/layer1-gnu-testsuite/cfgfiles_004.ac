@@ -1,0 +1,7 @@
+dnl G248: 4 AC_CONFIG_FILES with transformations
+AC_INIT([gnu-cfg-4],[1.0])
+AC_CONFIG_FILES([out0:in0.tmpl])
+AC_CONFIG_FILES([out1:in1.tmpl])
+AC_CONFIG_FILES([out2:in2.tmpl])
+AC_CONFIG_FILES([out3:in3.tmpl])
+AC_OUTPUT

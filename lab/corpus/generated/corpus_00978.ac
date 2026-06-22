@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CANONICAL_BUILD
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_MKDIR_P
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_TYPE_UINT32_T
+AC_OUTPUT

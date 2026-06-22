@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MAKE_SET
+AC_TYPE_UID_T
+AC_HEADER_STDC
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

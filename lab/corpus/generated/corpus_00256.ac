@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_TIMEZONE
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CANONICAL_HOST
+AC_PREFIX_DEFAULT([/usr/local])
+AC_LIBOBJ([fnmatch])
+AC_PROG_MKDIR_P
+AC_OUTPUT

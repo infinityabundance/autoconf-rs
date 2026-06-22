@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_FGREP
+AC_HEADER_TIME
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_SED
+AC_OUTPUT

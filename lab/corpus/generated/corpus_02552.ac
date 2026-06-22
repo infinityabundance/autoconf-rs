@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_PID_T
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_UINT32_T
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

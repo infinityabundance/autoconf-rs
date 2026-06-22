@@ -1,0 +1,4 @@
+dnl Check file: /bin/sh
+AC_INIT([gnu-chkf-3],[1.0])
+AC_CHECK_FILE([/bin/sh], [AC_DEFINE([HAVE__BIN_SH])])
+AC_OUTPUT

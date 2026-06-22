@@ -1,0 +1,5 @@
+AC_INIT([versioned], [2.5])
+AC_PREREQ([2.69])
+m4_version_prereq([2.69])
+AC_PROG_CC
+AC_OUTPUT

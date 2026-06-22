@@ -1,0 +1,30 @@
+dnl Layer 1: m4sugar.at — m4sugar macro exercises
+AC_INIT([gnu-m4sugar], [1.0])
+
+dnl m4_define / m4_defun
+m4_define([MY_CONST], [42])
+
+dnl m4_if testing
+m4_if([a], [a], [m4_define([MATCHED], [yes])])
+
+dnl m4_foreach
+m4_foreach([item], [[a], [b], [c]], [AC_SUBST([SUB_]item, [val_]item)])
+
+dnl m4_join
+m4_define([JOINED], m4_join([:], [x], [y], [z]))
+
+dnl m4_case
+m4_case([b], [a], [AC_DEFINE([CASE_A])], [b], [AC_DEFINE([CASE_B])])
+
+dnl m4_toupper/tolower
+m4_define([UPPER], m4_toupper([hello]))
+m4_define([LOWER], m4_tolower([HELLO]))
+
+dnl m4_normalize
+m4_define([NORM], m4_normalize([  a   b  c  ]))
+
+dnl m4_append
+m4_append([LIST], [first], [, ])
+m4_append([LIST], [second], [, ])
+
+AC_OUTPUT

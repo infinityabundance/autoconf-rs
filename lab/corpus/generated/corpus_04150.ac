@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_TARGET
+AC_PROG_CC
+AC_PROG_MKDIR_P
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_YACC
+AC_OUTPUT

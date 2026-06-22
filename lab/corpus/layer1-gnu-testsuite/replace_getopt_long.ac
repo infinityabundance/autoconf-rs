@@ -1,0 +1,5 @@
+dnl G363: Replace func: getopt_long
+AC_INIT([gnu-repl-getopt_long],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([getopt_long])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_AR
+AC_PROG_MKDIR_P
+AC_PRESERVE_HELP_ORDER
+AC_FUNC_VPRINTF
+AC_OUTPUT

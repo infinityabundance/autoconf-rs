@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_YACC
+AC_PROG_CC
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_OFF_T
+AC_OUTPUT

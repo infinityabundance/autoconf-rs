@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_SIZEOF([long])
+AC_TYPE_PID_T
+AC_PROG_MKDIR_P
+AC_PROG_SED
+AC_TYPE_INT32_T
+AC_OUTPUT

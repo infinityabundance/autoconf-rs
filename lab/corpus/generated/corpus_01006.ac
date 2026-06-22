@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_HOST
+AC_PROG_MKDIR_P
+AC_PROG_CC
+AC_HEADER_STDBOOL
+AC_CHECK_TYPES([off_t mode_t])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_YACC
+AC_TYPE_UINT32_T
+AC_OUTPUT

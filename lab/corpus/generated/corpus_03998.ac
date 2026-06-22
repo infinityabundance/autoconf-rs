@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_LIB([m], [sin])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

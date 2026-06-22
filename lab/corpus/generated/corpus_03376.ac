@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_SED
+AC_HEADER_SYS_WAIT
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

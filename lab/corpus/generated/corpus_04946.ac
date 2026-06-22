@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_PROG_AWK
+AC_CONFIG_AUX_DIR([build-aux])
+AC_TYPE_UID_T
+AC_TYPE_SIZE_T
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

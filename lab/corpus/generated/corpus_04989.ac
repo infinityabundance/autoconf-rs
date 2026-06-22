@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CANONICAL_BUILD
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_LEX
+AC_OUTPUT

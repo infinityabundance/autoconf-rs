@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PREREQ([2.59])
+AC_CONFIG_SUBDIRS([lib])
+AC_HEADER_STDINT
+AC_OUTPUT

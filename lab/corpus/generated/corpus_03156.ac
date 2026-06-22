@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_CC_C_O
+AC_PROG_MKDIR_P
+AC_FUNC_FORK
+AC_LANG_PUSH([C])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

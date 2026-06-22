@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_AWK
+AC_PROG_SED
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_INSTALL
+AC_PROG_CPP
+AC_HEADER_STDC
+AC_HEADER_STDBOOL
+AC_OUTPUT

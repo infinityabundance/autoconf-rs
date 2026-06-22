@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_TIME
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_CC_C_O
+AC_FUNC_VPRINTF
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

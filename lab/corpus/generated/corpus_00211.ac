@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CXX
+AC_HEADER_STDINT
+AC_OUTPUT

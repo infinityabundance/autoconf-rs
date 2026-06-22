@@ -1,0 +1,5 @@
+dnl G82: Single header check: pwd.h
+AC_INIT([gnu-hdr-pwd_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([pwd.h])
+AC_OUTPUT

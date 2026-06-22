@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_MALLOC
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_OUTPUT

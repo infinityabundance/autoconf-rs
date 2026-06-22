@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_ALLOCA
+AC_PRESERVE_HELP_ORDER
+AC_PROG_AWK
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

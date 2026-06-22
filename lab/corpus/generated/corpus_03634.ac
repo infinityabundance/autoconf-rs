@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_OFF_T
+AC_SUBST([prefix])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

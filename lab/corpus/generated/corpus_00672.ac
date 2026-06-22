@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_EGREP
+AC_SUBST([LIBS])
+AC_STRUCT_TM
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_CXX
+AC_STRUCT_TIMEZONE
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_INSTALL
+AC_HEADER_TIME
+AC_OUTPUT

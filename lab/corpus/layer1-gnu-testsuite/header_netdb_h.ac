@@ -1,0 +1,5 @@
+dnl G78: Single header check: netdb.h
+AC_INIT([gnu-hdr-netdb_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([netdb.h])
+AC_OUTPUT

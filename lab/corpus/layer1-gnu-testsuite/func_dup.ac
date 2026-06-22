@@ -1,0 +1,5 @@
+dnl G12: Single func check: dup
+AC_INIT([gnu-dup],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([dup])
+AC_OUTPUT

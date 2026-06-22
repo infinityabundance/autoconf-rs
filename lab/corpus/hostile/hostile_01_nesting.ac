@@ -1,0 +1,11 @@
+dnl Hostile M4 Corpus — tests maximal nesting, quoting edge cases,
+dnl diversion abuse, m4_wrap, pattern_forbid/allow, and trace output.
+dnl
+dnl These patterns stress the M4 engine's robustness under adversarial
+dnl configure.ac input. Compare byte-for-byte including --trace output.
+dnl
+dnl Court: AC.HOSTILE.M4.1
+
+dnl === HOSTILE_01: Maximal bracket nesting ===
+AC_INIT([[[[[[[deeply[[nested]]package]]]]]]], [[[[1.0]]]])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC
+AC_CANONICAL_TARGET
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_HEADERS([config.h])
+AC_PROG_LEX
+AC_OUTPUT

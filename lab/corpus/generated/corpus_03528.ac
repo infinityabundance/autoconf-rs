@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MAKE_SET
+AC_HEADER_STDC
+AC_FUNC_MMAP
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CANONICAL_TARGET
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

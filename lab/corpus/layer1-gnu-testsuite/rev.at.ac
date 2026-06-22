@@ -1,0 +1,4 @@
+AC_INIT([gnu-rev],[1.0])
+AC_REVISION([1.2.3])
+AC_COPYRIGHT([Copyright 2024])
+AC_OUTPUT

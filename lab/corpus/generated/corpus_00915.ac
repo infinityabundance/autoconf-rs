@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AWK
+AC_TYPE_MODE_T
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_OFF_T
+AC_CONFIG_SRCDIR([src/main.c])
+AC_LANG_PUSH([C])
+AC_OUTPUT

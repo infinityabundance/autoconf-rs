@@ -1,0 +1,5 @@
+dnl G27: Single func check: flock
+AC_INIT([gnu-flock],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([flock])
+AC_OUTPUT

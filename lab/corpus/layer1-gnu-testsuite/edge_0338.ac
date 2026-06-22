@@ -1,0 +1,4 @@
+AC_INIT([arg338],[1.0])
+AC_ARG_WITH([w338],[AS_HELP_STRING([--with-w338],[Option 338])])
+AC_ARG_ENABLE([e338],[AS_HELP_STRING([--enable-e338],[Feature 338])])
+AC_OUTPUT

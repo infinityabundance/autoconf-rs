@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MALLOC
+AC_HEADER_STDC
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_UINT32_T
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

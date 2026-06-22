@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_PREFIX_PROGRAM([gcc])
+AC_LANG_PUSH([C])
+AC_CHECK_FUNCS([fork vfork])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_OUTPUT

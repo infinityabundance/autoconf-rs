@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_HEADER_STDINT
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

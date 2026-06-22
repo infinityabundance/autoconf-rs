@@ -1,0 +1,18 @@
+.TH ACLOCAL 1 "2026-06-20" "autoconf-rs 0.1" "User Commands"
+.SH NAME
+aclocal \- generate aclocal.m4 by scanning configure.ac
+.SH SYNOPSIS
+.B aclocal
+[\fIOPTION\fR]...
+.SH DESCRIPTION
+Scan configure.ac for macro usage and generate aclocal.m4
+by collecting macros from m4/ directories.
+.SH OPTIONS
+.TP
+\fB\-\-install\fR
+Install third-party macros into the first m4/ directory.
+.TP
+\fB\-o\fR \fIFILE\fR
+Write output to FILE instead of aclocal.m4.
+.SH "SEE ALSO"
+\fBautoconf\fR(1)

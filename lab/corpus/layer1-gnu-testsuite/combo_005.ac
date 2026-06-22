@@ -1,0 +1,17 @@
+dnl G446: Max combo 5
+AC_INIT([gnu-combo-5],[1.0])
+AC_PROG_CC
+AC_CANONICAL_HOST
+AC_ARG_WITH([pkg5], [AS_HELP_STRING([--with-pkg5], [Package 5])])
+AC_ARG_ENABLE([feat5], [AS_HELP_STRING([--enable-feat5], [Feature 5])])
+AC_CHECK_FUNC([malloc5])
+AC_CHECK_HEADER([stdlib.h])
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_TYPE([pid_t])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_MEMBER([struct stat.st_mode])
+AC_SUBST([COMBO_VAR_5], [combo_5])
+AC_DEFINE([COMBO_DEF_5], [5])
+AC_CONFIG_FILES([Makefile5])
+AC_CONFIG_HEADERS([config5.h])
+AC_OUTPUT

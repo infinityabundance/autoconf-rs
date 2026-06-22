@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_AWK
+AC_OUTPUT

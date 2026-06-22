@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LEX
+AC_PROG_CXX
+AC_REPLACE_FUNCS([strdup getopt])
+AC_STRUCT_ST_BLOCKS
+AC_CANONICAL_TARGET
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

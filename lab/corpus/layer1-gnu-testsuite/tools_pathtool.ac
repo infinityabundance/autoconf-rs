@@ -1,0 +1,13 @@
+dnl AC_PATH_TOOL all
+AC_INIT([gnu-pathtool],[1.0])
+AC_PATH_TOOL([AR], [ar])
+AC_PATH_TOOL([AS], [as])
+AC_PATH_TOOL([DLLTOOL], [dlltool])
+AC_PATH_TOOL([LD], [ld])
+AC_PATH_TOOL([LIPO], [lipo])
+AC_PATH_TOOL([NM], [nm])
+AC_PATH_TOOL([OBJCOPY], [objcopy])
+AC_PATH_TOOL([OBJDUMP], [objdump])
+AC_PATH_TOOL([RANLIB], [ranlib])
+AC_PATH_TOOL([STRIP], [strip])
+AC_OUTPUT

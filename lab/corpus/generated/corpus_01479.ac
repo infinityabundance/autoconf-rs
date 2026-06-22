@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_ALLOCA
+AC_PREFIX_PROGRAM([gcc])
+AC_LIBOBJ([fnmatch])
+AC_PROG_GREP
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PREREQ([2.71])
+AC_OUTPUT

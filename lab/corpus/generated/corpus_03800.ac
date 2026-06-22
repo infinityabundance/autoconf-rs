@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_STRUCT_TIMEZONE
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

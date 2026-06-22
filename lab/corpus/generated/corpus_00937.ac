@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_OFF_T
+AC_TYPE_UID_T
+AC_PROG_RANLIB
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

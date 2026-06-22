@@ -1,0 +1,4 @@
+dnl G399: AC_PREREQ(8.80)
+AC_PREREQ([8.80])
+AC_INIT([gnu-prq-8],[1.0])
+AC_OUTPUT

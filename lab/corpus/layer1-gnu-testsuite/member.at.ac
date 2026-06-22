@@ -1,0 +1,8 @@
+AC_INIT([gnu-member],[1.0])
+AC_PROG_CC
+AC_CHECK_MEMBER([struct stat.st_blksize])
+AC_CHECK_MEMBER([struct stat.st_rdev])
+AC_CHECK_MEMBER([struct stat.st_blocks])
+AC_CHECK_MEMBER([struct tm.tm_zone])
+AC_CHECK_MEMBER([struct tm.tm_gmtoff])
+AC_OUTPUT

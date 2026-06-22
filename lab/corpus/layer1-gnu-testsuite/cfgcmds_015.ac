@@ -1,0 +1,8 @@
+dnl G299: 5 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-15],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_15])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_15])
+AC_CONFIG_COMMANDS([cmd2], [echo command_2_15])
+AC_CONFIG_COMMANDS([cmd3], [echo command_3_15])
+AC_CONFIG_COMMANDS([cmd4], [echo command_4_15])
+AC_OUTPUT

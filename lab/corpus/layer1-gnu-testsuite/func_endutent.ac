@@ -1,0 +1,5 @@
+dnl G16: Single func check: endutent
+AC_INIT([gnu-endutent],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([endutent])
+AC_OUTPUT

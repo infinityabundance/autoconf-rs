@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TM
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_TYPE_PID_T
+AC_TYPE_UINT32_T
+AC_OUTPUT

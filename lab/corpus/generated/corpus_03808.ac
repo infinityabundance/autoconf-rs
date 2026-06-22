@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_MAKE_SET
+AC_PRESERVE_HELP_ORDER
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_CC
+AC_HEADER_STDBOOL
+AC_HEADER_TIME
+AC_HEADER_STDINT
+AC_OUTPUT

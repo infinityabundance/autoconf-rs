@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REVISION([$Revision: 1.0 $])
+AC_LIBOBJ([fnmatch])
+AC_TYPE_OFF_T
+AC_OUTPUT

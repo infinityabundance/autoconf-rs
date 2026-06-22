@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_HEADER_STDBOOL
+AC_PROG_AWK
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CHECK_TYPES([off_t mode_t])
+AC_FUNC_MMAP
+AC_CANONICAL_BUILD
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl G398: AC_PREREQ(7.70)
+AC_PREREQ([7.70])
+AC_INIT([gnu-prq-7],[1.0])
+AC_OUTPUT

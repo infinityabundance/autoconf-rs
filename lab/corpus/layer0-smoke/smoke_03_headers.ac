@@ -1,0 +1,6 @@
+dnl Smoke test with config headers
+AC_INIT([header_test], [2.0])
+AC_CONFIG_HEADERS([config.h])
+AC_DEFINE([PACKAGE], ["header_test"])
+AC_DEFINE([VERSION], ["2.0"])
+AC_OUTPUT

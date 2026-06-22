@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AR
+AC_SUBST([exec_prefix])
+AC_PREREQ([2.59])
+AC_PROG_AWK
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CPP
+AC_OUTPUT

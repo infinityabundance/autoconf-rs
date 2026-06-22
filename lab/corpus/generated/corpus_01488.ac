@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UINT32_T
+AC_FUNC_ALLOCA
+AC_LANG_PUSH([C])
+AC_PROG_INSTALL
+AC_CANONICAL_TARGET
+AC_PROG_LN_S
+AC_HEADER_TIME
+AC_OUTPUT

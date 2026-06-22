@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_ST_BLOCKS
+AC_STRUCT_TM
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_RANLIB
+AC_PROG_AWK
+AC_PROG_MAKE_SET
+AC_OUTPUT

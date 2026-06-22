@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CPP
+AC_CANONICAL_TARGET
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_FUNC_STRERROR_R
+AC_CANONICAL_BUILD
+AC_SUBST([PACKAGE_NAME])
+AC_TYPE_OFF_T
+AC_OUTPUT

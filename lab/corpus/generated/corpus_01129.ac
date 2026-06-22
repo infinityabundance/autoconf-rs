@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LN_S
+AC_PROG_MKDIR_P
+AC_TYPE_INT32_T
+AC_PRESERVE_HELP_ORDER
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

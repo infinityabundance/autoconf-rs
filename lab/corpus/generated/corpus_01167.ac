@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LEX
+AC_STRUCT_TM
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

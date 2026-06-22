@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_SUBST([PACKAGE_NAME])
+AC_HEADER_TIME
+AC_OUTPUT

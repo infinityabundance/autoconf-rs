@@ -1,0 +1,5 @@
+dnl G53: Single header check: complex.h
+AC_INIT([gnu-hdr-complex_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([complex.h])
+AC_OUTPUT

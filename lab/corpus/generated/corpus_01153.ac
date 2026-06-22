@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UINT32_T
+AC_PROG_AR
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_FUNC_MMAP
+AC_OUTPUT

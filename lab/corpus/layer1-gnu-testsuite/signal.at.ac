@@ -1,0 +1,6 @@
+AC_INIT([gnu-signal],[1.0])
+AC_PROG_CC
+AC_TYPE_SIGNAL
+AC_CHECK_FUNCS([sigaction sigprocmask sigpending sigsuspend])
+AC_CHECK_FUNCS([signal sigset sigrelse sighold])
+AC_OUTPUT

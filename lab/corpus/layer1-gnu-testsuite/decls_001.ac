@@ -1,0 +1,5 @@
+dnl G345: Multi decl check
+AC_INIT([gnu-decls-1],[1.0])
+AC_PROG_CC
+AC_CHECK_DECLS([free getenv])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_MMAP
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([malloc realloc])
+AC_TYPE_SIZE_T
+AC_LANG_PUSH([C])
+AC_OUTPUT

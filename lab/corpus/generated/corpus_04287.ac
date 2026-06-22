@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_STRUCT_TM
+AC_PROG_GREP
+AC_CHECK_SIZEOF([long])
+AC_PRESERVE_HELP_ORDER
+AC_PROG_LN_S
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PROG_MKDIR_P
+AC_OUTPUT

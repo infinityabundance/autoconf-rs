@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_FORK
+AC_PREREQ([2.71])
+AC_TYPE_PID_T
+AC_OUTPUT

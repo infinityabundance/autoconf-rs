@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PRESERVE_HELP_ORDER
+AC_PROG_INSTALL
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

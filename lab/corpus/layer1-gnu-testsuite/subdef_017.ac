@@ -1,0 +1,13 @@
+dnl G428: SUBST+DEFINE combo 17
+AC_INIT([gnu-sd-17],[1.0])
+AC_SUBST([S17_0], [v17_0])
+AC_SUBST([S17_1], [v17_1])
+AC_SUBST([S17_2], [v17_2])
+AC_SUBST([S17_3], [v17_3])
+AC_SUBST([S17_4], [v17_4])
+AC_DEFINE([D17_0], [0])
+AC_DEFINE([D17_1], [17])
+AC_DEFINE([D17_2], [34])
+AC_DEFINE([D17_3], [51])
+AC_DEFINE([D17_4], [68])
+AC_OUTPUT

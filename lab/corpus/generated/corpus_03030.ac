@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_FUNCS([fork vfork])
+AC_HEADER_STDINT
+AC_FUNC_ALLOCA
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

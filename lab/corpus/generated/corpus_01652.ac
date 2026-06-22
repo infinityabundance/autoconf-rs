@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_RANLIB
+AC_PROG_GREP
+AC_TYPE_OFF_T
+AC_PREREQ([2.63])
+AC_TYPE_MODE_T
+AC_OUTPUT

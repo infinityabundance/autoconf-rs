@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([exec_prefix])
+AC_HEADER_SYS_WAIT
+AC_FUNC_VPRINTF
+AC_TYPE_MODE_T
+AC_PROG_FGREP
+AC_OUTPUT

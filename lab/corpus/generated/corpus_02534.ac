@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_FORK
+AC_PROG_AWK
+AC_PREREQ([2.59])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_FUNCS([fork vfork])
+AC_PROG_AR
+AC_PROG_MAKE_SET
+AC_STRUCT_TIMEZONE
+AC_FUNC_FORK
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

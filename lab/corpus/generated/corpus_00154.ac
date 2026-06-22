@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PRESERVE_HELP_ORDER
+AC_HEADER_TIME
+AC_PROG_CXX
+AC_PREREQ([2.69])
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_OUTPUT

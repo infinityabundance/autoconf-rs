@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDC
+AC_PROG_FGREP
+AC_CONFIG_HEADERS([config.h])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CHECK_LIB([m], [sin])
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_HOST
+AC_PROG_GREP
+AC_PROG_AR
+AC_HEADER_DIRENT
+AC_OUTPUT

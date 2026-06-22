@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDINT
+AC_CONFIG_SUBDIRS([lib])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_LIBOBJ([fnmatch])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_YACC
+AC_OUTPUT

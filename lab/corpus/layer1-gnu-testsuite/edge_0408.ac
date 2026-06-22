@@ -1,0 +1,4 @@
+AC_INIT([arg408],[1.0])
+AC_ARG_WITH([w408],[AS_HELP_STRING([--with-w408],[Option 408])])
+AC_ARG_ENABLE([e408],[AS_HELP_STRING([--enable-e408],[Feature 408])])
+AC_OUTPUT

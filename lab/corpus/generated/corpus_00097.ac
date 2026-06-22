@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_FUNC_VPRINTF
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_CPP
+AC_OUTPUT

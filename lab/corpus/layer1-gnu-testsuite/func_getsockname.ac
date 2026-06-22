@@ -1,0 +1,5 @@
+dnl G48: Single func check: getsockname
+AC_INIT([gnu-getsockname],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getsockname])
+AC_OUTPUT

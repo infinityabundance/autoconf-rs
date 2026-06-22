@@ -1,0 +1,7 @@
+dnl G133: 4 AC_DEFINE calls
+AC_INIT([gnu-def-4],[1.0])
+AC_DEFINE([DVAR_0], [0])
+AC_DEFINE([DVAR_1], [4])
+AC_DEFINE([DVAR_2], [8])
+AC_DEFINE([DVAR_3], [12])
+AC_OUTPUT

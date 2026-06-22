@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_RANLIB
+AC_PROG_LEX
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

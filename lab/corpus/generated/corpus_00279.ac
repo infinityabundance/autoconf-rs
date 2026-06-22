@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_FGREP
+AC_TYPE_UID_T
+AC_CANONICAL_TARGET
+AC_TYPE_OFF_T
+AC_OUTPUT

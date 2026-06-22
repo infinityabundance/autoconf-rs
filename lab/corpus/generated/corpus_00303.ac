@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_OFF_T
+AC_CHECK_SIZEOF([long])
+AC_PROG_RANLIB
+AC_CANONICAL_BUILD
+AC_HEADER_TIME
+AC_OUTPUT

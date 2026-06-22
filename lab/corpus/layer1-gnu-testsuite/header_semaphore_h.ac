@@ -1,0 +1,5 @@
+dnl G86: Single header check: semaphore.h
+AC_INIT([gnu-hdr-semaphore_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([semaphore.h])
+AC_OUTPUT

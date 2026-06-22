@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_STDBOOL
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_LN_S
+AC_OUTPUT

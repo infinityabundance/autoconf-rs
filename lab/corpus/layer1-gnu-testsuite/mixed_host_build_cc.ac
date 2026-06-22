@@ -1,0 +1,6 @@
+dnl G177: Mixed: host,build,cc
+AC_INIT([gnu-mix-host_build_cc],[1.0])
+AC_CANONICAL_HOST
+AC_CANONICAL_BUILD
+AC_PROG_CC
+AC_OUTPUT

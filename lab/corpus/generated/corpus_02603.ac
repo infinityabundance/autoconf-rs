@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_AR
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

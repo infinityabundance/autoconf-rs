@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_HEADERS([config.h])
+AC_TYPE_OFF_T
+AC_PREREQ([2.69])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CANONICAL_HOST
+AC_OUTPUT

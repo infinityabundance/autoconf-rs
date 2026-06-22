@@ -1,0 +1,7 @@
+dnl G288: 4 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-4],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_4])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_4])
+AC_CONFIG_COMMANDS([cmd2], [echo command_2_4])
+AC_CONFIG_COMMANDS([cmd3], [echo command_3_4])
+AC_OUTPUT

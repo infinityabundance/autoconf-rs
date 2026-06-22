@@ -1,0 +1,404 @@
+{
+  "schema": "autoconf-rs-atlas-v1",
+  "document": "ATLAS.md",
+  "purpose": "Complete forensic surface atlas of GNU Autoconf for 1:1 parity verification against autoconf-rs. This is the canonical reference for every behavioral surface that must be admitted through oracle courts.",
+  "doctrine": "No surface is claimed until it has a sealed receipt comparing autoconf-rs output byte-for-byte against a pinned GNU Autoconf oracle. This atlas enumerates every surface that requires a receipt.",
+
+  "oracle_versions": [
+    {
+      "version": "2.73",
+      "date": "2025-06",
+      "admitted": true,
+      "profile": "reports/oracle-profile.json",
+      "binaries": ["autoconf", "autoheader", "autom4te", "autoreconf", "aclocal", "autoscan", "autoupdate", "ifnames"],
+      "key_changes": "Current stable release. --help formatting changes, Perl 5.10 requirement, improved Fortran support.",
+      "notes": "Primary oracle for autoconf-rs development."
+    },
+    {
+      "version": "2.72",
+      "date": "2023-12",
+      "admitted": false,
+      "key_changes": "Added AC_PROG_CC_C23, removed deprecated macros. Fixed shell portability issues.",
+      "notes": "Previous stable. Should be admitted as secondary oracle for regression testing."
+    },
+    {
+      "version": "2.71",
+      "date": "2021-01",
+      "admitted": false,
+      "key_changes": "Major release. New AC_CONFIG_MACRO_DIRS, AC_PROG_AR. Dropped Perl 5.6 support. Removed $as_echo backwards compatibility.",
+      "notes": "Widely deployed in Linux distributions. Important for compatibility."
+    },
+    {
+      "version": "2.69",
+      "date": "2012-04",
+      "admitted": false,
+      "key_changes": "Last release before 2.70 rewrite. Very different internals from 2.71+. Uses old M4sh initialization.",
+      "notes": "Important for legacy project compatibility. Many projects still use macros that were available in 2.69."
+    }
+  ],
+
+  "surface_taxonomy": {
+    "description": "Every behavioral surface in GNU Autoconf, organized by category. Each surface requires a separate sealed court receipt.",
+    "categories": [
+      {
+        "id": "SURFACE.CLI",
+        "name": "CLI Binary Interfaces",
+        "description": "Command-line invocation surfaces for all 8 Autoconf binaries.",
+        "subsurfaces": [
+          { "id": "CLI.AUTOCONF.INVOKE", "binary": "autoconf", "surface": "Basic invocation: autoconf [template-file]", "status": "partial" },
+          { "id": "CLI.AUTOCONF.FLAGS", "binary": "autoconf", "surface": "All CLI flags: -o, -I, -B, -W, -f, --trace, --debug, --initialization, -i, -t, -v", "status": "unimplemented" },
+          { "id": "CLI.AUTOCONF.ENV", "binary": "autoconf", "surface": "Environment variables: AUTOCONF, AUTOM4TE, M4, WARNINGS, PATH", "status": "unimplemented" },
+          { "id": "CLI.AUTOCONF.EXIT", "binary": "autoconf", "surface": "Exit codes: 0=success, 1=warnings, 2=fatal errors", "status": "partial" },
+          { "id": "CLI.AUTOHEADER.INVOKE", "binary": "autoheader", "surface": "Basic invocation: autoheader [template-file]", "status": "stub" },
+          { "id": "CLI.AUTOM4TE.INVOKE", "binary": "autom4te", "surface": "M4 wrapper with caching: --language, --include, --freeze, --reload, --trace", "status": "stub" },
+          { "id": "CLI.AUTORECONF.INVOKE", "binary": "autoreconf", "surface": "Orchestration: --force, --install, --symlink, --make, directory traversal", "status": "stub" },
+          { "id": "CLI.ACLOCAL.INVOKE", "binary": "aclocal", "surface": "M4 macro scanning: -I, --install, --diff, third-party .m4 loading", "status": "stub" },
+          { "id": "CLI.AUTOSCAN.INVOKE", "binary": "autoscan", "surface": "C source scanning for configure.ac hints", "status": "stub" },
+          { "id": "CLI.AUTOUPDATE.INVOKE", "binary": "autoupdate", "surface": "Macro deprecation and upgrade", "status": "stub" },
+          { "id": "CLI.IFNAMES.INVOKE", "binary": "ifnames", "surface": "#if/#ifdef name extraction from C sources", "status": "stub" }
+        ]
+      },
+      {
+        "id": "SURFACE.M4.ENGINE",
+        "name": "M4 Macro Engine",
+        "description": "The GNU m4 engine that processes all Autoconf macros. This is the computational core.",
+        "subsurfaces": [
+          { "id": "M4.LEX", "surface": "Byte-level tokenizer: quote/comment/paren/comma/name/text/EOF tokens, eight-bit-clean", "status": "implemented" },
+          { "id": "M4.QUOTE", "surface": "Quote handling: nesting, changequote, same-pass re-lexing, empty-quote boundary tokens", "status": "partial" },
+          { "id": "M4.COMMENT", "surface": "Comment handling: changecom, dnl, comment consumption", "status": "partial" },
+          { "id": "M4.MACRO_TABLE", "surface": "Symbol table: define/undefine/pushdef/popdef, builtin registration, prefix mode", "status": "implemented" },
+          { "id": "M4.ARGS", "surface": "Argument collection: nested parens, quoted commas, whitespace handling, $n/$@/$*/$#", "status": "implemented" },
+          { "id": "M4.EXPAND", "surface": "Expansion engine: rescanning, recursion prevention, macro body substitution, pure-text fast path", "status": "partial" },
+          { "id": "M4.DIVERT", "surface": "Diversion system: divert/undivert/divnum, EOF auto-undivert, negative discard, file undivert", "status": "unimplemented" },
+          { "id": "M4.FROZEN", "surface": "Frozen file save/reload: -F/-R, cross-compatibility with GNU m4 frozen format", "status": "unimplemented" },
+          { "id": "M4.INCLUDE", "surface": "File inclusion: include/sinclude, -I search path, directory-of-including-file logic", "status": "unimplemented" },
+          { "id": "M4.SYSCMD", "surface": "Shell command execution: syscmd/esyscmd/sysval, fd inheritance, signal encoding", "status": "unimplemented" },
+          { "id": "M4.TRACE", "surface": "Debug/trace: traceon/traceoff/dumpdef, debugmode/debugfile, -d flags, -t name", "status": "unimplemented" },
+          { "id": "M4.BUILTIN.TEXT", "surface": "Text builtins: len/index/substr/translit/regexp/patsubst/format", "status": "partial" },
+          { "id": "M4.BUILTIN.EVAL", "surface": "Arithmetic: eval (32-bit signed, all GNU operators), incr/decr", "status": "partial" },
+          { "id": "M4.BUILTIN.COND", "surface": "Conditionals: ifdef/ifelse/shift", "status": "implemented" },
+          { "id": "M4.BUILTIN.DEFN", "surface": "Definition inspection: defn, builtin, indir", "status": "unimplemented" },
+          { "id": "M4.MODE.POSIX", "surface": "POSIX traditional mode (-G): different expansion semantics, no GNU extensions", "status": "unimplemented" },
+          { "id": "M4.MODE.SYNCLINE", "surface": "Syncline output (-s): #line directives for error tracking", "status": "unimplemented" }
+        ]
+      },
+      {
+        "id": "SURFACE.M4SUGAR",
+        "name": "m4sugar Macro Library",
+        "description": "Convenience layer above raw M4. Provides structured programming constructs.",
+        "subsurfaces": [
+          { "id": "M4SUGAR.DEFUN", "surface": "m4_defun/m4_require/m4_provide: macro definition with dependency tracking", "status": "implemented" },
+          { "id": "M4SUGAR.COND", "surface": "Conditionals: m4_if/m4_case/m4_cond/m4_bmatch", "status": "partial" },
+          { "id": "M4SUGAR.LOOP", "surface": "Iteration: m4_for/m4_foreach/m4_foreach_w", "status": "partial" },
+          { "id": "M4SUGAR.MAP", "surface": "Mapping: m4_map/m4_map_args/m4_map_args_w/m4_map_args_pair", "status": "unimplemented" },
+          { "id": "M4SUGAR.LIST", "surface": "List ops: m4_car/m4_cdr/m4_append/m4_prepend/m4_flatten/m4_join/m4_split/m4_list_cmp", "status": "partial" },
+          { "id": "M4SUGAR.QUOTE", "surface": "Quoting: m4_quote/m4_dquote/m4_expand/m4_do/m4_curry", "status": "partial" },
+          { "id": "M4SUGAR.STRING", "surface": "String: m4_normalize/m4_text_wrap/m4_toupper/m4_tolower/m4_strip/m4_escape", "status": "partial" },
+          { "id": "M4SUGAR.SET", "surface": "Sets: m4_set_add/m4_set_contains/m4_set_foreach/m4_set_list/m4_set_remove", "status": "unimplemented" },
+          { "id": "M4SUGAR.DIVERT", "surface": "Diversion: m4_divert_push/m4_divert_pop/m4_divert_text", "status": "unimplemented" },
+          { "id": "M4SUGAR.DIAG", "surface": "Diagnostics: m4_warn/m4_fatal/m4_errprintn/m4_assert", "status": "unimplemented" },
+          { "id": "M4SUGAR.STACK", "surface": "Stack ops: m4_stack_foreach/m4_stack_foreach_sep", "status": "unimplemented" },
+          { "id": "M4SUGAR.VERSION", "surface": "Version: m4_version_prereq/m4_version_compare", "status": "unimplemented" }
+        ]
+      },
+      {
+        "id": "SURFACE.M4SH",
+        "name": "m4sh Shell-Generation Library",
+        "description": "Generates portable POSIX shell code from M4 macros.",
+        "subsurfaces": [
+          { "id": "M4SH.INIT", "surface": "M4sh initialization: DUALCASE, ZSH_VERSION, IFS, PATH, as_echo, as_mkdir_p, as_test_x, as_lineno, as_me", "status": "implemented" },
+          { "id": "M4SH.SANITIZE", "surface": "Shell sanitization: AS_SHELL_SANITIZE, AS_BOURNE_COMPATIBLE", "status": "partial" },
+          { "id": "M4SH.IO", "surface": "I/O: AS_ECHO/AS_ECHO_N, AS_ESCAPE, AS_MESSAGE_FD, AS_ORIGINAL_STDIN_FD", "status": "partial" },
+          { "id": "M4SH.COND", "surface": "Conditionals: AS_IF, AS_CASE", "status": "implemented" },
+          { "id": "M4SH.LOOP", "surface": "Loops: AS_FOR", "status": "implemented" },
+          { "id": "M4SH.VAR", "surface": "Variables: AS_VAR_SET/GET/TEST_SET/SET_IF/PUSHDEF/POPDEF/APPEND/ARITH/COPY", "status": "unimplemented" },
+          { "id": "M4SH.FILE", "surface": "Files: AS_MKDIR_P, AS_TMPDIR, AS_BASENAME, AS_DIRNAME, AS_SET_CATFILE, AS_LN_S", "status": "partial" },
+          { "id": "M4SH.TR", "surface": "String translation: AS_TR_SH, AS_TR_CPP", "status": "implemented" },
+          { "id": "M4SH.EXIT", "surface": "Exit: AS_EXIT", "status": "implemented" },
+          { "id": "M4SH.FUNC", "surface": "Shell functions: AS_REQUIRE_SHELL_FN, AS_FUNCTION_DESCRIBE", "status": "unimplemented" },
+          { "id": "M4SH.BOX", "surface": "Formatting: AS_BOX, AS_LITERAL_IF, AS_LITERAL_WORD_IF", "status": "partial" }
+        ]
+      },
+      {
+        "id": "SURFACE.AUTOCONF.CORE",
+        "name": "Core Autoconf Macros",
+        "description": "The fundamental macros that form the structure of every configure.ac.",
+        "subsurfaces": [
+          { "id": "AC.INIT", "surface": "AC_INIT: Package metadata, version, bug-report, tarname, URL. Expands to full prologue.", "status": "partial" },
+          { "id": "AC.OUTPUT", "surface": "AC_OUTPUT: Generate config.status and trigger output file creation.", "status": "partial" },
+          { "id": "AC.PREREQ", "surface": "AC_PREREQ: Require minimum Autoconf version.", "status": "unimplemented" },
+          { "id": "AC.COPYRIGHT", "surface": "AC_COPYRIGHT/AC_REVISION: Copyright and revision notices.", "status": "unimplemented" },
+          { "id": "AC.CONFIG", "surface": "AC_CONFIG_FILES/HEADERS/COMMANDS/LINKS/SUBDIRS: Output file declarations.", "status": "partial" },
+          { "id": "AC.SUBST", "surface": "AC_SUBST/AC_SUBST_FILE: Variable substitution in output files.", "status": "partial" },
+          { "id": "AC.DEFINE", "surface": "AC_DEFINE/AC_DEFINE_UNQUOTED: C preprocessor macro definitions.", "status": "partial" },
+          { "id": "AC.ARG", "surface": "AC_ARG_WITH/AC_ARG_ENABLE/AC_ARG_VAR/AC_ARG_PROGRAM: configure command-line arguments.", "status": "unimplemented" },
+          { "id": "AC.CANONICAL", "surface": "AC_CANONICAL_HOST/BUILD/TARGET/SYSTEM: Platform triple detection.", "status": "unimplemented" },
+          { "id": "AC.PREFIX", "surface": "AC_PREFIX_DEFAULT/AC_PREFIX_PROGRAM: Installation prefix handling.", "status": "unimplemented" },
+          { "id": "AC.DIR", "surface": "AC_CONFIG_SRCDIR/AUX_DIR/MACRO_DIR/MACRO_DIRS: Directory configuration.", "status": "unimplemented" },
+          { "id": "AC.PRESERVE", "surface": "AC_PRESERVE_HELP_ORDER: Preserve --help output ordering.", "status": "unimplemented" }
+        ]
+      },
+      {
+        "id": "SURFACE.AUTOCONF.FEATURE",
+        "name": "Feature Test Macros",
+        "description": "Macros that probe the build environment for features.",
+        "subsurfaces": [
+          { "id": "AC.CHECK.FUNC", "surface": "AC_CHECK_FUNC/AC_CHECK_FUNCS/AC_CHECK_FUNC_ONCE/AC_REPLACE_FUNCS/AC_LIBOBJ", "status": "unimplemented" },
+          { "id": "AC.CHECK.HEADER", "surface": "AC_CHECK_HEADER/AC_CHECK_HEADERS/AC_CHECK_HEADER_ONCE", "status": "unimplemented" },
+          { "id": "AC.CHECK.TYPE", "surface": "AC_CHECK_TYPE/AC_CHECK_TYPES/AC_CHECK_MEMBER/AC_CHECK_MEMBERS/AC_CHECK_SIZEOF/AC_CHECK_ALIGNOF", "status": "unimplemented" },
+          { "id": "AC.CHECK.LIB", "surface": "AC_CHECK_LIB/AC_SEARCH_LIBS/AC_HAVE_LIBRARY", "status": "unimplemented" },
+          { "id": "AC.CHECK.PROG", "surface": "AC_CHECK_PROG/AC_CHECK_PROGS/AC_CHECK_TOOL/AC_CHECK_TOOLS/AC_PATH_PROG/AC_PATH_PROGS/AC_PATH_TOOL/AC_PATH_TOOLS", "status": "unimplemented" },
+          { "id": "AC.CHECK.FILE", "surface": "AC_CHECK_FILE/AC_CHECK_FILES", "status": "unimplemented" },
+          { "id": "AC.CHECK.DECL", "surface": "AC_CHECK_DECL/AC_CHECK_DECLS/AC_CHECK_DECL_ONCE", "status": "unimplemented" },
+          { "id": "AC.COMPILE", "surface": "AC_COMPILE_IFELSE/AC_LINK_IFELSE/AC_RUN_IFELSE/AC_TRY_COMPILE/AC_TRY_LINK/AC_TRY_RUN/AC_TRY_CPP", "status": "unimplemented" },
+          { "id": "AC.EGREP", "surface": "AC_EGREP_CPP/AC_EGREP_HEADER: Pattern matching in preprocessor output.", "status": "unimplemented" },
+          { "id": "AC.MSG", "surface": "AC_MSG_CHECKING/AC_MSG_RESULT/AC_MSG_WARN/AC_MSG_ERROR/AC_MSG_NOTICE/AC_MSG_FAILURE", "status": "partial" }
+        ]
+      },
+      {
+        "id": "SURFACE.AUTOCONF.LANG",
+        "name": "Language Support",
+        "description": "Multi-language compiler and tool detection.",
+        "subsurfaces": [
+          { "id": "AC.LANG.C", "surface": "C: AC_PROG_CC (full), AC_PROG_CC_C89/C99/C11/C23, AC_PROG_CPP, AC_C_*", "status": "minimal" },
+          { "id": "AC.LANG.CXX", "surface": "C++: AC_PROG_CXX, AC_PROG_CXXCPP, AC_CXX_*", "status": "unimplemented" },
+          { "id": "AC.LANG.OBJC", "surface": "Objective C: AC_PROG_OBJC, AC_PROG_OBJCXX", "status": "unimplemented" },
+          { "id": "AC.LANG.FORTRAN", "surface": "Fortran: AC_PROG_FC, AC_PROG_F77, AC_FC_*", "status": "unimplemented" },
+          { "id": "AC.LANG.ERLANG", "surface": "Erlang: AC_ERLANG_*", "status": "unimplemented" },
+          { "id": "AC.LANG.GO", "surface": "Go: AC_PROG_GO", "status": "unimplemented" },
+          { "id": "AC.LANG.FRAMEWORK", "surface": "Language framework: AC_LANG_PUSH/POP, AC_LANG_CALL, AC_LANG_PROGRAM/SOURCE/CONFTEST", "status": "unimplemented" }
+        ]
+      },
+      {
+        "id": "SURFACE.OUTPUT",
+        "name": "Output Generation",
+        "description": "Configure script and config.status output surfaces.",
+        "subsurfaces": [
+          { "id": "OUT.CONFIGURE", "surface": "Configure script structure: shebang, header, M4sh init, feature tests, config.status generation, footer", "status": "partial" },
+          { "id": "OUT.STATUS.FILES", "surface": "config.status file generation: sed substitution, AC_SUBST variable expansion, @VARIABLE@ replacement", "status": "partial" },
+          { "id": "OUT.STATUS.HEADERS", "surface": "config.status header generation: #undef → #define transformation, AH_TEMPLATE expansion", "status": "partial" },
+          { "id": "OUT.STATUS.COMMANDS", "surface": "config.status command execution: AC_CONFIG_COMMANDS tag dispatch", "status": "unimplemented" },
+          { "id": "OUT.STATUS.LINKS", "surface": "config.status symlink creation: AC_CONFIG_LINKS", "status": "unimplemented" },
+          { "id": "OUT.TRAP", "surface": "Signal trap handling: trap for INT/TERM/HUP in configure and config.status", "status": "unimplemented" },
+          { "id": "OUT.LOG", "surface": "config.log generation: capturing all command output and exit codes", "status": "unimplemented" },
+          { "id": "OUT.CACHE", "surface": "config.cache: reading/writing cached test results for speed", "status": "unimplemented" },
+          { "id": "OUT.SITE", "surface": "config.site: sourcing system-wide defaults from /usr/share/config.site", "status": "unimplemented" },
+          { "id": "OUT.VPATH", "surface": "VPATH support: building in a separate directory from source", "status": "unimplemented" },
+          { "id": "OUT.STAMP", "surface": "Stamp files: preventing redundant rebuilds", "status": "unimplemented" },
+          { "id": "OUT.INSTALL", "surface": "Installation paths: prefix/exec_prefix/bindir/libdir/includedir/mandir/datarootdir", "status": "unimplemented" }
+        ]
+      }
+    ]
+  },
+
+  "perl_to_rust_mapping": {
+    "description": "GNU Autoconf is written in a combination of Perl scripts, shell scripts, and M4 macros. This maps every component to its autoconf-rs Rust equivalent. No GPL code is consulted — this is derived from black-box oracle behavior and public documentation.",
+    "components": [
+      {
+        "gnu_component": "bin/autoconf.in",
+        "language": "Perl",
+        "lines": 380,
+        "purpose": "Main autoconf driver. Finds autom4te, constructs M4 command line, invokes autom4te with --language=autoconf, handles --trace/--debug/--output/--include.",
+        "rust_equivalent": "crates/autoconf-rs-cli/src/main_autoconf.rs",
+        "surface_coverage": "Invocation model (reads configure.ac, calls M4 engine). Missing: CLI flag parsing, autom4te subprocess, --trace regex matching, environment variable handling.",
+        "perl_constructs_used": "Getopt::Long, File::Basename, File::Spec, strict/warnings, system() calls, pipe opens, signal handlers, tempfile creation, find_via_PATH.",
+        "rust_alternatives": "clap/lexopt for CLI, std::path, std::process::Command, tempfile crate.",
+        "status": "partial"
+      },
+      {
+        "gnu_component": "bin/autom4te.in",
+        "language": "Perl",
+        "lines": 1100,
+        "purpose": "Caching M4 wrapper. Manages M4 frozen files for caching, handles --language selection (loads appropriate .m4 libraries), --include path management, --freeze/--reload, --trace output formatting.",
+        "rust_equivalent": "crates/autoconf-rs-core/src/autom4te.rs (stub)",
+        "surface_coverage": "None yet. Full autom4te pipeline: M4 invocation, cache management, frozen file I/O, language library loading, trace formatting, autom4te.cfg parsing.",
+        "perl_constructs_used": "Getopt::Long, IO::File, File::stat, Storable (cache serialization), complex M4 argument construction, pipe communication with M4 subprocess.",
+        "rust_alternatives": "serde for cache serialization, std::process for M4 subprocess, std::fs for frozen file I/O.",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/autoheader.in",
+        "language": "Perl",
+        "lines": 280,
+        "purpose": "Generates config.h.in from configure.ac. Scans for AC_DEFINE/AC_DEFINE_UNQUOTED, AH_TEMPLATE, produces template header with #undef lines.",
+        "rust_equivalent": "crates/autoconf-rs-core/src/autoheader.rs (stub)",
+        "surface_coverage": "None yet. Must: scan configure.ac for AC_DEFINE/AH_TEMPLATE, generate config.h.in with #undef stubs, handle AH_TOP/AH_BOTTOM.",
+        "perl_constructs_used": "Getopt::Long, autom4te invocation, regex-based macro scanning, text template generation.",
+        "rust_alternatives": "regex crate for scanning, string templating.",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/autoreconf.in",
+        "language": "Perl",
+        "lines": 650,
+        "purpose": "Orchestrates autoconf, autoheader, automake, aclocal, libtoolize. Walks directory tree, updates timestamps, handles --force/--install/--symlink.",
+        "rust_equivalent": "crates/autoconf-rs-core/src/autoreconf.rs (stub)",
+        "surface_coverage": "None yet. Must: directory traversal, subprocess orchestration, dependency tracking, timestamp comparison.",
+        "perl_constructs_used": "Getopt::Long, File::Find, subprocess management, version comparison, --install logic for aux files.",
+        "rust_alternatives": "walkdir crate, std::process::Command orchestration.",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/aclocal.in",
+        "language": "Perl",
+        "lines": 450,
+        "purpose": "Generates aclocal.m4 by scanning m4/ directories for third-party .m4 macro files. Handles --install to copy system macros locally.",
+        "rust_equivalent": "crates/autoconf-rs-core/src/aclocal.rs (stub)",
+        "perl_constructs_used": "Getopt::Long, File::Find, Macro file parsing, --install file copy logic, serial number tracking.",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/autoscan.in",
+        "language": "Perl",
+        "lines": 450,
+        "purpose": "Scans C source files for common Autoconf patterns and generates a configure.scan template.",
+        "rust_equivalent": "crates/autoconf-rs-cli/src/main_autoscan.rs (stub)",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/autoupdate.in",
+        "language": "Perl",
+        "lines": 400,
+        "purpose": "Updates outdated Autoconf macros in configure.ac. Uses AU_DEFUN mappings to know what to replace.",
+        "rust_equivalent": "crates/autoconf-rs-cli/src/main_autoupdate.rs (stub)",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "bin/ifnames.in",
+        "language": "Perl",
+        "lines": 130,
+        "purpose": "Extracts #if, #ifdef, #ifndef, #elif, #else, #endif preprocessor condition names from C source files.",
+        "rust_equivalent": "crates/autoconf-rs-cli/src/main_ifnames.rs (stub)",
+        "status": "stub"
+      },
+      {
+        "gnu_component": "lib/Autom4te/*.pm",
+        "language": "Perl modules",
+        "lines": 4500,
+        "purpose": "Core Perl library: Autom4te::General (utility functions), Autom4te::ChannelDefs (warning channels), Autom4te::Configure_ac (configure.ac parsing), Autom4te::FileUtils (file operations), Autom4te::Getopt (option parsing), Autom4te::Request (autom4te request tracking), Autom4te::XFile (cross-platform file I/O).",
+        "rust_equivalent": "crates/autoconf-rs-core/src/{configure_ac,diagnostics,autom4te}.rs",
+        "surface_coverage": "configure_ac.rs parses basic AC_INIT. diagnostics.rs has basic Diagnostic types. autom4te.rs is a stub.",
+        "perl_constructs_used": "Perl OOP, complex data structures (hash of arrays), file locking, mktemp, signal handling, die/warn error handling, Carp for backtraces.",
+        "rust_alternatives": "serde for structured data, std::fs for file ops, anyhow/thiserror for error handling.",
+        "status": "partial"
+      },
+      {
+        "gnu_component": "lib/m4sugar/*.m4 + lib/autoconf/*.m4",
+        "language": "M4 macros (loaded by autom4te)",
+        "lines": 12000,
+        "purpose": "The computational core: m4sugar provides programming constructs, m4sh generates shell code, autoconf/ provides feature test macros. These are loaded by autom4te at runtime in dependency order.",
+        "rust_equivalent": "crates/autoconf-rs-core/src/{m4sugar,m4sh,m4sh_init,autoconf_macros}.rs",
+        "surface_coverage": "m4sugar: 18/48 macros. m4sh: 18/42 macros. autoconf_macros: 28/72 macros (general.m4) + 0/320+ across other files.",
+        "perl_constructs_used": "N/A — these are M4, not Perl. But they are loaded by Perl scripts via autom4te.",
+        "rust_alternatives": "Rust structs with byte-level behavioral matching. Macros are built-in, not loaded from files.",
+        "status": "partial"
+      }
+    ]
+  },
+
+  "ast_parity_bridge": {
+    "description": "The AST parity bridge verifies that autoconf-rs produces token-identical M4 expansion output to GNU Autoconf. This is the foundation of forensic parity.",
+    "verification_layers": [
+      {
+        "layer": "Token Parity",
+        "description": "The M4 lexer must produce the same token stream as GNU m4 for identical input.",
+        "comparison_axes": ["token types", "token boundaries", "quote nesting depth", "comment consumption", "whitespace handling"],
+        "autoconf_rs_status": "partial — basic tokenizer works, but same-pass changequote re-lexing, empty-quote boundaries, and dnl newline consumption need verification."
+      },
+      {
+        "layer": "Expansion Parity",
+        "description": "The M4 expansion engine must produce the same output text as GNU m4 for identical macro definitions and invocations.",
+        "comparison_axes": ["define/undefine semantics", "argument collection with nested parens", "$n/$@/$*/$# substitution", "rescanning behavior", "recursion prevention", "self-referencing macros"],
+        "autoconf_rs_status": "partial — basic expansion works, but diversion system, frozen files, include/sinclude, and syscmd/esyscmd not yet implemented."
+      },
+      {
+        "layer": "Macro Library Parity",
+        "description": "Every m4sugar, m4sh, and Autoconf macro must expand to identical shell script output.",
+        "comparison_axes": ["m4sugar macros (48 total, 18 done)", "m4sh macros (42 total, 18 done)", "Autoconf general.m4 macros (72 total, 28 done)"],
+        "autoconf_rs_status": "partial"
+      },
+      {
+        "layer": "Shell Script Parity",
+        "description": "The generated configure script must be byte-identical to the GNU Autoconf oracle output for the same configure.ac input.",
+        "comparison_axes": ["shebang", "header comment", "M4sh initialization", "feature test code", "config.status generation", "footer"],
+        "autoconf_rs_status": "partial — prologue generated but output structure differs significantly from oracle."
+      },
+      {
+        "layer": "Execution Parity",
+        "description": "The generated configure script, when executed, must produce identical config.status, Makefile, and config.h output.",
+        "comparison_axes": ["config.status content", "Makefile substitution", "config.h generation", "log output", "exit codes"],
+        "autoconf_rs_status": "unimplemented — generated configure not yet executed in sandbox."
+      }
+    ]
+  },
+
+  "code_archaeology": {
+    "description": "Historical context for key behaviors. Understanding WHY Autoconf does things the way it does is essential for correct forensic reproduction.",
+    "entries": [
+      {
+        "id": "ARCH.001",
+        "topic": "M4 quote characters: backtick and single-quote",
+        "who": "Brian Kernighan and Dennis Ritchie (original m4, 1977); GNU m4 maintainers (Francois Pinard, Rene Seindal, Gary V. Vaughan, Eric Blake)",
+        "when": "1977 (original m4); 1989-1990 (GNU m4)",
+        "why": "Backtick (`) and single-quote (') were chosen because they are visually paired on many terminals and rarely used in natural prose. They are asymmetric opening/closing delimiters, unlike double-quotes which are symmetric.",
+        "impact_on_autoconf_rs": "Our lexer MUST treat these as single-byte delimiters. Using char-based matching would fail on non-UTF-8 input. Receipt: AC.M4.LEX.1."
+      },
+      {
+        "id": "ARCH.002",
+        "topic": "AC_REQUIRE diversion-based dependency ordering",
+        "who": "David MacKenzie (original Autoconf, 1991); Akim Demaille (rewrote AC_REQUIRE with diversions, 2000)",
+        "when": "2000 (Autoconf 2.50)",
+        "why": "Before diversions, AC_REQUIRE used textual ordering — the required macro had to appear textually before the requiring macro. This was fragile. Diversions allow AC_REQUIRE to reorder expansion so dependencies always expand first, regardless of textual position. This is achieved by expanding required macros into a separate diversion that is 'undiverted' at the right time.",
+        "impact_on_autoconf_rs": "Our RequireTracker must implement diversion-based deferred expansion to correctly handle AC_REQUIRE when the required macro appears textually AFTER the requiring macro."
+      },
+      {
+        "id": "ARCH.003",
+        "topic": "M4sh initialization: DUALCASE and ZSH_VERSION",
+        "who": "Paul Eggert, Eric Blake, and the Autoconf mailing list community",
+        "when": "2001-2006 (gradually accumulated)",
+        "why": "Shell portability is hard. MKS shell requires DUALCASE to handle case-insensitive filesystems. Zsh in sh-compatibility mode still has subtle differences (word splitting, NULLCMD). Each line in the M4sh initialization addresses a real bug found in a real shell on a real platform. The as_echo backslash-testing monstrosity exists because /bin/echo and the shell builtin echo behave differently on different systems, especially with -n and backslash escapes.",
+        "impact_on_autoconf_rs": "We must emit the M4sh initialization byte-identically to the oracle. The as_echo test with 1024 backslashes is not a joke — it's a necessary evil for portability."
+      },
+      {
+        "id": "ARCH.004",
+        "topic": "autom4te caching with frozen files",
+        "who": "Akim Demaille",
+        "when": "2001 (Autoconf 2.52)",
+        "why": "Before autom4te, Autoconf ran GNU m4 directly for each configure.ac. This was slow because m4 had to re-expand the entire m4sugar, m4sh, and Autoconf library for every invocation. autom4te solves this by: 1) expanding the standard libraries once and saving the M4 state as a 'frozen file', 2) reloading the frozen file for subsequent invocations, skipping the expensive re-expansion. This reduced configure script generation time by 10-20x.",
+        "impact_on_autoconf_rs": "We must implement M4 frozen file save/reload cross-compatible with GNU m4 frozen format to achieve comparable performance. Without this, every autoconf-rs invocation will re-expand all standard libraries."
+      },
+      {
+        "id": "ARCH.005",
+        "topic": "AC_TRY_RUN and cross-compilation",
+        "who": "David MacKenzie, Ben Elliston, Akim Demaille",
+        "when": "1994-2000",
+        "why": "AC_TRY_RUN compiles and executes a test program. This is impossible when cross-compiling (building for a different target than the host). Autoconf handles this by: 1) detecting cross-compilation mode, 2) providing an 'action-if-cross-compiling' argument to AC_TRY_RUN that supplies a default answer, 3) caching the result in config.cache to avoid re-running. The cross-compilation machinery (--host/--build/--target) is one of the most complex parts of Autoconf.",
+        "impact_on_autoconf_rs": "We must implement the full cross-compilation detection and AC_TRY_RUN fallback semantics. This requires config.cache support and platform triple handling."
+      },
+      {
+        "id": "ARCH.006",
+        "topic": "config.status as a separate generated script",
+        "who": "David MacKenzie, Roland McGrath",
+        "when": "1992-1994",
+        "why": "config.status is generated by configure and executed separately. This two-phase design exists because: 1) configure may be run once but config.status may be re-run multiple times (e.g., after editing config.h), 2) config.status can be distributed with the package and run on the target system without re-running configure, 3) it separates the 'detect' phase (configure) from the 'apply' phase (config.status). This is a key architectural insight.",
+        "impact_on_autoconf_rs": "Our generated configure scripts must produce a correct, self-contained config.status that can be re-run independently."
+      },
+      {
+        "id": "ARCH.007",
+        "topic": "m4sugar: from m4 to a programming language",
+        "who": "Akim Demaille",
+        "when": "2000-2001 (Autoconf 2.50-2.52)",
+        "why": "Raw M4 is a macro processor, not a programming language. Writing Autoconf macros in raw M4 was error-prone — no data structures, no scoping, no error handling. Akim Demaille built m4sugar as a 'standard library' that provides: structured macro definition (m4_defun vs define), dependency tracking (m4_require/m4_provide), conditionals with proper short-circuit evaluation (m4_if/m4_case vs ifelse), iteration constructs (m4_foreach/m4_for), list/set operations, and diversion management. This transformed Autoconf macro authoring from assembly language to a high-level language.",
+        "impact_on_autoconf_rs": "Our m4sugar implementation must capture all these semantics, especially the short-circuit evaluation behavior of m4_if (which differs from ifelse) and the diversion-based reordering of m4_require."
+      },
+      {
+        "id": "ARCH.008",
+        "topic": "The --help output system",
+        "who": "Akim Demaille, Eric Blake",
+        "when": "2001-2007",
+        "why": "Autoconf's --help output is not hardcoded. It is dynamically generated from the macros present in configure.ac. AC_ARG_WITH and AC_ARG_ENABLE register their options into a diversion that is collected and formatted at AC_OUTPUT time. AC_PRESERVE_HELP_ORDER (added in 2.69c) was needed because the diversion-based collection destroyed the original ordering of --help entries.",
+        "impact_on_autoconf_rs": "We must implement diversion-based --help collection and AC_PRESERVE_HELP_ORDER to match the oracle output."
+      }
+    ]
+  }
+}

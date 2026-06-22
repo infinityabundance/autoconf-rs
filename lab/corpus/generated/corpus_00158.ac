@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_ST_BLOCKS
+AC_HEADER_STDC
+AC_PROG_RANLIB
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

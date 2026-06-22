@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_RANLIB
+AC_CONFIG_AUX_DIR([build-aux])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_SUBST([PACKAGE_VERSION])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_EGREP
+AC_OUTPUT

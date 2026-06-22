@@ -1,0 +1,11 @@
+dnl G107: 8 AC_SUBST calls
+AC_INIT([gnu-subst-8],[1.0])
+AC_SUBST([SVAR_0], [sval_0_8])
+AC_SUBST([SVAR_1], [sval_1_8])
+AC_SUBST([SVAR_2], [sval_2_8])
+AC_SUBST([SVAR_3], [sval_3_8])
+AC_SUBST([SVAR_4], [sval_4_8])
+AC_SUBST([SVAR_5], [sval_5_8])
+AC_SUBST([SVAR_6], [sval_6_8])
+AC_SUBST([SVAR_7], [sval_7_8])
+AC_OUTPUT

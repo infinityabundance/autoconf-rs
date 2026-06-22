@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TIMEZONE
+AC_PROG_GREP
+AC_TYPE_UINT32_T
+AC_SUBST([CFLAGS])
+AC_HEADER_STDBOOL
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+AC_INIT([arg18],[1.0])
+AC_ARG_WITH([w18],[AS_HELP_STRING([--with-w18],[Option 18])])
+AC_ARG_ENABLE([e18],[AS_HELP_STRING([--enable-e18],[Feature 18])])
+AC_OUTPUT

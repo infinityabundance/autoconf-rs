@@ -1,0 +1,5 @@
+dnl G364: Replace func: realpath
+AC_INIT([gnu-repl-realpath],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([realpath])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_INT32_T
+AC_PROG_AWK
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_HEADER_STDBOOL
+AC_CHECK_SIZEOF([long])
+AC_PROG_YACC
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G162: Mixed: header,type
+AC_INIT([gnu-mix-header_type],[1.0])
+AC_CHECK_HEADER
+AC_CHECK_TYPE
+AC_OUTPUT

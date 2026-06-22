@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_MMAP
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_TYPE_OFF_T
+AC_PROG_CC
+AC_PROG_AWK
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl G389: Language: Go
+AC_INIT([gnu-lang-Go],[1.0])
+AC_LANG([Go])
+AC_OUTPUT

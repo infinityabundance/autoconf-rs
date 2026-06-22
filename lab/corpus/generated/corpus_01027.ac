@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_OFF_T
+AC_STRUCT_TM
+AC_CONFIG_AUX_DIR([build-aux])
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

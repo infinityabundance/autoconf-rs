@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_PROG_YACC
+AC_CANONICAL_TARGET
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_DEFINE([PACKAGE_VERSION], ["1.0"])
+AC_OUTPUT

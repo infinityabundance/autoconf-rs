@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_CC_C_O
+AC_HEADER_STDC
+AC_CONFIG_SRCDIR([src/main.c])
+AC_LIBOBJ([fnmatch])
+AC_FUNC_MALLOC
+AC_OUTPUT

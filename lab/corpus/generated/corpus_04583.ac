@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_SUBST([prefix])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_CPP
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_TYPE_INT32_T
+AC_LANG_PUSH([C])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MKDIR_P
+AC_HEADER_STDBOOL
+AC_FUNC_ALLOCA
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_AUX_DIR([build-aux])
+AC_HEADER_TIME
+AC_OUTPUT

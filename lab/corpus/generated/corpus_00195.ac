@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_INSTALL
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_GREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

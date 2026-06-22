@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_SIZEOF([long])
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

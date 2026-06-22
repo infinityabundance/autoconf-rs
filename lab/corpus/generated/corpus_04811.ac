@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_PROG_MAKE_SET
+AC_PROG_CPP
+AC_STRUCT_ST_BLOCKS
+AC_HEADER_DIRENT
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_SUBST([CFLAGS])
+AC_FUNC_STRERROR_R
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_AWK
+AC_OUTPUT

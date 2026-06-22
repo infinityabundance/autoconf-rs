@@ -1,0 +1,5 @@
+dnl G9: Single func check: clock
+AC_INIT([gnu-clock],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([clock])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G81: Single header check: pthread.h
+AC_INIT([gnu-hdr-pthread_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([pthread.h])
+AC_OUTPUT

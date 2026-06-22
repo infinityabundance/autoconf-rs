@@ -1,0 +1,5 @@
+dnl G71: Single header check: libgen.h
+AC_INIT([gnu-hdr-libgen_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([libgen.h])
+AC_OUTPUT

@@ -1,0 +1,14 @@
+dnl G408: AS_IF nesting depth 5
+AC_INIT([gnu-asif-{i}],[1.0])
+AS_IF([test 0 = 0], [
+AS_IF([test 1 = 1], [
+AS_IF([test 2 = 2], [
+AS_IF([test 3 = 3], [
+AS_IF([test 4 = 4], [
+AC_DEFINE([DEEP_7])
+])
+])
+])
+])
+])
+AC_OUTPUT

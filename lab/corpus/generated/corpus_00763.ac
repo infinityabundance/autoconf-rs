@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDINT
+AC_CONFIG_MACRO_DIR([m4])
+AC_FUNC_FORK
+AC_OUTPUT

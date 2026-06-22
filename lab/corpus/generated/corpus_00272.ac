@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CPP
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_HEADER_SYS_WAIT
+AC_HEADER_STDINT
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_ALLOCA
+AC_OUTPUT

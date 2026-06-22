@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_LEX
+AC_FUNC_VPRINTF
+AC_PROG_EGREP
+AC_CHECK_LIB([m], [sin])
+AC_STRUCT_TM
+AC_OUTPUT

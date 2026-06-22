@@ -1,0 +1,4 @@
+dnl Layer 1: subdirs.at — AC_CONFIG_SUBDIRS
+AC_INIT([gnu-subdirs], [1.0])
+AC_CONFIG_SUBDIRS([libfoo libbar])
+AC_OUTPUT

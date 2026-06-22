@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_HEADER_STDINT
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_RANLIB
+AC_OUTPUT

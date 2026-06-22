@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_TIME
+AC_CANONICAL_TARGET
+AC_CHECK_FUNCS([fork vfork])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PROG_INSTALL
+AC_STRUCT_TM
+AC_OUTPUT

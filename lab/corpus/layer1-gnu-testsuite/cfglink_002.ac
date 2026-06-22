@@ -1,0 +1,5 @@
+dnl G306: 2 AC_CONFIG_LINKS
+AC_INIT([gnu-link-2],[1.0])
+AC_CONFIG_LINKS([dest0:src0])
+AC_CONFIG_LINKS([dest1:src1])
+AC_OUTPUT

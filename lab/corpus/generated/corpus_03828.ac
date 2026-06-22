@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MKDIR_P
+AC_CHECK_TYPES([off_t mode_t])
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_SUBDIRS([lib])
+AC_SUBST([LDFLAGS])
+AC_TYPE_UINT32_T
+AC_PREREQ([2.69])
+AC_OUTPUT

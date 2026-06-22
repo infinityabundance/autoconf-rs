@@ -1,0 +1,17 @@
+dnl G443: Max combo 2
+AC_INIT([gnu-combo-2],[1.0])
+AC_PROG_CC
+AC_CANONICAL_HOST
+AC_ARG_WITH([pkg2], [AS_HELP_STRING([--with-pkg2], [Package 2])])
+AC_ARG_ENABLE([feat2], [AS_HELP_STRING([--enable-feat2], [Feature 2])])
+AC_CHECK_FUNC([malloc2])
+AC_CHECK_HEADER([stdlib.h])
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_TYPE([pid_t])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_MEMBER([struct stat.st_mode])
+AC_SUBST([COMBO_VAR_2], [combo_2])
+AC_DEFINE([COMBO_DEF_2], [2])
+AC_CONFIG_FILES([Makefile2])
+AC_CONFIG_HEADERS([config2.h])
+AC_OUTPUT

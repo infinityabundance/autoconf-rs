@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_CPP
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_RANLIB
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_AWK
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_FUNC_ALLOCA
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

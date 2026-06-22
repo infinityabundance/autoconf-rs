@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_OFF_T
+AC_REPLACE_FUNCS([strdup getopt])
+AC_FUNC_FORK
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

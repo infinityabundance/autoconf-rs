@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_OFF_T
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_INSTALL
+AC_PROG_CPP
+AC_OUTPUT

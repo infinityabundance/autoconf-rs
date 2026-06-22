@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_ST_BLOCKS
+AC_FUNC_ALLOCA
+AC_HEADER_STDC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

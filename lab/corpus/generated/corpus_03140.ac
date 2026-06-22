@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MMAP
+AC_PROG_AWK
+AC_HEADER_STDC
+AC_PROG_LEX
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_LN_S
+AC_OUTPUT

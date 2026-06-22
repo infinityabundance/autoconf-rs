@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UID_T
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_STRUCT_ST_BLOCKS
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

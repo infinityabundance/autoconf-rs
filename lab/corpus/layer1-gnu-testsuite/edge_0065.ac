@@ -1,0 +1,3 @@
+AC_INIT([mcf65],[1.0])
+AC_CONFIG_FILES([a65 b66 c67 d68])
+AC_OUTPUT

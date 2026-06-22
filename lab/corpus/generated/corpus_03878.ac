@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_INSTALL
+AC_CHECK_SIZEOF([long])
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_TYPE_INT32_T
+AC_CHECK_LIB([m], [sin])
+AC_OUTPUT

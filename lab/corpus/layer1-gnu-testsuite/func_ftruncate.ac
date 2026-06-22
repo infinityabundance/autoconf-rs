@@ -1,0 +1,5 @@
+dnl G31: Single func check: ftruncate
+AC_INIT([gnu-ftruncate],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([ftruncate])
+AC_OUTPUT

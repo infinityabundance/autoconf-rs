@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_CONFIG_SUBDIRS([lib])
+AC_HEADER_STDBOOL
+AC_CANONICAL_BUILD
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

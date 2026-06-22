@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_FUNC_FORK
+AC_TYPE_UID_T
+AC_PROG_LN_S
+AC_HEADER_STDBOOL
+AC_CHECK_TYPES([off_t mode_t])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_OUTPUT

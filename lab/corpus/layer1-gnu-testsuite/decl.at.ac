@@ -1,0 +1,7 @@
+AC_INIT([gnu-decl],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([malloc])
+AC_CHECK_DECL([realloc])
+AC_CHECK_DECL([free])
+AC_CHECK_DECL([getenv])
+AC_OUTPUT

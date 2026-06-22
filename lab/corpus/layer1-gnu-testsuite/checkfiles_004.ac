@@ -1,0 +1,4 @@
+dnl Check files: /dev/zero /tmp
+AC_INIT([gnu-chkfs-4],[1.0])
+AC_CHECK_FILES([/dev/zero /tmp])
+AC_OUTPUT

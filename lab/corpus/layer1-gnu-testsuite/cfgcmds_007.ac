@@ -1,0 +1,8 @@
+dnl G291: 5 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-7],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_7])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_7])
+AC_CONFIG_COMMANDS([cmd2], [echo command_2_7])
+AC_CONFIG_COMMANDS([cmd3], [echo command_3_7])
+AC_CONFIG_COMMANDS([cmd4], [echo command_4_7])
+AC_OUTPUT

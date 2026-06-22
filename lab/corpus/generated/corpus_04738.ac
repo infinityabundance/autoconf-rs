@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_SED
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_MAKE_SET
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G29: Single func check: fpathconf
+AC_INIT([gnu-fpathconf],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fpathconf])
+AC_OUTPUT

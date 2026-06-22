@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_CPP
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_CXX
+AC_OUTPUT

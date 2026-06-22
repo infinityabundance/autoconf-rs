@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_TIME
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_CC_C_O
+AC_PROG_CXX
+AC_PREREQ([2.59])
+AC_LIBOBJ([fnmatch])
+AC_TYPE_MODE_T
+AC_OUTPUT

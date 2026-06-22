@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_SUBDIRS([lib])
+AC_REVISION([$Revision: 1.0 $])
+AC_HEADER_STDINT
+AC_PROG_YACC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

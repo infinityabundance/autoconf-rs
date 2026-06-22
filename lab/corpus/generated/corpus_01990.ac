@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

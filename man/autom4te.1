@@ -1,0 +1,20 @@
+.TH AUTOM4TE 1 "2026-06-20" "autoconf-rs 0.1" "User Commands"
+.SH NAME
+autom4te \- M4 macro processor with caching
+.SH SYNOPSIS
+.B autom4te
+[\fIOPTION\fR]... [\fIFILE\fR]...
+.SH DESCRIPTION
+Process M4 macros with caching. Uses SHA256-hashed JSON cache entries.
+.SH OPTIONS
+.TP
+\fB\-\-language\fR=\fILANG\fR
+Set the Autoconf language (Autoconf, M4sh, M4sugar, Autotest).
+.TP
+\fB\-\-trace\fR=\fIMACRO\fR[:\fIFORMAT\fR]
+Trace MACRO expansion with optional FORMAT.
+.TP
+\fB\-\-freeze\fR
+Produce a frozen state file.
+.SH "SEE ALSO"
+\fBautoconf\fR(1)

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CXX
+AC_TYPE_MODE_T
+AC_TYPE_UINT32_T
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_HEADER_TIME
+AC_OUTPUT

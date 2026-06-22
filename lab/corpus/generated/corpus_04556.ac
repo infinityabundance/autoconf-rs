@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_OFF_T
+AC_CHECK_SIZEOF([long])
+AC_LIBOBJ([fnmatch])
+AC_PROG_MAKE_SET
+AC_STRUCT_ST_BLOCKS
+AC_OUTPUT

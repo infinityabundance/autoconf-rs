@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_RANLIB
+AC_PREREQ([2.59])
+AC_REVISION([$Revision: 1.0 $])
+AC_STRUCT_TM
+AC_OUTPUT

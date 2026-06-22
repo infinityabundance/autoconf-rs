@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_FGREP
+AC_PROG_INSTALL
+AC_CONFIG_SUBDIRS([lib])
+AC_CHECK_SIZEOF([long])
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_MALLOC
+AC_OUTPUT

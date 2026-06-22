@@ -1,0 +1,6 @@
+dnl G287: 3 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-3],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_3])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_3])
+AC_CONFIG_COMMANDS([cmd2], [echo command_2_3])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_LN_S
+AC_PROG_CXX
+AC_HEADER_DIRENT
+AC_HEADER_STDINT
+AC_LIBOBJ([fnmatch])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

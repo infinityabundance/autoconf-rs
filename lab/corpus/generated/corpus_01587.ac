@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_AWK
+AC_CANONICAL_HOST
+AC_PROG_FGREP
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

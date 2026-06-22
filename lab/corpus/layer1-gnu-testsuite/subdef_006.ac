@@ -1,0 +1,13 @@
+dnl G417: SUBST+DEFINE combo 6
+AC_INIT([gnu-sd-6],[1.0])
+AC_SUBST([S6_0], [v6_0])
+AC_SUBST([S6_1], [v6_1])
+AC_SUBST([S6_2], [v6_2])
+AC_SUBST([S6_3], [v6_3])
+AC_SUBST([S6_4], [v6_4])
+AC_DEFINE([D6_0], [0])
+AC_DEFINE([D6_1], [6])
+AC_DEFINE([D6_2], [12])
+AC_DEFINE([D6_3], [18])
+AC_DEFINE([D6_4], [24])
+AC_OUTPUT

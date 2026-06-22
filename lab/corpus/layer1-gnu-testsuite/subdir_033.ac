@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-33],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub33_0 sub33_1 sub33_2 sub33_3])
+AC_OUTPUT

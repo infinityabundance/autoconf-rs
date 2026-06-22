@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_UID_T
+AC_TYPE_MODE_T
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_GREP
+AC_PROG_RANLIB
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G332: Check decl: fclose
+AC_INIT([gnu-decl-fclose],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([fclose])
+AC_OUTPUT

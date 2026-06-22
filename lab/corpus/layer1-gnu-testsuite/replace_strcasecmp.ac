@@ -1,0 +1,5 @@
+dnl G360: Replace func: strcasecmp
+AC_INIT([gnu-repl-strcasecmp],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([strcasecmp])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_INT32_T
+AC_HEADER_TIME
+AC_PROG_CXX
+AC_PROG_CPP
+AC_CHECK_FUNCS([malloc realloc])
+AC_CONFIG_MACRO_DIR([m4])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

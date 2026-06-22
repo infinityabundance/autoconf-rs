@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_TARGET
+AC_PROG_CC
+AC_FUNC_MALLOC
+AC_PROG_RANLIB
+AC_OUTPUT

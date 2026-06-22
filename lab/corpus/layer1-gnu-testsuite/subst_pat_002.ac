@@ -1,0 +1,5 @@
+dnl G101: 2 AC_SUBST calls
+AC_INIT([gnu-subst-2],[1.0])
+AC_SUBST([SVAR_0], [sval_0_2])
+AC_SUBST([SVAR_1], [sval_1_2])
+AC_OUTPUT

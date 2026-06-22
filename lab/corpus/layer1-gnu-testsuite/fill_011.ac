@@ -1,0 +1,4 @@
+dnl Fill test 11
+AC_INIT([gnu-fill-11],[1.0])
+AC_DEFINE([FDEF],[1])
+AC_OUTPUT

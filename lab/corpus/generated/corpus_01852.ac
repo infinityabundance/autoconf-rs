@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_CC_C_O
+AC_OUTPUT

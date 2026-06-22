@@ -1,0 +1,3 @@
+dnl Minimal smoke test - just AC_INIT/AC_OUTPUT
+AC_INIT([smoke], [0.1])
+AC_OUTPUT

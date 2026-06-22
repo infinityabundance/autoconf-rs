@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MKDIR_P
+AC_TYPE_INT32_T
+AC_PROG_LN_S
+AC_PROG_CXX
+AC_CONFIG_SUBDIRS([lib])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

@@ -1,0 +1,17 @@
+target/
+Cargo.lock
+**/*.rs.bk
+*.swp
+*.swo
+*~
+.DS_Store
+/reports/receipts/*.json
+!/reports/receipts/cleanroom-receipt.json
+!/reports/receipts/fuzz-1M-receipt.json
+lab/corpus/layer4-real-packages/
+lab/corpus/layer5-large-projects/
+autom4te.cache/
+config.h.in
+config.log
+config.status
+configure

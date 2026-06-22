@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_PROG_AWK
+AC_TYPE_MODE_T
+AC_SUBST([exec_prefix])
+AC_OUTPUT

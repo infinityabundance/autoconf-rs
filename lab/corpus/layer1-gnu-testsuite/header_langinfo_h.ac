@@ -1,0 +1,5 @@
+dnl G70: Single header check: langinfo.h
+AC_INIT([gnu-hdr-langinfo_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([langinfo.h])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G98: Single header check: stropts.h
+AC_INIT([gnu-hdr-stropts_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([stropts.h])
+AC_OUTPUT

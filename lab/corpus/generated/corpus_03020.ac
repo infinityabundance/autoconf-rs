@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_FGREP
+AC_HEADER_TIME
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

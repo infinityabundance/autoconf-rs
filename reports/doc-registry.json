@@ -1,0 +1,70 @@
+{
+  "schema": "autoconf-rs-doc-registry-v1",
+  "generated_at": "1782137453",
+  "documents": [
+    {
+      "path": "docs/negative-capabilities.md",
+      "sha256": "e9c643a21f38851164a033cf041ef1be476fb66edb70b3e17cb2f72f5f52bc44",
+      "sources": {
+        "sources/negcaps/structured-negative-capabilities.json": "8c65e71144d03b8ca0a5b4d3a35ec80bcd53575dc6bf91e6f1b18180603512db"
+      },
+      "dsse_signature": "fa539783455e68d8717b8bbee9a36a54768226086863b831f378c253111c842f"
+    },
+    {
+      "path": "reports/FORENSIC-GAP-ANALYSIS.md",
+      "sha256": "c16b0aadd7a0d370f285728c1445df780e130e8f15f20b677bb79042554621d5",
+      "sources": {
+        "sources/gaps/master-gap-analysis.json": "db3e51cbfe4795bb7c5aab427d0dae1647616cf46363eba478fc8056210062d9"
+      },
+      "dsse_signature": "f408ff8c461310e53fbbfe6c349acc41fd2e06c26e2bf8f384e2796642b90824"
+    },
+    {
+      "path": "reports/NEEDLE-REPORT.md",
+      "sha256": "645c490dd7c764d92903d4fade770f007358e4d2fbadffeeee38ca02435e27f3",
+      "sources": {
+        "sources/gaps/needle-metrics.json": "19db6c7492b4cbfaa9fa86089b53c58882e6425ee2a61d3d721f2e9c644f4a32"
+      },
+      "dsse_signature": "8b90b2f4cda4cbabed426598dd9882f3c76c6c51afebb5855aed4859f4e9b6c6"
+    },
+    {
+      "path": "reports/claim-ladder.json",
+      "sha256": "f90969e2cefb0266bbef27e03c482335ec1ddba83c4e152445f1d9ca36d101f4",
+      "sources": {
+        "sources/claims/initial-claims.json": "f90969e2cefb0266bbef27e03c482335ec1ddba83c4e152445f1d9ca36d101f4"
+      },
+      "dsse_signature": "0ac30e30ee5169c7df51979c28ff7d2e443c5306214bf7c2cd6be820d02a1d39"
+    },
+    {
+      "path": "docs/REVIEW-IN-10-MINUTES.md",
+      "sha256": "429d2dd0a08237d8ff5da8413a91d92ee60370059fbdc4744cc9d1e1eb08e93b",
+      "sources": {
+        "generated": "5b8533bda7d4e4059a7822d818219d6be0b91ded8098f54452a0a123bf04ace5"
+      },
+      "dsse_signature": "aca3a2abd799234ad775d2f0f72dff1e344c639e2ae46e118df6a25f70afe05b"
+    },
+    {
+      "path": "STATUS.md",
+      "sha256": "305b7657694941d4d6c331d676f16a612ff525db3f0f2e645410f008b67288c5",
+      "sources": {
+        "generated": "5b8533bda7d4e4059a7822d818219d6be0b91ded8098f54452a0a123bf04ace5"
+      },
+      "dsse_signature": "6063a743e56ec1684d7ece34252d98e2c41d1656818e0991a8b20d388a181659"
+    },
+    {
+      "path": "docs/forensic-atlas.md",
+      "sha256": "5acef7e5c960b174d9ab92c68f1eaca23364d4a4764855fbb51d4614d67fbc27",
+      "sources": {
+        "sources/docs/forensic-atlas.json": "6376efa273a3c9f719348fa95a738eefcc656ebe510109f9e669352754647799"
+      },
+      "dsse_signature": "85d31f009a7bd6222b2f6340b628d12ae1fb1af5924b5a15b6b1a037031a6fa4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5a5daab85a93100714a6cc5c2b453e20fc2a0344d53340d2a1f0cb2e67d845a5",
+      "sources": {
+        "sources/docs/status.json": "470f58f5b3f8b3b9fd19f559549661c20e1f4e89ddc465cecd754eff8bf13241"
+      },
+      "dsse_signature": "d0444b9a0c9a40488cb6646276b00d1a7e7dbb8d248f7d254366573d61345ae5"
+    }
+  ]
+}

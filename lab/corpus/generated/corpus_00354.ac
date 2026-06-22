@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_SED
+AC_OUTPUT

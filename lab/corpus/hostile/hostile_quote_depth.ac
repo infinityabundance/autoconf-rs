@@ -1,0 +1,53 @@
+dnl QUOTING DEPTH TEST SUITE
+dnl Tests 10 levels of nested quotes with embedded dnl and changequote.
+dnl If the M4 engine can handle this while matching the oracle, it's ready.
+dnl If not, everything built on top will be flaky.
+dnl
+dnl Court: AC.M4.QUOTE.DEPTH.1
+dnl Panel recommendation: "The Quoting Depth Test"
+
+dnl === LEVEL 1: Basic bracket nesting ===
+AC_INIT([[pkg]], [[1.0]])
+AC_OUTPUT
+
+dnl === LEVEL 2: Double bracket ===
+AC_INIT([[[pkg]]], [[[1.0]]])
+AC_OUTPUT
+
+dnl === LEVEL 3: Triple bracket ===
+AC_INIT([[[[pkg]]]], [[[[1.0]]]])
+AC_OUTPUT
+
+dnl === LEVEL 4: Quad bracket ===
+AC_INIT([[[[[pkg]]]]], [[[[[1.0]]]]])
+AC_OUTPUT
+
+dnl === LEVEL 5: Deep nesting with commas ===
+AC_INIT([[[[[pkg,with,commas]]]]], [[[[[1,2,3]]]]])
+AC_OUTPUT
+
+dnl === LEVEL 6: Nested with embedded dnl ===
+AC_INIT([[pkg]dnl
+], [[1.0]])
+AC_OUTPUT
+
+dnl === LEVEL 7: changequote mid-argument ===
+AC_INIT([pkg], changequote(`«', `»')[«1.0»]changequote([, ]))
+AC_OUTPUT
+
+dnl === LEVEL 8: m4_dquote with nested brackets ===
+m4_dquote([[[AC_INIT([[pkg]], [[1.0]])]]])
+AC_INIT([pkg], [1.0])
+AC_OUTPUT
+
+dnl === LEVEL 9: m4_foreach with quoted elements ===
+AC_INIT([foreach_quote], [1.0])
+m4_foreach([VAR], [[[a]], [[b]], [[c]]], [AC_SUBST(VAR)])
+m4_foreach_w([malloc realloc], [AC_CHECK_FUNC(], [)])
+AC_OUTPUT
+
+dnl === LEVEL 10: Maximal nesting — 8 levels of brackets with commas ===
+AC_INIT([[[[[[[[deepest,with,commas]]]]]]]], [[[[[[[[8.0]]]]]]]])
+m4_define([DEPTH_TEST], [[[[[[success]]]]]])
+AC_DEFINE([DEPTH], m4_dquote(m4_dquote(DEPTH_TEST)))
+AC_OUTPUT

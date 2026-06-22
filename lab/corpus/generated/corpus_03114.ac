@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_CXX
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_MKDIR_P
+AC_OUTPUT

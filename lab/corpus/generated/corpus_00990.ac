@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_HOST
+AC_PROG_LEX
+AC_CONFIG_SUBDIRS([lib])
+AC_HEADER_STDC
+AC_CANONICAL_TARGET
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

@@ -1,0 +1,13 @@
+dnl G422: SUBST+DEFINE combo 11
+AC_INIT([gnu-sd-11],[1.0])
+AC_SUBST([S11_0], [v11_0])
+AC_SUBST([S11_1], [v11_1])
+AC_SUBST([S11_2], [v11_2])
+AC_SUBST([S11_3], [v11_3])
+AC_SUBST([S11_4], [v11_4])
+AC_DEFINE([D11_0], [0])
+AC_DEFINE([D11_1], [11])
+AC_DEFINE([D11_2], [22])
+AC_DEFINE([D11_3], [33])
+AC_DEFINE([D11_4], [44])
+AC_OUTPUT

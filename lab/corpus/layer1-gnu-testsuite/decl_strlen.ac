@@ -1,0 +1,5 @@
+dnl G335: Check decl: strlen
+AC_INIT([gnu-decl-strlen],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([strlen])
+AC_OUTPUT

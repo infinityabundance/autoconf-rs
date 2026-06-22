@@ -1,0 +1,7 @@
+dnl Smoke test with substitutions
+AC_INIT([subst_test], [1.0])
+AC_SUBST([PACKAGE_NAME], [subst_test])
+AC_SUBST([PACKAGE_VERSION], [1.0])
+AC_SUBST([PACKAGE_STRING], [subst_test 1.0])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

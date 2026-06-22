@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AWK
+AC_PROG_GREP
+AC_TYPE_MODE_T
+AC_PREREQ([2.63])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

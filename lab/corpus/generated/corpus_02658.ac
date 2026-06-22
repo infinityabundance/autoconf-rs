@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_GREP
+AC_PROG_CXX
+AC_PROG_EGREP
+AC_SUBST([LIBS])
+AC_OUTPUT

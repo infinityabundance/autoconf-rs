@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_PID_T
+AC_FUNC_STRERROR_R
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CANONICAL_HOST
+AC_PROG_CC
+AC_OUTPUT

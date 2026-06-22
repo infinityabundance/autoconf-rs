@@ -1,0 +1,6 @@
+AC_INIT([gnu-io],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNCS([open read write close lseek])
+AC_CHECK_FUNCS([fopen fread fwrite fclose fseek])
+AC_CHECK_FUNCS([stat fstat lstat])
+AC_OUTPUT

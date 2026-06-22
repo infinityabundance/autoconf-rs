@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_CONFIG_MACRO_DIR([m4])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_FUNC_MMAP
+AC_PRESERVE_HELP_ORDER
+AC_REPLACE_FUNCS([strdup getopt])
+AC_LANG_PUSH([C])
+AC_OUTPUT

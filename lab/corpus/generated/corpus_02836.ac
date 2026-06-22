@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PRESERVE_HELP_ORDER
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_HEADER_STDBOOL
+AC_STRUCT_TM
+AC_CHECK_LIB([m], [sin])
+AC_TYPE_INT32_T
+AC_OUTPUT

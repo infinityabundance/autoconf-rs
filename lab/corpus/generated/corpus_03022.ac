@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_UINT32_T
+AC_FUNC_VPRINTF
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

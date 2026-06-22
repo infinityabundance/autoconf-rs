@@ -1,0 +1,5 @@
+AC_INIT([libfoo], [0.1])
+AC_DEFINE([VERSION], ["0.1"], [Package version])
+AC_DEFINE([HAVE_FOO], [1], [Define if foo is available])
+AC_CONFIG_HEADERS([config.h])
+AC_OUTPUT

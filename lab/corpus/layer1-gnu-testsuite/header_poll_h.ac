@@ -1,0 +1,5 @@
+dnl G80: Single header check: poll.h
+AC_INIT([gnu-hdr-poll_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([poll.h])
+AC_OUTPUT

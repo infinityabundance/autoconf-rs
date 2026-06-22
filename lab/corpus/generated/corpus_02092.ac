@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_PREREQ([2.69])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

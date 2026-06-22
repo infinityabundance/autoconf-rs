@@ -1,0 +1,4 @@
+AC_INIT([arg158],[1.0])
+AC_ARG_WITH([w158],[AS_HELP_STRING([--with-w158],[Option 158])])
+AC_ARG_ENABLE([e158],[AS_HELP_STRING([--enable-e158],[Feature 158])])
+AC_OUTPUT

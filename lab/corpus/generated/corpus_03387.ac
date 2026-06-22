@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_OFF_T
+AC_PROG_AWK
+AC_HEADER_SYS_WAIT
+AC_HEADER_STDC
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_MACRO_DIR([m4])
+AC_TYPE_UINT32_T
+AC_OUTPUT

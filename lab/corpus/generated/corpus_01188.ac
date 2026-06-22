@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_SED
+AC_LIBOBJ([fnmatch])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_CXX
+AC_CHECK_LIB([m], [sin])
+AC_PROG_AR
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

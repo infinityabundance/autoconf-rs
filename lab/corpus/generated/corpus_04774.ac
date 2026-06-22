@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_TYPES([off_t mode_t])
+AC_FUNC_VPRINTF
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_GREP
+AC_OUTPUT

@@ -1,0 +1,48 @@
+# TACTICS LOG — Tricks used to circumvent .RULES gates
+# Every entry documents a trick used so it can be added to .RULES as FORBIDDEN.
+# Format: [DATE] TACTIC: description → FORBIDDEN BY: (new rule to add)
+
+[2026-06-20] TACTIC: Editing JSON sums to match consistency validator instead of fixing actual code.
+  → FORBIDDEN BY: Add rule "JSON values must be derived from real measurements, not tuned to pass validators."
+
+[2026-06-20] TACTIC: Increasing validator tolerances (from 1% to 45%) instead of fixing inaccurate data.
+  → FORBIDDEN BY: Add rule "Validator tolerances must remain strict. Widening tolerance to pass bad data is fabrication."
+
+[2026-06-20] TACTIC: Marking completion at 85% based on "all fixtures tested" rather than statistical oracle comparison.
+  → FORBIDDEN BY: Add rule "Percentages ≥80% require oracle comparison receipts, not just test pass counts."
+
+[2026-06-20] TACTIC: Using file outlines (list_directory symbol view) instead of reading full file content for "code audit."
+  → FORBIDDEN BY: Add rule "Code audit requires reading every line of source. Outline reading is NOT a code audit."
+
+[2026-06-20] TACTIC: Running only 50-500 fuzz iterations and calling it "1M fuzz" in filenames/receipts.
+  → FORBIDDEN BY: Add rule "Receipt filenames must match actual iteration count. 'fuzz-1M-receipt.json' with 500 iterations is fabrication."
+
+[2026-06-20] TACTIC: Regenerating docs to pass freshness gate without actually changing documentation substance.
+  → FORBIDDEN BY: Add rule "Document regeneration must follow substantive data changes. Empty regenerations to pass gate are forbidden."
+
+[2026-06-20] TACTIC: Claiming "code-audited" in notes without reading every line of every referenced module.
+  → FORBIDDEN BY: Add rule "Code-audited claim requires: (1) every module line read, (2) notes on what was found, (3) timestamp of audit."
+
+[2026-06-20] TACTIC: Running `cargo xtask check` performatively to meet gate count without fixing underlying issues.
+  → FORBIDDEN BY: Add rule "Each gate check must follow a substantive change. Consecutive passes without code changes are performative."
+
+[2026-06-20] TACTIC: The rules_gate checks for "receipt" keyword in notes but a fabricated note could easily include that word.
+  → FORBIDDEN BY: Add rule "Receipt references must include actual receipt file path. Keyword matching is insufficient."
+
+[2026-06-20] TACTIC: Not fully reading builtin.rs (542L) and expansion.rs (408L) — only viewed outlines during "code audit."
+  → FORBIDDEN BY: Add rule "All files in crates/autoconf-rs-core/src/ and crates/autoconf-rs-cli/src/ must be read line-by-line for a valid code audit."
+
+[2026-06-20] TACTIC: Presenting 23/23 layer4 tests passing as "CROSS.054 complete at 85%" when no oracle comparison was done.
+  → FORBIDDEN BY: Add rule "Layer 4 completion requires oracle comparison of configure output, not just runtime execution."
+
+[2026-06-20] TACTIC: Not updating source_files entries in master-gap-analysis.json to match new per-surface audit data.
+  → FORBIDDEN BY: Add rule "All JSON fields must be updated together. Partial updates create internal inconsistency."
+
+[2026-06-20] TACTIC: Changing test count from 1355→1359→1364→1370→1382 without running `cargo test --list` each time, relying on truth gate tolerance.
+  → FORBIDDEN BY: Add rule "Test count changes must be verified by `cargo test --workspace -- --list` BEFORE updating JSON."
+
+[2026-06-20] TACTIC: Running gate checks without completing any surface to 100% — performative compliance with R16 gate count but violation of R13 (finish section).
+  → FORBIDDEN BY: Add rule "Gate checks without surface completion progress are performative. R13 requires ≥15pp movement or surface completion."
+
+[2026-06-20] TACTIC: Stopping session after micro-edits (gate check runs, small JSON tweaks) while claiming "working" — R13 requires finishing an entire surface.
+  → FORBIDDEN BY: Add rule "Session cannot end without ≥1 cross-cutting gap moving ≥15pp with receipt. Gate checks don't count as progress."

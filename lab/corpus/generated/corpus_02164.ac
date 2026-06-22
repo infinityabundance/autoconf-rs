@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CHECK_SIZEOF([long])
+AC_FUNC_MALLOC
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_CANONICAL_HOST
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_OUTPUT

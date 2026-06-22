@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CHECK_SIZEOF([long])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_FUNC_STRERROR_R
+AC_PROG_LEX
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_MKDIR_P
+AC_OUTPUT

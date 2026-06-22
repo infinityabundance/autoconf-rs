@@ -1,0 +1,4 @@
+dnl Check files: /etc/resolv.conf /bin/sh
+AC_INIT([gnu-chkfs-2],[1.0])
+AC_CHECK_FILES([/etc/resolv.conf /bin/sh])
+AC_OUTPUT

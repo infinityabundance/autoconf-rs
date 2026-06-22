@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_EGREP
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_LEX
+AC_TYPE_UINT32_T
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_GREP
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_OUTPUT

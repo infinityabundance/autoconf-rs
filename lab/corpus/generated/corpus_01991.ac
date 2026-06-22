@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_YACC
+AC_FUNC_ALLOCA
+AC_PROG_CC
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UID_T
+AC_OUTPUT

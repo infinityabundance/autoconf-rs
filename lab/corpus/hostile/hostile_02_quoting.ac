@@ -1,0 +1,5 @@
+dnl HOSTILE_02: Quoting abuse with changequote
+changequote(«, »)
+AC_INIT(«pack», «1.0»)
+changequote([, ])
+AC_OUTPUT

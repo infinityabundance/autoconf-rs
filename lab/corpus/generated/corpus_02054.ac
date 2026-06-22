@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_FGREP
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_OUTPUT

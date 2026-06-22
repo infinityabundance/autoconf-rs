@@ -1,0 +1,13 @@
+dnl G432: SUBST+DEFINE combo 21
+AC_INIT([gnu-sd-21],[1.0])
+AC_SUBST([S21_0], [v21_0])
+AC_SUBST([S21_1], [v21_1])
+AC_SUBST([S21_2], [v21_2])
+AC_SUBST([S21_3], [v21_3])
+AC_SUBST([S21_4], [v21_4])
+AC_DEFINE([D21_0], [0])
+AC_DEFINE([D21_1], [21])
+AC_DEFINE([D21_2], [42])
+AC_DEFINE([D21_3], [63])
+AC_DEFINE([D21_4], [84])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_HEADER_SYS_WAIT
+AC_PROG_YACC
+AC_STRUCT_TM
+AC_OUTPUT

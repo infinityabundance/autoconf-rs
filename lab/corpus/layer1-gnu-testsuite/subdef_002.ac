@@ -1,0 +1,7 @@
+dnl G413: SUBST+DEFINE combo 2
+AC_INIT([gnu-sd-2],[1.0])
+AC_SUBST([S2_0], [v2_0])
+AC_SUBST([S2_1], [v2_1])
+AC_DEFINE([D2_0], [0])
+AC_DEFINE([D2_1], [2])
+AC_OUTPUT

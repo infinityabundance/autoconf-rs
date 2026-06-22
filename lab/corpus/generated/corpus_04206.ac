@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CANONICAL_HOST
+AC_CHECK_FUNCS([malloc realloc])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G77: Single header check: ndbm.h
+AC_INIT([gnu-hdr-ndbm_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([ndbm.h])
+AC_OUTPUT

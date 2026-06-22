@@ -1,0 +1,5 @@
+dnl G60: Single header check: fenv.h
+AC_INIT([gnu-hdr-fenv_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([fenv.h])
+AC_OUTPUT

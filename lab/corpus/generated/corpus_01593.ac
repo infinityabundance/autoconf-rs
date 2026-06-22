@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_PROG_CPP
+AC_PROG_FGREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_FUNC_MALLOC
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

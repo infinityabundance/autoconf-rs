@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-44],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub44_0 sub44_1 sub44_2 sub44_3 sub44_4])
+AC_OUTPUT

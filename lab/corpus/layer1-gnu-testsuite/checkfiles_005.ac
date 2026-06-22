@@ -1,0 +1,4 @@
+dnl Check files: /proc/self /sys
+AC_INIT([gnu-chkfs-5],[1.0])
+AC_CHECK_FILES([/proc/self /sys])
+AC_OUTPUT

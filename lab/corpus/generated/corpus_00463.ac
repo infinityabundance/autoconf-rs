@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDBOOL
+AC_PROG_YACC
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_TYPE_OFF_T
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

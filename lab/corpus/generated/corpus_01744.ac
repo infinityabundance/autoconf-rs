@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_RANLIB
+AC_PROG_CPP
+AC_TYPE_INT32_T
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_OUTPUT

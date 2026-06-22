@@ -1,0 +1,5 @@
+dnl G286: 2 AC_CONFIG_COMMANDS
+AC_INIT([gnu-cmd-2],[1.0])
+AC_CONFIG_COMMANDS([cmd0], [echo command_0_2])
+AC_CONFIG_COMMANDS([cmd1], [echo command_1_2])
+AC_OUTPUT

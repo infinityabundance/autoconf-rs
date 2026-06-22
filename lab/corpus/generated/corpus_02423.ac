@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_TYPE_UINT32_T
+AC_CHECK_LIB([m], [sin])
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

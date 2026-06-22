@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_RANLIB
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_OUTPUT

@@ -1,0 +1,6 @@
+dnl G381: AH_TEMPLATE
+AC_INIT([gnu-ah-7],[1.0])
+AC_CONFIG_HEADERS([config.h])
+AH_TEMPLATE([FEATURE_7], [Description for feature 7])
+AH_VERBATIM([BOTTOM_7], [/* Bottom comment 7 */])
+AC_OUTPUT

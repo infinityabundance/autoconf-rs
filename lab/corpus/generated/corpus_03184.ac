@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_AR
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_FUNC_MALLOC
+AC_PROG_LEX
+AC_OUTPUT

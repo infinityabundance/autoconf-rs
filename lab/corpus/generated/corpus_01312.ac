@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CHECK_LIB([m], [sin])
+AC_CANONICAL_TARGET
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_SED
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

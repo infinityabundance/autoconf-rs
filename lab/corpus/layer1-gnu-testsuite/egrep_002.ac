@@ -1,0 +1,5 @@
+dnl EGREP pattern: ^int main
+AC_INIT([gnu-egrep-2],[1.0])
+AC_PROG_CC
+AC_EGREP_HEADER([^int main], [stdlib.h], [AC_DEFINE([EGREP_OK_2])])
+AC_OUTPUT

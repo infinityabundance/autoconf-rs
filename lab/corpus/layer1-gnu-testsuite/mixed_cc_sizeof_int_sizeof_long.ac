@@ -1,0 +1,6 @@
+dnl G173: Mixed: cc,sizeof_int,sizeof_long
+AC_INIT([gnu-mix-cc_sizeof_int_sizeof_long],[1.0])
+AC_PROG_CC
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

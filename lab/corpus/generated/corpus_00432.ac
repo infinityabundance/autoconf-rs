@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_HEADER_STDBOOL
+AC_PROG_EGREP
+AC_PROG_MAKE_SET
+AC_OUTPUT

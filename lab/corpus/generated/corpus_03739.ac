@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_HEADER_STDINT
+AC_STRUCT_TM
+AC_PROG_YACC
+AC_FUNC_ALLOCA
+AC_HEADER_TIME
+AC_OUTPUT

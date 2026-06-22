@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_STRUCT_TM
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_FUNC_FORK
+AC_PROG_RANLIB
+AC_PRESERVE_HELP_ORDER
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

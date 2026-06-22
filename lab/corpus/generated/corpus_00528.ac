@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_AR
+AC_CONFIG_MACRO_DIR([m4])
+AC_FUNC_FORK
+AC_OUTPUT

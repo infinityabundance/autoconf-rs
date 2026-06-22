@@ -1,0 +1,4 @@
+dnl HOSTILE_04: Special characters in macro arguments
+AC_INIT([pkg$dollar`backtick], [1.0\backslash"double])
+AC_DEFINE([WEIRD], ["$`\\"])
+AC_OUTPUT

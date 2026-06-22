@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_CANONICAL_HOST
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_EGREP
+AC_PROG_INSTALL
+AC_HEADER_DIRENT
+AC_OUTPUT

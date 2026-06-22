@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UID_T
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

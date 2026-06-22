@@ -1,0 +1,4 @@
+dnl AC_PROG_CXXCPP
+AC_INIT([gnu-prog-cxxcpp],[1.0])
+AC_PROG_CXXCPP
+AC_OUTPUT

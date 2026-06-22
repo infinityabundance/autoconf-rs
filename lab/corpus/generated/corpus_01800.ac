@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_OFF_T
+AC_FUNC_VPRINTF
+AC_TYPE_UINT32_T
+AC_TYPE_INT32_T
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_FUNC_STRERROR_R
+AC_FUNC_MALLOC
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G166: Mixed: header,define
+AC_INIT([gnu-mix-header_define],[1.0])
+AC_CHECK_HEADER
+AC_DEFINE
+AC_OUTPUT

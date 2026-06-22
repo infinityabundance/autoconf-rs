@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_FUNCS([fork vfork])
+AC_CANONICAL_HOST
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_STRUCT_TIMEZONE
+AC_PROG_GREP
+AC_FUNC_MMAP
+AC_OUTPUT

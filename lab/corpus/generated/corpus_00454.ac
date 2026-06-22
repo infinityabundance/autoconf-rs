@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_TIMEZONE
+AC_CHECK_SIZEOF([long])
+AC_PROG_EGREP
+AC_PREFIX_DEFAULT([/usr/local])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_AWK
+AC_PROG_EGREP
+AC_CHECK_SIZEOF([long])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

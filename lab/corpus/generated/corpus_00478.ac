@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_PROG_FGREP
+AC_CONFIG_AUX_DIR([build-aux])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_OUTPUT

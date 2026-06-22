@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_CC_C_O
+AC_HEADER_STDBOOL
+AC_CONFIG_SUBDIRS([lib])
+AC_LIBOBJ([fnmatch])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+dnl Check file: /etc/passwd
+AC_INIT([gnu-chkf-0],[1.0])
+AC_CHECK_FILE([/etc/passwd], [AC_DEFINE([HAVE__ETC_PASSWD])])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CANONICAL_HOST
+AC_PROG_CXX
+AC_PRESERVE_HELP_ORDER
+AC_TYPE_PID_T
+AC_PROG_LN_S
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

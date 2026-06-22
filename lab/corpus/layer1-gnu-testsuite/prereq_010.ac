@@ -1,0 +1,4 @@
+dnl G401: AC_PREREQ(10.100)
+AC_PREREQ([10.100])
+AC_INIT([gnu-prq-10],[1.0])
+AC_OUTPUT

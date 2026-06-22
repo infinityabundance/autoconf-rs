@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_CHECK_FUNCS([fork vfork])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_INSTALL
+AC_OUTPUT

@@ -1,0 +1,13 @@
+dnl G421: SUBST+DEFINE combo 10
+AC_INIT([gnu-sd-10],[1.0])
+AC_SUBST([S10_0], [v10_0])
+AC_SUBST([S10_1], [v10_1])
+AC_SUBST([S10_2], [v10_2])
+AC_SUBST([S10_3], [v10_3])
+AC_SUBST([S10_4], [v10_4])
+AC_DEFINE([D10_0], [0])
+AC_DEFINE([D10_1], [10])
+AC_DEFINE([D10_2], [20])
+AC_DEFINE([D10_3], [30])
+AC_DEFINE([D10_4], [40])
+AC_OUTPUT

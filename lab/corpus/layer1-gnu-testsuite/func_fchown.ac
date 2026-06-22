@@ -1,0 +1,5 @@
+dnl G25: Single func check: fchown
+AC_INIT([gnu-fchown],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([fchown])
+AC_OUTPUT

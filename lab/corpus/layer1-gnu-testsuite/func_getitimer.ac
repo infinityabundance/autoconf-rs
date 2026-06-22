@@ -1,0 +1,5 @@
+dnl G39: Single func check: getitimer
+AC_INIT([gnu-getitimer],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getitimer])
+AC_OUTPUT

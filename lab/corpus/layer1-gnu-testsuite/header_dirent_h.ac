@@ -1,0 +1,5 @@
+dnl G56: Single header check: dirent.h
+AC_INIT([gnu-hdr-dirent_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([dirent.h])
+AC_OUTPUT

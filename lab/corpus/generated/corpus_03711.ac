@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_YACC
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CANONICAL_HOST
+AC_SUBST([exec_prefix])
+AC_OUTPUT

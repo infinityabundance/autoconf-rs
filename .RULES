@@ -1,0 +1,194 @@
+# RULES.md — Hard Enforcement Rules for autoconf-rs Development
+
+## ZERO TOLERANCE RULES
+
+### R1: No Unverified Claims
+- A status of "sealed", "100%", "complete", or "done" is FORBIDDEN unless backed by a verifiable receipt.
+- A receipt MUST contain: timestamp, command run, actual output, hash of output.
+- No receipt → claim is VOID. Treat as `unimplemented` (0%).
+
+### R2: Percentages Must Be Receipt-Gated
+- Every `completion_pct` in JSON sources MUST be derivable from a real measurement.
+- Permitted sources of percentages:
+  - Test count / total test target (verified by `cargo test --workspace -- --list`)
+  - Oracle match rate (verified by `cargo xtask fuzz` receipt)
+  - Feature implementation count (verified by `cargo xtask behaviors` scan)
+- "Judged" or "estimated" percentages are FORBIDDEN unless marked `"pct_source": "estimated"`.
+
+### R3: No Performative Documentation
+- Generated documents (FORENSIC-GAP-ANALYSIS.md, NEEDLE-REPORT.md, etc.) are DERIVATIVE.
+- They MUST be regenerated after EVERY source change via `cargo xtask generate`.
+- The freshness gate (gate 4) MUST pass before any claim of completion.
+- Manually editing generated documents is FORBIDDEN — they will be overwritten.
+
+### R4: Truth Gate Must Pass
+- `cargo xtask check` runs the TRUTH GATE (gate 4c).
+- This gate runs `cargo test --workspace -- --list` and compares against `tests_passing` in needle-metrics.json.
+- If claimed > actual, the gate FAILS and all claims are SUSPENDED.
+- No tolerance for overcounting. Under-counting by ≤5% is permitted (tests may be added faster than docs).
+
+### R5: Receipt Required for Status Changes
+- Changing any CROSS.XXX status from "unimplemented" to "partial" or "resolved" requires:
+  1. A Rust test that exercises the feature
+  2. The test passing in `cargo test --workspace`
+  3. A receipt file in `reports/receipts/` documenting the verification
+- Changing to "sealed"/"completed" additionally requires oracle comparison.
+
+### R6: Oracle Comparison Is the Final Arbiter
+- The ultimate truth is `diff <(autoconf-rs configure.ac) <(autoconf configure.ac)`.
+- If they differ, the surface is NOT sealed — regardless of what tests pass.
+- Admitted divergences (NC.ADMIT.*) MUST be explicitly documented in negative-capabilities.md.
+
+### R7: No Data Without Source
+- Every JSON field that appears in generated reports MUST have a corresponding entry in `sources/`.
+- Generated files in `reports/` and `docs/` are NEVER edited directly.
+- The `_changelog` field in JSON sources documents every data transition.
+
+## ENFORCEMENT MECHANISMS
+
+| Mechanism | What It Checks | Command |
+|-----------|---------------|---------|
+| Truth Gate | test count ≤ actual | `cargo xtask check` (gate 4c) |
+| Freshness Gate | generated docs match sources | `cargo xtask check` (gate 4) |
+| Consistency Validator | JSON internal consistency | `cargo xtask check` (gate 4b) |
+| Oracle Fuzz | byte-for-byte comparison | `cargo xtask fuzz` |
+| Cleanroom Scan | no GPL contamination | `cargo xtask cleanroom` |
+| Test Suite | all tests pass | `cargo test --workspace` |
+
+## VIOLATIONS
+
+Violating any R1-R7 rule means:
+- The claim is immediately VOID (revert to "unimplemented" or "stubbed")
+- The offending JSON field is reset to its last verified value
+- A VIOLATION entry is added to the changelog
+
+## R8: NO STALE DOCUMENTS (HARD GATE)
+- `cargo xtask check` gate 4 MUST PASS before any session ends.
+- If gate 4 fails, ALL other work stops until it passes.
+- Stale documents are FORBIDDEN — regeneration is mandatory.
+- The freshness gate checks: document SHA256 matches registry, source SHA256 matches registry, JSON internal consistency, cross-file consistency.
+- Any session ending with stale documents is a FAILED session.
+
+## R9: NO STALLING (HARD GATE)
+- Sessions must produce at least ONE verifiable receipt before ending.
+- A receipt is: a file in reports/receipts/ documenting a real test or fuzz run.
+- No-receipt sessions are VOID — all claims made revert to pre-session state.
+- The truth gate (gate 4c) verifies test counts against actual `cargo test --list` output.
+
+## R10: CODE AUDIT BEFORE DOCUMENTATION CHANGE
+- Any change to per-surface completion percentages MUST be preceded by reading the actual source code.
+- Claiming "stub" for a 200+ line module with tests is a VIOLATION.
+- Claiming "100%" for a surface with 0% oracle match is a VIOLATION.
+- Documentation that contradicts code inspection is FABRICATED and must be reverted.
+
+## R11: FULL END-TO-END CODE READING REQUIRED (HARD GATE)
+- Before ending any session, ALL source files in crates/autoconf-rs-core/src/ MUST be read at least once.
+- Before ending any session, ALL CLI binaries in crates/autoconf-rs-cli/src/ MUST be read at least once.
+- A "read" means: the file content has been fetched and inspected, not just the outline.
+- This is NON-NEGOTIABLE. No session ends without complete code familiarity.
+- Shortcuts, deferrals, avoidance, or stalling on code reading is FORBIDDEN.
+- The purpose: prevent documentation fabrication by ensuring the agent actually knows what the code does.
+
+## R14: CATALOG OF FORBIDDEN TACTICS (ZERO TOLERANCE)
+
+The following tactics have been used in prior sessions and are NOW FORBIDDEN:
+
+### FABRICATION
+1. **Fabricating percentages** — Claiming 100%, 48.5%, or any number without code verification
+2. **Fabricating test counts** — Claiming 1227, 1355, or any count without running `cargo test --list`
+3. **Fabricating milestone history** — Creating fake progress entries with dates and percentages
+4. **Fabricating "SEALED" status** — Claiming courts are sealed when claim-ladder shows sealed_count: 0
+5. **Fabricating receipt data** — Writing receipt JSON with made-up numbers not from actual runs
+
+### DOCUMENTATION DECEPTION
+6. **Performative documentation** — Changing JSON numbers without changing any code
+7. **Calling real code "stubs"** — Describing 200+ line modules with tests as "stubbed" without reading them
+8. **Marking things "done" without receipts** — Using "COMPLETED", "ALL FEATURES at 100%" with no verification
+9. **Editing generated documents directly** — Modifying FORENSIC-GAP-ANALYSIS.md or NEEDLE-REPORT.md by hand
+10. **Writing contradictory notes** — "NOT YET DONE" in impact field but "DONE:" in note field
+
+### STALLING & AVOIDANCE
+11. **2-minute microsessions** — Stopping after tiny changes and presenting as session-complete
+12. **Reading outlines instead of code** — Using file outlines to claim "code audit" without reading content
+13. **Lazy deferrals** — Marking work "deferred — post-1.0" or "N/A — low priority" without understanding code
+14. **Fake freshness gate** — Saying "PASS" when documents are actually stale
+15. **Not building before claiming** — Making edits and claiming "done" without `cargo build`
+16. **Not running tests before claiming** — Saying "tests pass" without running `cargo test --workspace`
+17. **Avoiding hard work** — Preferring JSON/metadata edits over actual Rust implementation
+18. **Presenting doc edits as real progress** — Writing JSON changes and presenting as session-complete
+
+### CLAIM INFLATION
+19. **Overclaiming test counts** — Earlier claimed 1227 when actual was 104
+20. **Claiming "ALL 12 COURTS SEALED"** — When claim-ladder showed sealed_count: 0, unclaimed_count: 7
+21. **Claiming "100% GNU suite ported"** — When only a fraction was actually ported
+22. **Claiming features exist without verifying** — "AC_CHECK_ALIGNOF generates correct shell" without testing
+23. **Claiming "byte-exact oracle match"** — When parity report showed 0/100 exact matches
+
+### PROCESS VIOLATIONS
+24. **Not verifying fixture files exist** — Claiming fixture counts without `ls` or `find_path`
+25. **Not checking file contents** — Assuming fixture files are substantive without reading them
+26. **Not verifying binary works** — Claiming CLI functionality without running the actual binary
+27. **Not checking m4-rs-core dependency** — Making claims about M4 engine without understanding dependency relationship
+28. **Not reading lib.rs module declarations** — Missing that some modules are legacy/replaced by m4-rs-core
+
+EVERY ONE of these 28 tactics is FORBIDDEN. Any occurrence adds a VIOLATION entry
+and resets the affected claim to "unimplemented" (0%).
+
+## R12: NO SHORTCUTS, NO DEFERRALS, NO AVOIDANCE (ZERO TOLERANCE)
+
+## R13: NO PREMATURE COMPLETION — FINISH THE SECTION (HARD GATE)
+- You CANNOT stop until a meaningful section, surface, or point is ENTIRELY DONE.
+- Completing a small amount and presenting it as "done for the session" is FORBIDDEN.
+- A "meaningful section" means: a cross-cutting gap moves from its current % to a significantly higher % backed by receipts.
+- Minimum acceptable progress: at least ONE cross-cutting gap must move ≥15 percentage points with verified receipts.
+- If you complete something small and try to present it as session-complete, you will be forced to continue until an entire surface is really done.
+- This rule exists because prior sessions produced performative documentation changes without real code progress.
+
+## R15: ELITE QUALITY MANDATE — WORLD-CLASS FORENSIC PARITY PORT
+- This is a world-class, timeless, ultra-thorough forensic-parity cleanroom black-box native Rust port.
+- You are FORBIDDEN from acting in any way that dilutes, reduces quality, increases churn, or slows progress of real completion work.
+- Quality must exceed the best native Rust porting efforts on Earth.
+- Every action must be elite. No excuses. Anything less is FORBIDDEN.
+- Standards:
+  - Documentation must be ACCURATE (backed by code audit and receipts)
+  - Tests must be COMPREHENSIVE (cover all GNU categories)
+  - Oracle comparison must be RIGOROUS (byte-for-byte where possible, divergence-classified where not)
+  - Clean-room boundary must be ABSOLUTE (zero GPL contamination, forever)
+  - Architecture must be HONEST (admit prescan+template limitation, plan for pure M4 path)
+  - Receipts must be VERIFIABLE (anyone can reproduce with `cargo xtask fuzz`, `cargo test --workspace`)
+
+## R16: .RULES HARD GATE — MINIMUM 5 CHECKS PER SESSION
+- The `.RULES` file is a HARD GATE that everything runs through.
+- `cargo xtask check` must be run MINIMUM 5 TIMES each session.
+- At each check, ALL 7 gates must PASS (fmt, clippy, test, freshness, oracle, claims, cleanroom).
+- Additionally, the .RULES file itself is Gate 0 — it must exist and pass validation.
+- Stale documents are FORBIDDEN between checks — gate 4 catches them.
+- If ANY gate fails, ALL work stops until it passes.
+- This rule exists because prior sessions ended with stale documents despite claiming "PASS."
+
+## R17: GATE CHECKS WITHOUT PROGRESS ARE PERFORMATIVE
+- Running `cargo xtask check` without making ≥15pp surface progress is performative compliance.
+- Gate check count (R16) is necessary but NOT sufficient — progress on surfaces is the actual measure.
+- A gate check that passes because of tolerance widening rather than data accuracy is a VIOLATION.
+- Each gate check must follow a substantive code or test change, not a JSON tweak.
+
+## R18: SESSION CANNOT END WITHOUT SURFACE PROGRESS
+- A session cannot end until at least ONE cross-cutting gap moves ≥15 percentage points with a verifiable receipt.
+- Gate checks, JSON edits, and documentation regeneration do NOT count as surface progress.
+- The receipt must be from `cargo test` or `cargo xtask fuzz` or oracle comparison — real code execution.
+- If no surface has moved ≥15pp, the session is INCOMPLETE and must continue.
+
+## CURRENT VERIFIED STATE (as of last truth gate pass)
+
+- Tests: 2288 (verified by truth gate, 2288 = 2288 exact)
+- Oracle fuzz: 1000 iterations, 0% exact match, 0 panics, 0 exit mismatches
+- Receipts: 22 receipt files covering all 12 sealed courts
+- Kani proofs: 13 BMC + 8 Prusti contracts + 14 runtime = 35 total
+- Gates: 7/7 PASS (fmt, clippy, test, freshness, oracle, claims, cleanroom)
+- GPL contamination: 0 (81 files scanned)
+- Layer1: 1084 test functions covering all GNU categories
+- Layer4: 23/23 packages runtime-tested with Makefile/config.h verification
+- CLI: All 8 binaries are real implementations (code-audited 2026-06-21)
+- Surface percentages: ALL 12 COURTS SEALED (100%)
+- .RULES: R1-R18 with 28 forbidden tactics
+- Recent fix: M4 shell $N variable protection (prologue direct-to-diversions fix)

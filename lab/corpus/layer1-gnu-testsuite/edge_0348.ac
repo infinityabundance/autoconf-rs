@@ -1,0 +1,4 @@
+AC_INIT([arg348],[1.0])
+AC_ARG_WITH([w348],[AS_HELP_STRING([--with-w348],[Option 348])])
+AC_ARG_ENABLE([e348],[AS_HELP_STRING([--enable-e348],[Feature 348])])
+AC_OUTPUT

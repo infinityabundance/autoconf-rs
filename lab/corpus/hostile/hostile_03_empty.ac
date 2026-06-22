@@ -1,0 +1,5 @@
+dnl HOSTILE_03: Empty arguments and zero-length strings
+AC_INIT([], [])
+AC_DEFINE([EMPTY], [])
+AC_SUBST([BLANK], [])
+AC_OUTPUT

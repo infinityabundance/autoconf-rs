@@ -1,0 +1,4 @@
+dnl G400: AC_PREREQ(9.90)
+AC_PREREQ([9.90])
+AC_INIT([gnu-prq-9],[1.0])
+AC_OUTPUT

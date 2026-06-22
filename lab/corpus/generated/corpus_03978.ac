@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PRESERVE_HELP_ORDER
+AC_CANONICAL_HOST
+AC_OUTPUT

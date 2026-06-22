@@ -1,0 +1,4 @@
+AC_INIT([arg398],[1.0])
+AC_ARG_WITH([w398],[AS_HELP_STRING([--with-w398],[Option 398])])
+AC_ARG_ENABLE([e398],[AS_HELP_STRING([--enable-e398],[Feature 398])])
+AC_OUTPUT

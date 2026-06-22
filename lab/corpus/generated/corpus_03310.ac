@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_CANONICAL_TARGET
+AC_FUNC_FORK
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LEX
+AC_OUTPUT

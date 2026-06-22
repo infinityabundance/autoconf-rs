@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PRESERVE_HELP_ORDER
+AC_PROG_CC_C_O
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([fork vfork])
+AC_OUTPUT

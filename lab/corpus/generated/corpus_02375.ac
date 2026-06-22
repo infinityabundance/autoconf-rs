@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_GREP
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PREFIX_PROGRAM([gcc])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_FUNC_MMAP
+AC_FUNC_ALLOCA
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_CC
+AC_OUTPUT

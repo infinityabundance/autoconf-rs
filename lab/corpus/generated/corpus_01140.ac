@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_PROG_LEX
+AC_CHECK_SIZEOF([long])
+AC_SUBST([prefix])
+AC_FUNC_MMAP
+AC_OUTPUT

@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_SUBDIRS([lib])
+AC_CONFIG_HEADERS([config.h])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_AR
+AC_LANG_PUSH([C])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CANONICAL_HOST
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G340: Check decl: bsearch
+AC_INIT([gnu-decl-bsearch],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([bsearch])
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_INT32_T
+AC_STRUCT_TIMEZONE
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PREFIX_PROGRAM([gcc])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_RANLIB
+AC_OUTPUT

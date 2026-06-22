@@ -1,0 +1,5 @@
+dnl G88: Single header check: signal.h
+AC_INIT([gnu-hdr-signal_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([signal.h])
+AC_OUTPUT

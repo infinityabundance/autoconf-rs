@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_MALLOC
+AC_TYPE_INT32_T
+AC_FUNC_VPRINTF
+AC_HEADER_DIRENT
+AC_LIBOBJ([fnmatch])
+AC_CHECK_LIB([m], [sin])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

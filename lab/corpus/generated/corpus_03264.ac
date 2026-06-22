@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_SUBST([prefix])
+AC_PREREQ([2.71])
+AC_HEADER_DIRENT
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TIMEZONE
+AC_SUBST([PACKAGE_VERSION])
+AC_FUNC_VPRINTF
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_CXX
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

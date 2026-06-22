@@ -1,0 +1,8 @@
+AC_INIT([quote-test], [1.0])
+AC_SUBST([VAR_WITH_SPACES], ["value with spaces"])
+AC_SUBST([VAR_WITH_DOLLAR], ["cost $5.00"])
+AC_SUBST([VAR_WITH_QUOTES], ["it's a \"test\""])
+AC_SUBST([VAR_WITH_BACKTICKS], ["`date`"])
+AC_SUBST([VAR_WITH_BACKSLASH], ["C:\path\to\file"])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

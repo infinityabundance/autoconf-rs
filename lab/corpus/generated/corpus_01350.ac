@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_UID_T
+AC_FUNC_VPRINTF
+AC_FUNC_MALLOC
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CHECK_FUNCS([malloc realloc])
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_SIZEOF([long])
+AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
+AC_PROG_LN_S
+AC_CONFIG_HEADERS([config.h])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

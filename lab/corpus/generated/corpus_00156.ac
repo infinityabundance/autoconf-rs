@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UID_T
+AC_PROG_INSTALL
+AC_REVISION([$Revision: 1.0 $])
+AC_FUNC_VPRINTF
+AC_PROG_CPP
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CPP
+AC_PROG_EGREP
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

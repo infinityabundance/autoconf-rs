@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_SED
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_TYPE_UID_T
+AC_PROG_CC_C_O
+AC_FUNC_MALLOC
+AC_OUTPUT

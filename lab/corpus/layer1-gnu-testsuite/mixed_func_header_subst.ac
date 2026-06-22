@@ -1,0 +1,8 @@
+dnl G169: Mixed: func,header,subst,define,sizeof
+AC_INIT([gnu-mix-func_header_subst],[1.0])
+AC_CHECK_FUNC
+AC_CHECK_HEADER
+AC_SUBST
+AC_DEFINE
+AC_CHECK_SIZEOF
+AC_OUTPUT

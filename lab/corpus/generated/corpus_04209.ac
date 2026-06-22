@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDC
+AC_TYPE_INT32_T
+AC_PREFIX_PROGRAM([gcc])
+AC_HEADER_STDINT
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UINT32_T
+AC_PROG_EGREP
+AC_OUTPUT

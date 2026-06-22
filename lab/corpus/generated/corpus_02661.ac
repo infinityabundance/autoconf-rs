@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_LN_S
+AC_PROG_CC
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

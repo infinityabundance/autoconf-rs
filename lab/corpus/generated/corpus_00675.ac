@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDBOOL
+AC_PROG_CC
+AC_PROG_MKDIR_P
+AC_PREREQ([2.63])
+AC_OUTPUT

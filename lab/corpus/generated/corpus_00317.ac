@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_TIME
+AC_TYPE_INT32_T
+AC_PROG_INSTALL
+AC_LANG_PUSH([C])
+AC_CHECK_FUNCS([malloc realloc])
+AC_OUTPUT

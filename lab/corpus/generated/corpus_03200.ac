@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_HEADER_STDINT
+AC_PROG_YACC
+AC_PROG_RANLIB
+AC_CANONICAL_HOST
+AC_HEADER_STDC
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_GREP
+AC_PROG_CC_C_O
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_MKDIR_P
+AC_OUTPUT

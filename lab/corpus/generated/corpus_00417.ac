@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_OFF_T
+AC_STRUCT_ST_BLOCKS
+AC_CONFIG_MACRO_DIR([m4])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

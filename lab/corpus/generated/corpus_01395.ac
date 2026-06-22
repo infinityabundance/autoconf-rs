@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_HEADERS([config.h])
+AC_PROG_LN_S
+AC_OUTPUT

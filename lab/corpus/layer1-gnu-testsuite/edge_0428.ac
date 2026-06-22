@@ -1,0 +1,4 @@
+AC_INIT([arg428],[1.0])
+AC_ARG_WITH([w428],[AS_HELP_STRING([--with-w428],[Option 428])])
+AC_ARG_ENABLE([e428],[AS_HELP_STRING([--enable-e428],[Feature 428])])
+AC_OUTPUT

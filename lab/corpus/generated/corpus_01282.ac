@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_TYPE_UID_T
+AC_TYPE_INT32_T
+AC_HEADER_STDC
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_GREP
+AC_PROG_AR
+AC_OUTPUT

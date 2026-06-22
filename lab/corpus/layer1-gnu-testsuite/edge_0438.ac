@@ -1,0 +1,4 @@
+AC_INIT([arg438],[1.0])
+AC_ARG_WITH([w438],[AS_HELP_STRING([--with-w438],[Option 438])])
+AC_ARG_ENABLE([e438],[AS_HELP_STRING([--enable-e438],[Feature 438])])
+AC_OUTPUT

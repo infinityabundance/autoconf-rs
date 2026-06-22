@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PRESERVE_HELP_ORDER
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PROG_AWK
+AC_PROG_CPP
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_FGREP
+AC_OUTPUT

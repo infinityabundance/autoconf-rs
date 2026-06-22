@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_FUNC_MMAP
+AC_OUTPUT

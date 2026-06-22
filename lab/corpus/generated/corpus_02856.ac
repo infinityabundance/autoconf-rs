@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_TYPE_INT32_T
+AC_PROG_AWK
+AC_FUNC_MMAP
+AC_HEADER_TIME
+AC_PROG_CC
+AC_OUTPUT

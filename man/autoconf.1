@@ -1,0 +1,83 @@
+.TH AUTOCONF-RS 1 "2026-06-20" "autoconf-rs 0.1.0" "User Commands"
+.SH NAME
+autoconf \- generate configuration scripts from configure.ac (Rust-native)
+.SH SYNOPSIS
+.B autoconf
+[\fB\-f\fR|\fB\-\-force\fR]
+[\fB\-I\fR \fIDIR\fR|\fB\-\-include=\fR\fIDIR\fR]
+[\fB\-B\fR \fIDIR\fR|\fB\-\-prepend\-include=\fR\fIDIR\fR]
+[\fB\-W\fR \fICATEGORY\fR|\fB\-\-warnings=\fR\fICATEGORY\fR]
+[\fItemplate-file\fR]
+.SH DESCRIPTION
+.B autoconf-rs
+is a clean-room, Rust-native reimplementation of GNU Autoconf.
+It generates POSIX-compliant
+.B configure
+shell scripts from
+.B configure.ac
+(or
+.BR configure.in )
+template files using forensic-parity methodology.
+.SH OPTIONS
+.TP
+\fB\-f\fR, \fB\-\-force\fR
+Force regeneration even if output is up to date.
+.TP
+\fB\-I\fR \fIDIR\fR, \fB\-\-include=\fR\fIDIR\fR
+Append directory DIR to the search path for M4 include files.
+.TP
+\fB\-B\fR \fIDIR\fR, \fB\-\-prepend\-include=\fR\fIDIR\fR
+Prepend directory DIR to the include search path.
+.TP
+\fB\-W\fR \fICATEGORY\fR, \fB\-\-warnings=\fR\fICATEGORY\fR
+Enable warnings from CATEGORY (cross, gnu, obsolete, override, portability, syntax, unsupported, all, error, no-CATEGORY).
+.SH ENVIRONMENT
+.TP
+.B AUTOCONF
+Path to the autoconf binary (for recursive invocation).
+.TP
+.B AUTOM4TE
+Path to the autom4te binary.
+.TP
+.B M4
+Path to the GNU M4 binary.
+.TP
+.B WARNINGS
+Default warning categories.
+.SH EXIT STATUS
+.TP
+0
+Success (no warnings or errors).
+.TP
+1
+Warnings were emitted.
+.TP
+2
+Errors occurred; no configure script was generated.
+.SH FILES
+.TP
+.B configure.ac / configure.in
+Input template file processed by autoconf.
+.TP
+.B configure
+Generated POSIX shell script.
+.TP
+.B autom4te.cache/
+Cache directory for M4 expansions (JSON format, SHA256-validated).
+.SH NOTES
+autoconf-rs is NOT a drop-in GNU Autoconf replacement.
+It uses a different internal architecture (prescan + template dispatch)
+but produces functionally equivalent configure scripts.
+See \fBdocs/FORENSIC-GAP-ANALYSIS.md\fR for detailed parity status.
+.SH SEE ALSO
+.BR autoheader (1),
+.BR autom4te (1),
+.BR autoreconf (1),
+.BR aclocal (1),
+.BR autoscan (1),
+.BR autoupdate (1),
+.BR ifnames (1)
+.SH BUGS
+Report bugs via the project issue tracker.
+.SH COPYRIGHT
+MIT OR Apache-2.0. Zero GPL code (clean-room reconstruction).

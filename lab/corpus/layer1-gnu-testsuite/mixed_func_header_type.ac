@@ -1,0 +1,8 @@
+dnl G170: Mixed: func,header,type,member,lib
+AC_INIT([gnu-mix-func_header_type],[1.0])
+AC_CHECK_FUNC
+AC_CHECK_HEADER
+AC_CHECK_TYPE
+AC_CHECK_MEMBER
+AC_CHECK_LIB
+AC_OUTPUT

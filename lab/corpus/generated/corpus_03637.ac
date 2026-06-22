@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDBOOL
+AC_PROG_YACC
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_MKDIR_P
+AC_PREFIX_PROGRAM([gcc])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

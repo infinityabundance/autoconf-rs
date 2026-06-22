@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_AR
+AC_FUNC_ALLOCA
+AC_PROG_LEX
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PRESERVE_HELP_ORDER
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

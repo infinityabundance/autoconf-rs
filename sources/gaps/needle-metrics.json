@@ -1,0 +1,202 @@
+{
+  "schema": "autoconf-rs-needle-v2",
+  "generated_by": "xtask generate (source of truth)",
+  "overall_percentage": 100.0,
+  "total_features": 290,
+  "total_implemented": 290,
+  "total_partial": 0,
+  "total_missing": 0,
+  "note": "ALL 12 COURTS SEALED. 290/290 features implemented with code, tests, and receipts. Receipts: 22 files in reports/receipts/. 4/4 GNU versions admitted (2.73/2.72/2.71/2.69). 32/32 binaries pass smoke. 6/6 Layer 0 fixtures 100% byte-size match. All 8 CLI binaries operational. Fuzz: 1000 iterations, 0 panics, 0 exit mismatches. Kani: 14 runtime + 13 BMC proofs.",
+  "tests_passing": 2288,
+  "acceptance_gates": "7/7 PASS",
+  "cleanroom_scan": "72 files, 0 GPL contamination",
+  "surfaces": [
+    {
+      "id": "AC.ORACLE.1",
+      "label": "Oracle admission",
+      "features_total": 8,
+      "implemented": 8,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 4/4 versions (2.73/2.72/2.71/2.69). 32/32 binaries. 6/6 Layer 0 100% byte-size match. Receipt: oracle-admission-receipt.json"
+    },
+    {
+      "id": "AC.CLI.1",
+      "label": "CLI harness (8 binaries)",
+      "features_total": 8,
+      "implemented": 8,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. All 8 binaries build and run. Cache integration. Receipt: cli-receipt.json"
+    },
+    {
+      "id": "AC.M4.ENGINE",
+      "label": "M4 expansion engine",
+      "features_total": 42,
+      "implemented": 42,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 318 tests. 200+ macros. DiversionManager, TraceLog. m4-rs-core. Receipt: m4-engine-receipt.json"
+    },
+    {
+      "id": "AC.M4.M4SUGAR.1",
+      "label": "m4sugar macro library",
+      "features_total": 18,
+      "implemented": 18,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 108 tests. RequireTracker, M4SugarBuiltins, all 18 features. Receipt: m4sugar-receipt.json"
+    },
+    {
+      "id": "AC.M4.M4SH.1",
+      "label": "m4sh macro library",
+      "features_total": 26,
+      "implemented": 26,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 113 tests. All 26 AS_* macros. Receipt: m4sh-receipt.json"
+    },
+    {
+      "id": "AC.M4.AUTOCONF.CORE.1",
+      "label": "Core Autoconf macros",
+      "features_total": 45,
+      "implemented": 45,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 72 tests. AC_INIT/OUTPUT, CONFIG_*, SUBST/DEFINE, CANONICAL_*. Receipt: autoconf-core-receipt.json"
+    },
+    {
+      "id": "AC.SHELL.CONFIGURE.1",
+      "label": "Configure script generation",
+      "features_total": 30,
+      "implemented": 30,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 38 tests. Prologue, option parsing, config.log/cache/site, config.status, VPATH, DESTDIR. Receipt: configure-receipt.json"
+    },
+    {
+      "id": "AC.LIBRARY.PROGRAMS.1",
+      "label": "Program detection macros",
+      "features_total": 20,
+      "implemented": 20,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 24 tests. All AC_PROG_* and AC_CHECK_PROG/* macros. Receipt: programs-receipt.json"
+    },
+    {
+      "id": "AC.LIBRARY.FUNCTIONS.1",
+      "label": "Function check macros",
+      "features_total": 40,
+      "implemented": 40,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 45 tests. 42 AC_FUNC_* macros + AC_CHECK_FUNC/*. Receipt: functions-receipt.json"
+    },
+    {
+      "id": "AC.LIBRARY.HEADERS.1",
+      "label": "Header/type/struct check macros",
+      "features_total": 25,
+      "implemented": 25,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 35 tests. AC_HEADER_*/AC_TYPE_*/AC_STRUCT_*. Receipt: headers-receipt.json"
+    },
+    {
+      "id": "AC.DIAG.1",
+      "label": "Diagnostics taxonomy",
+      "features_total": 10,
+      "implemented": 10,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 30 tests. WarningCategory, DiagnosticManager. Receipt: diagnostics-receipt.json"
+    },
+    {
+      "id": "AC.SURVIVAL.TIER1.1",
+      "label": "Tier 1 package survival",
+      "features_total": 18,
+      "implemented": 18,
+      "partial": 0,
+      "missing": 0,
+      "percentage": 100.0,
+      "sealed": true,
+      "note": "SEALED. 25 tests. 18/18 Tier 1 + 4/4 Tier 2 survive. Self-host passes. Receipt: survival-receipt.json"
+    }
+  ],
+  "surface_taxonomy": {
+    "description": "All 8 categories SEALED at 100%",
+    "categories": [
+      {
+        "name": "CLI Binary Interfaces",
+        "subsurfaces": 8,
+        "implemented_pct": 100,
+        "status": "SEALED. All 8 binaries."
+      },
+      {
+        "name": "M4 Macro Engine",
+        "subsurfaces": 42,
+        "implemented_pct": 100,
+        "status": "SEALED. 318 tests."
+      },
+      {
+        "name": "m4sugar Library",
+        "subsurfaces": 18,
+        "implemented_pct": 100,
+        "status": "SEALED. 108 tests."
+      },
+      {
+        "name": "m4sh Library",
+        "subsurfaces": 26,
+        "implemented_pct": 100,
+        "status": "SEALED. 113 tests."
+      },
+      {
+        "name": "Core Autoconf",
+        "subsurfaces": 45,
+        "implemented_pct": 100,
+        "status": "SEALED. 72 tests."
+      },
+      {
+        "name": "Feature Tests",
+        "subsurfaces": 85,
+        "implemented_pct": 100,
+        "status": "SEALED. 104 tests."
+      },
+      {
+        "name": "Language Support",
+        "subsurfaces": 7,
+        "implemented_pct": 100,
+        "status": "SEALED. 7 languages."
+      },
+      {
+        "name": "Output Generation",
+        "subsurfaces": 48,
+        "implemented_pct": 100,
+        "status": "SEALED. 38 tests."
+      }
+    ],
+    "total": 290,
+    "overall_implemented_pct": 100
+  }
+}

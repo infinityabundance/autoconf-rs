@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_TYPES([off_t mode_t])
+AC_LIBOBJ([fnmatch])
+AC_CHECK_SIZEOF([long])
+AC_PRESERVE_HELP_ORDER
+AC_OUTPUT

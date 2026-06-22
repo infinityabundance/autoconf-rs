@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_INT32_T
+AC_PROG_FGREP
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_SIZEOF([long])
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

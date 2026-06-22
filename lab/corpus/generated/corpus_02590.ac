@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LIBOBJ([fnmatch])
+AC_FUNC_FORK
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PREREQ([2.71])
+AC_CONFIG_HEADERS([config.h])
+AC_HEADER_DIRENT
+AC_OUTPUT

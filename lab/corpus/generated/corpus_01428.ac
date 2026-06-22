@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_MAKE_SET
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CONFIG_HEADERS([config.h])
+AC_SUBST([CFLAGS])
+AC_HEADER_STDBOOL
+AC_PROG_LEX
+AC_REVISION([$Revision: 1.0 $])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+dnl G61: Single header check: float.h
+AC_INIT([gnu-hdr-float_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([float.h])
+AC_OUTPUT

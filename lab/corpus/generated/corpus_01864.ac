@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_TYPE_UID_T
+AC_PRESERVE_HELP_ORDER
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_MAKE_SET
+AC_PROG_AWK
+AC_OUTPUT

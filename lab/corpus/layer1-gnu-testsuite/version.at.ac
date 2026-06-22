@@ -1,0 +1,3 @@
+AC_INIT([gnu-version],[2.0])
+AC_PREREQ([2.50])
+AC_OUTPUT

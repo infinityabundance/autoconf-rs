@@ -1,0 +1,44 @@
+dnl Layer 1: torture.at — Stress test with macro nesting, recursion, large argument lists
+AC_INIT([gnu-torture], [1.0])
+AC_PROG_CC
+
+dnl Deeply nested AC_SUBST
+AC_SUBST([T1], [v1])
+AC_SUBST([T2], [v2])
+AC_SUBST([T3], [v3])
+AC_SUBST([T4], [v4])
+AC_SUBST([T5], [v5])
+AC_SUBST([T6], [v6])
+AC_SUBST([T7], [v7])
+AC_SUBST([T8], [v8])
+AC_SUBST([T9], [v9])
+AC_SUBST([T10], [v10])
+
+dnl Multiple config files
+AC_CONFIG_FILES([Makefile src/Makefile lib/Makefile include/Makefile doc/Makefile])
+
+dnl Multiple headers
+AC_CONFIG_HEADERS([config.h src/config.h])
+
+dnl Lots of defines
+AC_DEFINE([HAVE_A], [1])
+AC_DEFINE([HAVE_B], [1])
+AC_DEFINE([HAVE_C], [1])
+AC_DEFINE([HAVE_D], [1])
+AC_DEFINE([HAVE_E], [1])
+
+dnl Complex argument handling
+AC_ARG_WITH([a], [AS_HELP_STRING([--with-a], [Option A])])
+AC_ARG_WITH([b], [AS_HELP_STRING([--with-b], [Option B])])
+AC_ARG_ENABLE([c], [AS_HELP_STRING([--enable-c], [Option C])])
+AC_ARG_ENABLE([d], [AS_HELP_STRING([--enable-d], [Option D])])
+
+dnl Nested conditionals
+AS_IF([test "x$CC" = xgcc], [
+  AC_DEFINE([USING_GCC], [1])
+  AS_IF([test -n "$CFLAGS"], [
+    AC_DEFINE([HAVE_CFLAGS], [1])
+  ])
+])
+
+AC_OUTPUT

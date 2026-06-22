@@ -1,0 +1,4 @@
+dnl Check file: /usr/bin/env
+AC_INIT([gnu-chkf-4],[1.0])
+AC_CHECK_FILE([/usr/bin/env], [AC_DEFINE([HAVE__USR_BIN_ENV])])
+AC_OUTPUT

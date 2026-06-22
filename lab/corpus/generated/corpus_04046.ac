@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_PID_T
+AC_PROG_MAKE_SET
+AC_PROG_AR
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

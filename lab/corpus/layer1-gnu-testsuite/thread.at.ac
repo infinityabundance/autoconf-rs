@@ -1,0 +1,6 @@
+AC_INIT([gnu-thread],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADERS([pthread.h])
+AC_CHECK_LIB([pthread],[pthread_create])
+AC_CHECK_FUNCS([pthread_create pthread_join pthread_mutex_init])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+AC_INIT([arg168],[1.0])
+AC_ARG_WITH([w168],[AS_HELP_STRING([--with-w168],[Option 168])])
+AC_ARG_ENABLE([e168],[AS_HELP_STRING([--enable-e168],[Feature 168])])
+AC_OUTPUT

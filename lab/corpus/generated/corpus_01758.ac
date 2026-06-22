@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_OFF_T
+AC_PREFIX_PROGRAM([gcc])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_LEX
+AC_PROG_CC_C_O
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_OUTPUT

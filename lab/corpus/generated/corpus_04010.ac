@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TM
+AC_CANONICAL_HOST
+AC_PREREQ([2.69])
+AC_OUTPUT

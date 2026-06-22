@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_SYS_WAIT
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

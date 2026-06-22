@@ -1,0 +1,5 @@
+dnl G330: Check decl: printf
+AC_INIT([gnu-decl-printf],[1.0])
+AC_PROG_CC
+AC_CHECK_DECL([printf])
+AC_OUTPUT

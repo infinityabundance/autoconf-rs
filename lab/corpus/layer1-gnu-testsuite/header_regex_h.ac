@@ -1,0 +1,5 @@
+dnl G83: Single header check: regex.h
+AC_INIT([gnu-hdr-regex_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([regex.h])
+AC_OUTPUT

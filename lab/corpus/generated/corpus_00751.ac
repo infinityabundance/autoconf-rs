@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_SIZEOF([long])
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_LEX
+AC_PROG_AR
+AC_OUTPUT

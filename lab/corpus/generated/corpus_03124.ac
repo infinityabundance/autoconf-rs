@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_RANLIB
+AC_HEADER_STDINT
+AC_PROG_CXX
+AC_CONFIG_AUX_DIR([build-aux])
+AC_SUBST([CFLAGS])
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

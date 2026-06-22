@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_FGREP
+AC_CONFIG_SUBDIRS([lib])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_TYPE_UINT32_T
+AC_OUTPUT

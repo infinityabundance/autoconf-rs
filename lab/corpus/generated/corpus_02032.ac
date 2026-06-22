@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_EGREP
+AC_STRUCT_TM
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_LEX
+AC_CANONICAL_TARGET
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

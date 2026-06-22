@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_EGREP
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PREREQ([2.63])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_FGREP
+AC_OUTPUT

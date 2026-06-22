@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_LANG_PUSH([C])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_STRUCT_ST_BLOCKS
+AC_PROG_CPP
+AC_CHECK_LIB([m], [sin])
+AC_FUNC_FORK
+AC_TYPE_MODE_T
+AC_OUTPUT

@@ -1,0 +1,10 @@
+[package]
+name = "autoconf-rs-kani"
+version = "0.1.0"
+edition = "2021"
+
+[lints.rust]
+unexpected_cfgs = { level = "allow", check-cfg = ['cfg(kani)'] }
+
+[dependencies]
+autoconf-rs-core = { path = "../crates/autoconf-rs-core" }

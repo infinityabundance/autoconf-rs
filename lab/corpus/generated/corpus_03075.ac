@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_SED
+AC_HEADER_SYS_WAIT
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_PROG_MKDIR_P
+AC_CHECK_FUNCS([malloc realloc])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_PROG_MAKE_SET
+AC_OUTPUT

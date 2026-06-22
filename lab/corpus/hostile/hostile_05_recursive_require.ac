@@ -1,0 +1,7 @@
+dnl HOSTILE_05: Recursive AC_REQUIRE chain (cycle detection)
+AC_DEFUN([A], [AC_REQUIRE([B])])
+AC_DEFUN([B], [AC_REQUIRE([C])])
+AC_DEFUN([C], [AC_REQUIRE([A])])
+AC_INIT([recursive], [1.0])
+A
+AC_OUTPUT

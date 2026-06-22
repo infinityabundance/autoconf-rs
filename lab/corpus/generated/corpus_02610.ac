@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_INT32_T
+AC_STRUCT_TIMEZONE
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

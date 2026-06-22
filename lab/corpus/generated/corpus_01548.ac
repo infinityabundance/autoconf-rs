@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREREQ([2.71])
+AC_PROG_YACC
+AC_CHECK_LIB([m], [sin])
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_MKDIR_P
+AC_OUTPUT

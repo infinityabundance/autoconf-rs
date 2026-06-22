@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_TIMEZONE
+AC_LANG_PUSH([C])
+AC_PROG_CXX
+AC_FUNC_VPRINTF
+AC_OUTPUT

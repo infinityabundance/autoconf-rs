@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDC
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_LIBOBJ([fnmatch])
+AC_CANONICAL_HOST
+AC_OUTPUT

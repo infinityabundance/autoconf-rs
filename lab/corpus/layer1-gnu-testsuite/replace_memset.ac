@@ -1,0 +1,5 @@
+dnl G359: Replace func: memset
+AC_INIT([gnu-repl-memset],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([memset])
+AC_OUTPUT

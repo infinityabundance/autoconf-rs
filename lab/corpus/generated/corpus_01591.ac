@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_FUNC_VPRINTF
+AC_PROG_EGREP
+AC_HEADER_DIRENT
+AC_PREREQ([2.59])
+AC_PROG_CC
+AC_TYPE_UINT32_T
+AC_OUTPUT

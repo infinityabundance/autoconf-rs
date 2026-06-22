@@ -1,0 +1,3 @@
+AC_INIT([mch456],[1.0])
+AC_CONFIG_HEADERS([h456_a h456_b h456_c])
+AC_OUTPUT

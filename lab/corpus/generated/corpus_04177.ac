@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_LANG_PUSH([C])
+AC_STRUCT_TIMEZONE
+AC_TYPE_PID_T
+AC_PROG_CC
+AC_PROG_AR
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

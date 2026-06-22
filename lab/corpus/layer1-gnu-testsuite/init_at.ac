@@ -1,0 +1,4 @@
+dnl Layer 1: init.at — AC_INIT variants and edge cases
+AC_INIT([GNU init-test with spaces], [1.0.0-alpha1], [bug@example.com], [init-test], [https://example.com/])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

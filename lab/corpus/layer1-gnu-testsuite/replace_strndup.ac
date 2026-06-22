@@ -1,0 +1,5 @@
+dnl G356: Replace func: strndup
+AC_INIT([gnu-repl-strndup],[1.0])
+AC_PROG_CC
+AC_REPLACE_FUNCS([strndup])
+AC_OUTPUT

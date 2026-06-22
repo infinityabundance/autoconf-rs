@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_UID_T
+AC_HEADER_SYS_WAIT
+AC_TYPE_MODE_T
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LEX
+AC_STRUCT_TIMEZONE
+AC_OUTPUT

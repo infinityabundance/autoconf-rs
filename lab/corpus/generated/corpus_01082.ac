@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_ST_BLOCKS
+AC_FUNC_MMAP
+AC_PROG_FGREP
+AC_PROG_SED
+AC_OUTPUT

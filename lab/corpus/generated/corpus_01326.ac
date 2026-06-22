@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_TYPE_MODE_T
+AC_REVISION([$Revision: 1.0 $])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_AWK
+AC_TYPE_INT32_T
+AC_OUTPUT

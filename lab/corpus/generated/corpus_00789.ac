@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_LN_S
+AC_PROG_FGREP
+AC_LANG_PUSH([C])
+AC_PROG_RANLIB
+AC_PROG_CC_C_O
+AC_PREREQ([2.71])
+AC_OUTPUT

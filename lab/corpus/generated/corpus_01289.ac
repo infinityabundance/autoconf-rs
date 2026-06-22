@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_CPP
+AC_TYPE_UID_T
+AC_TYPE_OFF_T
+AC_DEFINE([HAVE_STDIO_H], [1])
+AC_PRESERVE_HELP_ORDER
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

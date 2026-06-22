@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREREQ([2.69])
+AC_HEADER_STDBOOL
+AC_TYPE_UID_T
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_PROG_EGREP
+AC_OUTPUT

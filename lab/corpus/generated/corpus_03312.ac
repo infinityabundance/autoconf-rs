@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_SUBST([prefix])
+AC_PREREQ([2.71])
+AC_PROG_SED
+AC_HEADER_STDC
+AC_OUTPUT

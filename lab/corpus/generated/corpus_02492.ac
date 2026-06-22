@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_AR
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_STRUCT_TIMEZONE
+AC_PROG_MKDIR_P
+AC_PROG_MAKE_SET
+AC_HEADER_DIRENT
+AC_OUTPUT

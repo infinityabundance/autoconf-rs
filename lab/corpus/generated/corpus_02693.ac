@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_RANLIB
+AC_CHECK_FUNCS([fork vfork])
+AC_STRUCT_TIMEZONE
+AC_PROG_CC
+AC_TYPE_UID_T
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_SYS_WAIT
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_TYPE_PID_T
+AC_PROG_CXX
+AC_HEADER_STDC
+AC_PROG_LN_S
+AC_OUTPUT

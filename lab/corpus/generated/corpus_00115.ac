@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_INT32_T
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_SED
+AC_OUTPUT

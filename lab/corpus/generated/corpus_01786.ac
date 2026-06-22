@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_AR
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_LIB([m], [sin])
+AC_FUNC_ALLOCA
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

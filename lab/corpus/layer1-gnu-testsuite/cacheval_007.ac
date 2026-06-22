@@ -1,0 +1,5 @@
+dnl G371: AC_CACHE_VAL
+AC_INIT([gnu-cv-7],[1.0])
+AC_PROG_CC
+AC_CACHE_VAL([ac_cv_test_7], [ac_cv_test_7=yes])
+AC_OUTPUT

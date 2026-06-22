@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_FUNC_MALLOC
+AC_PROG_LN_S
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

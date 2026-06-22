@@ -1,0 +1,12 @@
+AC_INIT([pkg], [1.0])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_TYPE_PID_T
+AC_STRUCT_TIMEZONE
+AC_HEADER_TIME
+AC_PROG_INSTALL
+AC_TYPE_UID_T
+AC_SUBST([PACKAGE_NAME])
+AC_OUTPUT

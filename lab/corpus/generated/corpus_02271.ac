@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_CC_C_O
+AC_PREFIX_PROGRAM([gcc])
+AC_HEADER_DIRENT
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_PROG_CXX
+AC_TYPE_OFF_T
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

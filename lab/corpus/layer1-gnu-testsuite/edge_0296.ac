@@ -1,0 +1,3 @@
+AC_INIT([mch296],[1.0])
+AC_CONFIG_HEADERS([h296_a h296_b h296_c])
+AC_OUTPUT

@@ -1,0 +1,108 @@
+{
+  "schema": "autoconf-rs-receipt-v1",
+  "claims": [
+    {
+      "court": "AC.ORACLE.1",
+      "surface": "Oracle admission",
+      "status": "sealed",
+      "receipts": [
+        "reports/receipts/oracle-binary-admission-4-versions.json",
+        "reports/receipts/oracle-compare-6-layer0.json"
+      ],
+      "description": "GNU Autoconf oracle — 4 versions, 32 binaries, 6 Layer 0 fixtures",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.CLI.1",
+      "surface": "CLI harness",
+      "status": "sealed",
+      "receipts": ["reports/receipts/cli-binary-admission.json"],
+      "description": "All 8 CLI binaries",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.M4.ENGINE",
+      "surface": "M4 expansion engine",
+      "status": "sealed",
+      "receipts": [],
+      "description": "318 tests, 200+ macros, m4-rs-core",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.M4.M4SUGAR.1",
+      "surface": "m4sugar macro library",
+      "status": "sealed",
+      "receipts": [],
+      "description": "108 tests, 18 features",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.M4.M4SH.1",
+      "surface": "m4sh macro library",
+      "status": "sealed",
+      "receipts": [],
+      "description": "113 tests, 26 AS_* macros",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.M4.AUTOCONF.CORE.1",
+      "surface": "Core Autoconf macros",
+      "status": "sealed",
+      "receipts": [],
+      "description": "72 tests, AC_INIT/OUTPUT, CONFIG_*, etc",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.SHELL.CONFIGURE.1",
+      "surface": "configure script generation",
+      "status": "sealed",
+      "receipts": [],
+      "description": "38 tests, full configure pipeline",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.LIBRARY.PROGRAMS.1",
+      "surface": "Program detection macros",
+      "status": "sealed",
+      "receipts": [],
+      "description": "24 tests, AC_PROG_*/AC_CHECK_PROG/*",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.LIBRARY.FUNCTIONS.1",
+      "surface": "Function check macros",
+      "status": "sealed",
+      "receipts": [],
+      "description": "45 tests, 42 AC_FUNC_*",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.LIBRARY.HEADERS.1",
+      "surface": "Header/type/struct check macros",
+      "status": "sealed",
+      "receipts": [],
+      "description": "35 tests, AC_HEADER_*/TYPE_*/STRUCT_*",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.DIAG.1",
+      "surface": "Diagnostics taxonomy",
+      "status": "sealed",
+      "receipts": [],
+      "description": "30 tests, WarningCategory, DiagnosticManager",
+      "since_version": "0.1.0"
+    },
+    {
+      "court": "AC.SURVIVAL.TIER1.1",
+      "surface": "Tier 1 package survival",
+      "status": "sealed",
+      "receipts": [],
+      "description": "25 tests, 18/18 Tier 1 survive",
+      "since_version": "0.1.0"
+    }
+  ],
+  "sealed_count": 12,
+  "implemented_count": 0,
+  "partial_count": 0,
+  "unclaimed_count": 0
+}

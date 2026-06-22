@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_HEADER_STDC
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_CXX
+AC_HEADER_STDINT
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_INSTALL
+AC_PROG_YACC
+AC_OUTPUT

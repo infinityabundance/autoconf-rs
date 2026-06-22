@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_OFF_T
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_HEADER_TIME
+AC_CONFIG_HEADERS([config.h])
+AC_OUTPUT

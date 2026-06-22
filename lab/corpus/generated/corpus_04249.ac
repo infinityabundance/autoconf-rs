@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_STRUCT_ST_BLOCKS
+AC_CHECK_FUNCS([malloc realloc])
+AC_PROG_AR
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_PROG_YACC
+AC_OUTPUT

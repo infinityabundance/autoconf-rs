@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_RANLIB
+AC_PROG_EGREP
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

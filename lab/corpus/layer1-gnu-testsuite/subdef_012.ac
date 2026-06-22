@@ -1,0 +1,13 @@
+dnl G423: SUBST+DEFINE combo 12
+AC_INIT([gnu-sd-12],[1.0])
+AC_SUBST([S12_0], [v12_0])
+AC_SUBST([S12_1], [v12_1])
+AC_SUBST([S12_2], [v12_2])
+AC_SUBST([S12_3], [v12_3])
+AC_SUBST([S12_4], [v12_4])
+AC_DEFINE([D12_0], [0])
+AC_DEFINE([D12_1], [12])
+AC_DEFINE([D12_2], [24])
+AC_DEFINE([D12_3], [36])
+AC_DEFINE([D12_4], [48])
+AC_OUTPUT

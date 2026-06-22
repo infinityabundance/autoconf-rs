@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_LEX
+AC_STRUCT_TM
+AC_TYPE_INT32_T
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_MAKE_SET
+AC_TYPE_UINT32_T
+AC_FUNC_STRERROR_R
+AC_OUTPUT

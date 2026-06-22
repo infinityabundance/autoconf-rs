@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-29],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub29_0 sub29_1 sub29_2 sub29_3 sub29_4])
+AC_OUTPUT

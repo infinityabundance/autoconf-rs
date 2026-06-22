@@ -1,0 +1,5 @@
+dnl G79: Single header check: nl_types.h
+AC_INIT([gnu-hdr-nl_types_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([nl_types.h])
+AC_OUTPUT

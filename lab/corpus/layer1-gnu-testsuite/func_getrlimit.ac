@@ -1,0 +1,5 @@
+dnl G47: Single func check: getrlimit
+AC_INIT([gnu-getrlimit],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([getrlimit])
+AC_OUTPUT

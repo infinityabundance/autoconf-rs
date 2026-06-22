@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_SUBDIRS([lib])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_PROG_FGREP
+AC_TYPE_OFF_T
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_HEADER_TIME
+AC_FUNC_VPRINTF
+AC_FUNC_STRERROR_R
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_TYPE_SIZE_T
+AC_OUTPUT

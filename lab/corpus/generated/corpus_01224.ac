@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_TYPE_OFF_T
+AC_PROG_AR
+AC_SUBST([CC])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_OUTPUT

@@ -1,0 +1,4 @@
+AC_INIT([gnu-subd-22],[1.0])
+AC_PROG_CC
+AC_CONFIG_SUBDIRS([sub22_0 sub22_1 sub22_2])
+AC_OUTPUT

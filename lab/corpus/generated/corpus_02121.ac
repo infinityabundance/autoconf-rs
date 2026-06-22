@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_ALLOCA
+AC_PROG_AR
+AC_PRESERVE_HELP_ORDER
+AC_TYPE_MODE_T
+AC_REPLACE_FUNCS([strdup getopt])
+AC_ARG_WITH([zlib], AS_HELP_STRING([--with-zlib], [use zlib]))
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

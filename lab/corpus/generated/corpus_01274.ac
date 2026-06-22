@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0])
+AC_FUNC_MALLOC
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_MAKE_SET
+AC_OUTPUT

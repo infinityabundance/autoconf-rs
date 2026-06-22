@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDC
+AC_FUNC_FORK
+AC_PREFIX_PROGRAM([gcc])
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_TYPE_UID_T
+AC_CANONICAL_BUILD
+AC_CANONICAL_TARGET
+AC_OUTPUT

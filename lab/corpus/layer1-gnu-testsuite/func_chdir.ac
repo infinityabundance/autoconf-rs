@@ -1,0 +1,5 @@
+dnl G6: Single func check: chdir
+AC_INIT([gnu-chdir],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([chdir])
+AC_OUTPUT

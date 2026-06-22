@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_FUNCS([malloc realloc])
+AC_PROG_MAKE_SET
+AC_LANG_PUSH([C])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TIMEZONE
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

@@ -1,0 +1,35 @@
+dnl Layer 1: status.at — config.status edge cases
+AC_INIT([gnu-status], [1.0])
+AC_PROG_CC
+
+dnl Multiple config file patterns
+AC_CONFIG_FILES([Makefile:Makefile.in])
+AC_CONFIG_FILES([src/Makefile:src/Makefile.in])
+AC_CONFIG_FILES([lib/Makefile:lib/Makefile.in])
+
+dnl Header generation
+AC_CONFIG_HEADERS([config.h:config.h.in])
+
+dnl Complex substitutions
+AC_SUBST([CC], ['${CC}'])
+AC_SUBST([CFLAGS], ['${CFLAGS}'])
+AC_SUBST([LDFLAGS], ['${LDFLAGS}'])
+AC_SUBST([LIBS], ['${LIBS}'])
+AC_SUBST([prefix], ['${prefix}'])
+AC_SUBST([exec_prefix], ['${exec_prefix}'])
+AC_SUBST([bindir], ['${exec_prefix}/bin'])
+AC_SUBST([sbindir], ['${exec_prefix}/sbin'])
+AC_SUBST([libexecdir], ['${exec_prefix}/libexec'])
+AC_SUBST([datarootdir], ['${prefix}/share'])
+AC_SUBST([datadir], ['${datarootdir}'])
+AC_SUBST([sysconfdir], ['${prefix}/etc'])
+AC_SUBST([localstatedir], ['${prefix}/var'])
+AC_SUBST([runstatedir], ['${localstatedir}/run'])
+AC_SUBST([includedir], ['${prefix}/include'])
+AC_SUBST([libdir], ['${exec_prefix}/lib'])
+
+dnl Silent rules
+AC_SUBST([AM_V], ['$(V)'])
+AC_SUBST([AM_DEFAULT_V], ['$(AM_DEFAULT_VERBOSITY)'])
+
+AC_OUTPUT

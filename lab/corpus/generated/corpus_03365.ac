@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_STRUCT_TM
+AC_PROG_AR
+AC_PRESERVE_HELP_ORDER
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

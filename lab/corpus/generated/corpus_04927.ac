@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_STDBOOL
+AC_PRESERVE_HELP_ORDER
+AC_CANONICAL_HOST
+AC_LANG_PUSH([C])
+AC_DEFINE([HAVE_STDLIB_H], [1])
+AC_OUTPUT

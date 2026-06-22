@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_FUNC_ALLOCA
+AC_CANONICAL_TARGET
+AC_LIBOBJ([fnmatch])
+AC_TYPE_UINT32_T
+AC_ARG_ENABLE([threads], AS_HELP_STRING([--enable-threads], [enable threading]))
+AC_PROG_CC
+AC_PROG_MKDIR_P
+AC_OUTPUT

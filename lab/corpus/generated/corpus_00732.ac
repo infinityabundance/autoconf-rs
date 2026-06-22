@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_CC_C_O
+AC_PROG_RANLIB
+AC_CHECK_TYPES([off_t mode_t])
+AC_LIBOBJ([fnmatch])
+AC_TYPE_UID_T
+AC_OUTPUT

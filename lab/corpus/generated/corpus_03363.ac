@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_TYPE_MODE_T
+AC_CHECK_LIB([m], [sin])
+AC_PROG_AR
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_FUNC_VPRINTF
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_PROG_CPP
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_TYPE_OFF_T
+AC_OUTPUT

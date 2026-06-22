@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_ARG_WITH([ssl], AS_HELP_STRING([--with-ssl], [use SSL]))
+AC_FUNC_ALLOCA
+AC_PROG_FGREP
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CANONICAL_BUILD
+AC_HEADER_STDBOOL
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_GREP
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_PROG_LN_S
+AC_OUTPUT

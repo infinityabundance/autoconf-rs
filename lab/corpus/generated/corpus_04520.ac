@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_INSTALL
+AC_HEADER_STDC
+AC_STRUCT_TM
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_EGREP
+AC_OUTPUT

@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_TIME
+AC_CHECK_LIB([m], [sin])
+AC_CHECK_FUNCS([malloc realloc])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

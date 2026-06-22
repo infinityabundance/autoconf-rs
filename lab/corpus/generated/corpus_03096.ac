@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_AWK
+AC_FUNC_FORK
+AC_TYPE_INT32_T
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_OUTPUT

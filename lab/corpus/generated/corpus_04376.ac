@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_GREP
+AC_FUNC_ALLOCA
+AC_CONFIG_HEADERS([config.h])
+AC_HEADER_STDBOOL
+AC_CANONICAL_BUILD
+AC_TYPE_INT32_T
+AC_OUTPUT

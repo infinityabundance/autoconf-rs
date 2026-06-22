@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_AWK
+AC_PROG_MAKE_SET
+AC_FUNC_ALLOCA
+AC_LANG_PUSH([C])
+AC_PROG_YACC
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_TYPE_MODE_T
+AC_OUTPUT

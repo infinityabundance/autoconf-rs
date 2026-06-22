@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_PROG_RANLIB
+AC_PROG_MAKE_SET
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_FUNC_ALLOCA
+AC_OUTPUT

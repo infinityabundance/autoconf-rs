@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_HEADER_STDBOOL
+AC_CHECK_FUNCS([strerror gettimeofday])
+AC_CHECK_LIB([m], [sin])
+AC_PREFIX_PROGRAM([gcc])
+AC_CANONICAL_TARGET
+AC_REPLACE_FUNCS([strdup getopt])
+AC_PROG_GREP
+AC_OUTPUT

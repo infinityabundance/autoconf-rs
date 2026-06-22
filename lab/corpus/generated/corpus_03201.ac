@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_DEFAULT([/usr/local])
+AC_HEADER_TIME
+AC_HEADER_STDBOOL
+AC_FUNC_MMAP
+AC_PROG_CPP
+AC_PROG_LEX
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

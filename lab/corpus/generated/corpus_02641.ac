@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_FUNC_MALLOC
+AC_PREREQ([2.59])
+AC_PROG_FGREP
+AC_PRESERVE_HELP_ORDER
+AC_LIBOBJ([fnmatch])
+AC_REVISION([$Revision: 1.0 $])
+AC_TYPE_OFF_T
+AC_OUTPUT

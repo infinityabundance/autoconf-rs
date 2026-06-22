@@ -1,0 +1,4 @@
+dnl G390: Language: Objective C
+AC_INIT([gnu-lang-Objective_C],[1.0])
+AC_LANG([Objective C])
+AC_OUTPUT

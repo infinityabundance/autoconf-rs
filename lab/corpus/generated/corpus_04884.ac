@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_TYPE_PID_T
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_GREP
+AC_PROG_EGREP
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

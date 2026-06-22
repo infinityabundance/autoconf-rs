@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_HEADER_STDBOOL
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_FUNCS([socket gethostbyname])
+AC_PROG_SED
+AC_PROG_MKDIR_P
+AC_OUTPUT

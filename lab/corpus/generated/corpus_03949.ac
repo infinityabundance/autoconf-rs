@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_CANONICAL_HOST
+AC_HEADER_STDC
+AC_STRUCT_TM
+AC_PROG_LEX
+AC_CONFIG_AUX_DIR([build-aux])
+AC_OUTPUT

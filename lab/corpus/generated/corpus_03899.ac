@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC_C_O
+AC_CHECK_LIB([m], [sin])
+AC_PROG_AWK
+AC_REVISION([$Revision: 1.0 $])
+AC_PROG_CXX
+AC_CANONICAL_BUILD
+AC_OUTPUT

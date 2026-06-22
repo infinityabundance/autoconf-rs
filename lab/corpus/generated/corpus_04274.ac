@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PREFIX_PROGRAM([gcc])
+AC_TYPE_INT32_T
+AC_CANONICAL_HOST
+AC_FUNC_MMAP
+AC_OUTPUT

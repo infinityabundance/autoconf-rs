@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_YACC
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_CC
+AC_OUTPUT

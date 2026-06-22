@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_LANG_PUSH([C++])
+AC_LANG_POP([C++])
+AC_HEADER_STDC
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_OUTPUT

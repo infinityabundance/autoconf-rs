@@ -1,0 +1,4 @@
+dnl Fill test 12
+AC_INIT([gnu-fill-12],[1.0])
+AC_PROG_CC
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_GREP
+AC_REVISION([$Revision: 1.0 $])
+AC_PREFIX_PROGRAM([gcc])
+AC_FUNC_ALLOCA
+AC_CHECK_FUNCS([malloc realloc])
+AC_LIBOBJ([fnmatch])
+AC_PROG_INSTALL
+AC_OUTPUT

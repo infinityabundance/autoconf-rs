@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PROG_YACC
+AC_PREFIX_PROGRAM([gcc])
+AC_FUNC_STRERROR_R
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_TYPE_INT32_T
+AC_PROG_FGREP
+AC_OUTPUT

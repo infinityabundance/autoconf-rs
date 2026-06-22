@@ -1,0 +1,5 @@
+dnl G97: Single header check: strings.h
+AC_INIT([gnu-hdr-strings_h],[1.0])
+AC_PROG_CC
+AC_CHECK_HEADER([strings.h])
+AC_OUTPUT

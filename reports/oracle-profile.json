@@ -1,0 +1,95 @@
+{
+  "kind": "gnu_autoconf_2_73",
+  "path": "/usr/bin/autoconf",
+  "version_output": "autoconf (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n",
+  "sha256": "a5e638ffdfd471fe8a799e7efab8e2eedc795cc1c60e5786b56763682af086e9",
+  "platform": "linux-x86_64",
+  "locale": "C",
+  "shell": "/bin/sh",
+  "os_release": "CachyOS",
+  "features": {
+    "supports_autom4te": true,
+    "supports_autoheader": true,
+    "supports_autoreconf": true,
+    "supports_aclocal": true,
+    "supports_autoscan": true,
+    "supports_autoupdate": true,
+    "supports_ifnames": true,
+    "warning_categories": [
+      "portability"
+    ],
+    "languages": [
+      "Autoconf",
+      "Autotest",
+      "M4sh",
+      "M4sugar"
+    ]
+  },
+  "admitted_at": "1781887458",
+  "receipt_registry": [
+    "AC.ORACLE.1"
+  ],
+  "m4_oracle": {
+    "path": "/usr/bin/m4",
+    "sha256": "2ac39828a6f543e8091347622d879ea01f8c80402bd624529696fba137c9f204",
+    "version_output": "m4 (GNU M4) 1.4.21\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Rene' Seindal.\n"
+  },
+  "binaries": {
+    "autom4te": {
+      "name": "autom4te",
+      "path": "/usr/bin/autom4te",
+      "sha256": "cf272b098d9ec0472a4f60474460d62af063371eb918f01f88f8f0d741ccec94",
+      "version_output": "autom4te (GNU Autoconf) 2.73\nFeatures: subsecond-mtime\n\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Akim Demaille.\n",
+      "smoke_passed": true
+    },
+    "autoheader": {
+      "name": "autoheader",
+      "path": "/usr/bin/autoheader",
+      "sha256": "56aaf94903de31866a599cbe0540ac6c3398c03cb3d6953945d732297a807d60",
+      "version_output": "autoheader (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Roland McGrath and Akim Demaille.\n",
+      "smoke_passed": true
+    },
+    "autoscan": {
+      "name": "autoscan",
+      "path": "/usr/bin/autoscan",
+      "sha256": "1287f347d1e230e835310689cf544cadca6e5b73df956c1766058a6db511fec5",
+      "version_output": "autoscan (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n",
+      "smoke_passed": true
+    },
+    "autoupdate": {
+      "name": "autoupdate",
+      "path": "/usr/bin/autoupdate",
+      "sha256": "6b52a06ef7c5d4c16e146c7422939719eae03442143e58ef9d8b59b2fa6766f0",
+      "version_output": "autoupdate (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n",
+      "smoke_passed": true
+    },
+    "ifnames": {
+      "name": "ifnames",
+      "path": "/usr/bin/ifnames",
+      "sha256": "e1a7dcadd660b8393fec6b49de765b12502fe84b910546793f9c28236276bfde",
+      "version_output": "ifnames (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Paul Eggert.\n",
+      "smoke_passed": true
+    },
+    "aclocal": {
+      "name": "aclocal",
+      "path": "/usr/bin/aclocal",
+      "sha256": "2856208d4f55edabc4406a223bae20480aa2059ea2f399daedaa4a0b08971d26",
+      "version_output": "aclocal (GNU automake) 1.18.1\nCopyright (C) 2025 Free Software Foundation, Inc.\nLicense GPLv2+: GNU GPL version 2 or later <https://gnu.org/licenses/gpl-2.0.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Tom Tromey <tromey@redhat.com>\n       and Alexandre Duret-Lutz <adl@gnu.org>.\n",
+      "smoke_passed": true
+    },
+    "autoconf": {
+      "name": "autoconf",
+      "path": "/usr/bin/autoconf",
+      "sha256": "a5e638ffdfd471fe8a799e7efab8e2eedc795cc1c60e5786b56763682af086e9",
+      "version_output": "autoconf (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n",
+      "smoke_passed": true
+    },
+    "autoreconf": {
+      "name": "autoreconf",
+      "path": "/usr/bin/autoreconf",
+      "sha256": "35f56ef2351b895055608288740c2adbda46318e35967993dcc26407cbc8b33d",
+      "version_output": "autoreconf (GNU Autoconf) 2.73\nCopyright (C) 2026 Free Software Foundation, Inc.\nLicense GPLv3+/Autoconf: GNU GPL version 3 or later\n<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David J. MacKenzie and Akim Demaille.\n",
+      "smoke_passed": true
+    }
+  }
+}

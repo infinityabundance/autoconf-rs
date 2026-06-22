@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PREFIX_PROGRAM([gcc])
+AC_LANG_PUSH([C])
+AC_PROG_GREP
+AC_PROG_AR
+AC_OUTPUT

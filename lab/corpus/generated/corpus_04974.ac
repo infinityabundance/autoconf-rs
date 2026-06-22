@@ -1,0 +1,10 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CXX
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CHECK_TYPES([off_t mode_t])
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [enable debugging]))
+AC_PROG_AWK
+AC_LIBOBJ([fnmatch])
+AC_TYPE_OFF_T
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

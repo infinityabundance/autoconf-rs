@@ -1,0 +1,30 @@
+{
+  "court": "AC.FUZZ.1",
+  "fuzz_config": {
+    "duration_secs": 284.433384207,
+    "iterations": 1000,
+    "rate_per_sec": 3.515761705638032,
+    "seed": "0x00acacac01f5f5f5"
+  },
+  "non_claims": [
+    "Divergences may exist for unimplemented macro surfaces",
+    "Oracle comparison limited to generated configure script, not execution",
+    "Fuzz only tests Layer 0 macro expansion, not real-project configure.ac"
+  ],
+  "oracle": {
+    "kind": "gnu_autoconf",
+    "path": "autoconf",
+    "version": "autoconf (GNU Autoconf) 2.73"
+  },
+  "positive_claim": "autoconf-rs survives 1000 fuzz iterations with 0 panics, 1000 stdout divergences (100.0000%).",
+  "results": {
+    "divergence_rate_pct": 100.0,
+    "divergences": 1000,
+    "exit_mismatches": 0,
+    "panics": 0,
+    "stdout_match_rate_pct": 0.0,
+    "total_iterations": 1000
+  },
+  "schema": "autoconf-rs-fuzz-receipt-v1",
+  "verdict": "admitted_divergence"
+}

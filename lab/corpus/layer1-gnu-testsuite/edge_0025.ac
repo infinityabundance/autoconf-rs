@@ -1,0 +1,3 @@
+AC_INIT([mcf25],[1.0])
+AC_CONFIG_FILES([a25 b26 c27 d28])
+AC_OUTPUT

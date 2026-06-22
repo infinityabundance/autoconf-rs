@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_CHECK_LIB([m], [sin])
+AC_PROG_GREP
+AC_TYPE_MODE_T
+AC_FUNC_FORK
+AC_OUTPUT

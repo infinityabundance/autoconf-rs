@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PREREQ([2.59])
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_LIB([m], [sin])
+AC_HEADER_STDC
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_AWK
+AC_OUTPUT

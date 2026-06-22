@@ -1,0 +1,4 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_TYPE_OFF_T
+AC_PROG_MKDIR_P
+AC_OUTPUT

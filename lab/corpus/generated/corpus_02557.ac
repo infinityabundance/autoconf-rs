@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_CC
+AC_HEADER_DIRENT
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_PROG_FGREP
+AC_PROG_EGREP
+AC_CONFIG_SUBDIRS([lib])
+AC_PROG_AR
+AC_OUTPUT

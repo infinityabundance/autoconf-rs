@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_HEADER_STDC
+AC_PREREQ([2.59])
+AC_PREFIX_PROGRAM([gcc])
+AC_LANG_PUSH([C])
+AC_PROG_CPP
+AC_FUNC_MALLOC
+AC_REPLACE_FUNCS([strdup getopt])
+AC_OUTPUT

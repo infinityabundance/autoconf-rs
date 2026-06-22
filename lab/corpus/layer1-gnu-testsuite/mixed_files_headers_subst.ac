@@ -1,0 +1,6 @@
+dnl G179: Mixed: files,headers,subst
+AC_INIT([gnu-mix-files_headers_subst],[1.0])
+AC_CONFIG_FILES([a b c])
+AC_CONFIG_HEADERS([h])
+AC_SUBST([X])
+AC_OUTPUT

@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_PROG_CPP
+AC_PROG_AR
+AC_CONFIG_MACRO_DIR([m4])
+AC_OUTPUT

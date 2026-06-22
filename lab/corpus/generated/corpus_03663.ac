@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0])
+AC_PROG_GREP
+AC_STRUCT_TIMEZONE
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_PROG_AWK
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_CHECK_TYPES([off_t mode_t])
+AC_PROG_YACC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_OUTPUT

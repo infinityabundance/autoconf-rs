@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_EGREP
+AC_FUNC_MALLOC
+AC_FUNC_FORK
+AC_PREFIX_PROGRAM([gcc])
+AC_OUTPUT

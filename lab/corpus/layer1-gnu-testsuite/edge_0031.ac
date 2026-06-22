@@ -1,0 +1,3 @@
+AC_INIT([n31],[1.0])
+AC_DEFINE([NUM],[1147])
+AC_OUTPUT

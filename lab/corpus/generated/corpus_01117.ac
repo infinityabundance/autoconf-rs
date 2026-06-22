@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_STRUCT_TIMEZONE
+AC_PROG_LEX
+AC_FUNC_MALLOC
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CANONICAL_HOST
+AC_FUNC_FORK
+AC_OUTPUT

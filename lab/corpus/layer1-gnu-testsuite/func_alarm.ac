@@ -1,0 +1,5 @@
+dnl G1: Single func check: alarm
+AC_INIT([gnu-alarm],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([alarm])
+AC_OUTPUT

@@ -1,0 +1,13 @@
+dnl G430: SUBST+DEFINE combo 19
+AC_INIT([gnu-sd-19],[1.0])
+AC_SUBST([S19_0], [v19_0])
+AC_SUBST([S19_1], [v19_1])
+AC_SUBST([S19_2], [v19_2])
+AC_SUBST([S19_3], [v19_3])
+AC_SUBST([S19_4], [v19_4])
+AC_DEFINE([D19_0], [0])
+AC_DEFINE([D19_1], [19])
+AC_DEFINE([D19_2], [38])
+AC_DEFINE([D19_3], [57])
+AC_DEFINE([D19_4], [76])
+AC_OUTPUT

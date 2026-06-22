@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_HEADER_STDBOOL
+AC_PROG_RANLIB
+AC_CHECK_FUNCS([malloc realloc])
+AC_FUNC_ALLOCA
+AC_OUTPUT

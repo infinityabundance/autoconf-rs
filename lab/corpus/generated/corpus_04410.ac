@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_PRESERVE_HELP_ORDER
+AC_FUNC_MALLOC
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_MSG_CHECKING([for something])
+AC_MSG_RESULT([yes])
+AC_PROG_RANLIB
+AC_OUTPUT

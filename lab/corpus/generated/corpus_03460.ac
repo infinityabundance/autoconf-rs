@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PROG_CXX
+AC_DEFINE([PACKAGE_NAME], ["pkg"])
+AC_HEADER_SYS_WAIT
+AC_OUTPUT

@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_COPYRIGHT([Copyright 2024 Example Corp])
+AC_STRUCT_TIMEZONE
+AC_PROG_FGREP
+AC_PREREQ([2.63])
+AC_TYPE_OFF_T
+AC_OUTPUT

@@ -1,0 +1,9 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_REVISION([$Revision: 1.0 $])
+AC_LANG_PUSH([C])
+AC_CHECK_LIB([m], [sin])
+AC_CANONICAL_BUILD
+AC_CHECK_HEADERS([unistd.h fcntl.h])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_STRUCT_ST_BLOCKS
+AC_OUTPUT

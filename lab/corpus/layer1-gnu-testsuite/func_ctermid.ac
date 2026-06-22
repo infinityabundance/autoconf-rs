@@ -1,0 +1,5 @@
+dnl G10: Single func check: ctermid
+AC_INIT([gnu-ctermid],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([ctermid])
+AC_OUTPUT

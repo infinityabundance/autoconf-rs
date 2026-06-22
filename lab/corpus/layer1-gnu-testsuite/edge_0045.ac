@@ -1,0 +1,3 @@
+AC_INIT([mcf45],[1.0])
+AC_CONFIG_FILES([a45 b46 c47 d48])
+AC_OUTPUT

@@ -1,0 +1,7 @@
+dnl G174: Mixed: cc,malloc,free,stdlib
+AC_INIT([gnu-mix-cc_malloc_free],[1.0])
+AC_PROG_CC
+AC_CHECK_FUNC([malloc])
+AC_CHECK_FUNC([free])
+AC_CHECK_HEADER([stdlib.h])
+AC_OUTPUT

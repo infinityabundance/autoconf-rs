@@ -1,0 +1,6 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg], [https://example.com])
+AC_PROG_FGREP
+AC_CONFIG_MACRO_DIR([m4])
+AC_TYPE_MODE_T
+AC_CONFIG_SRCDIR([src/main.c])
+AC_OUTPUT

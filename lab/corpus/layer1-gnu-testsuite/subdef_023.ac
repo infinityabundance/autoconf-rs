@@ -1,0 +1,13 @@
+dnl G434: SUBST+DEFINE combo 23
+AC_INIT([gnu-sd-23],[1.0])
+AC_SUBST([S23_0], [v23_0])
+AC_SUBST([S23_1], [v23_1])
+AC_SUBST([S23_2], [v23_2])
+AC_SUBST([S23_3], [v23_3])
+AC_SUBST([S23_4], [v23_4])
+AC_DEFINE([D23_0], [0])
+AC_DEFINE([D23_1], [23])
+AC_DEFINE([D23_2], [46])
+AC_DEFINE([D23_3], [69])
+AC_DEFINE([D23_4], [92])
+AC_OUTPUT

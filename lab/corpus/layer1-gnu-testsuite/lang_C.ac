@@ -1,0 +1,4 @@
+dnl G385: Language: C
+AC_INIT([gnu-lang-C],[1.0])
+AC_LANG([C])
+AC_OUTPUT

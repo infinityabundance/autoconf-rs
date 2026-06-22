@@ -1,0 +1,10 @@
+dnl vpath_build.ac — VPATH / out-of-tree build test
+dnl Court: CROSS.022 — VPATH / out-of-tree builds
+AC_INIT([vpath-test], [1.0], [vpath@example.com])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_HEADERS([config.h])
+AC_SUBST([VPATH_VAR], [vpath_value])
+AC_OUTPUT

@@ -1,0 +1,17 @@
+[package]
+name = "autoconf-rs-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Core M4 macro engine and shell script generator for autoconf-rs (clean-room forensic-parity)"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+m4-rs = "0.1"
+libc = "0.2"
+
+[dev-dependencies]
+autoconf-oracle-rs = { path = "../autoconf-oracle-rs" }

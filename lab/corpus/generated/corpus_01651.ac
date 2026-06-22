@@ -1,0 +1,11 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_TYPE_PID_T
+AC_TYPE_INT32_T
+AC_PREFIX_PROGRAM([gcc])
+AC_CANONICAL_HOST
+AC_REPLACE_FUNCS([strdup getopt])
+AC_CACHE_CHECK([for working alloca.h], [ac_cv_header_alloca_h],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <alloca.h>])],
+    [ac_cv_header_alloca_h=yes], [ac_cv_header_alloca_h=no])])
+AC_FUNC_STRERROR_R
+AC_OUTPUT

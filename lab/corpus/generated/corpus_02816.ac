@@ -1,0 +1,7 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_FUNC_STRERROR_R
+AC_CHECK_SIZEOF([long])
+AC_SUBST([PACKAGE_VERSION])
+AC_FUNC_ALLOCA
+AC_CHECK_TYPES([off_t mode_t])
+AC_OUTPUT

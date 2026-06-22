@@ -1,0 +1,8 @@
+AC_INIT([pkg], [1.0], [bug@example.com])
+AC_CHECK_MEMBERS([struct stat.st_blocks])
+AC_PROG_AWK
+AC_FUNC_MMAP
+AC_TYPE_MODE_T
+AC_REVISION([$Revision: 1.0 $])
+AC_CHECK_SIZEOF([long])
+AC_OUTPUT

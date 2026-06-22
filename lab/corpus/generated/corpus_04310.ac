@@ -1,0 +1,5 @@
+AC_INIT([pkg], [1.0], [bug@example.com], [pkg])
+AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE_NAME"])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_FUNC_FORK
+AC_OUTPUT
