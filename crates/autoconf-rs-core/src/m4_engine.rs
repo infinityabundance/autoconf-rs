@@ -2792,13 +2792,21 @@ mod tests {
             "generated configure must begin with the shebang, got: {:?}",
             &output[..output.len().min(60)]
         );
-        assert!(!output.contains("banner comment"), "leading .ac comments must be dropped (oracle behaviour)");
+        assert!(
+            !output.contains("banner comment"),
+            "leading .ac comments must be dropped (oracle behaviour)"
+        );
     }
 
     #[test]
     fn test_ensure_shebang_first_normalizer() {
         assert!(M4Engine::ensure_shebang_first("#! /bin/sh\nx\n".into()).starts_with("#! /bin/sh"));
-        assert_eq!(M4Engine::ensure_shebang_first("# junk\n#! /bin/sh\ny\n".into()), "#! /bin/sh\ny\n");
-        assert!(M4Engine::ensure_shebang_first("no shebang here".into()).starts_with("#! /bin/sh\n"));
+        assert_eq!(
+            M4Engine::ensure_shebang_first("# junk\n#! /bin/sh\ny\n".into()),
+            "#! /bin/sh\ny\n"
+        );
+        assert!(
+            M4Engine::ensure_shebang_first("no shebang here".into()).starts_with("#! /bin/sh\n")
+        );
     }
 }
