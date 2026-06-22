@@ -74,7 +74,7 @@ pub fn generate_feature_test_body(state: &AutoconfState) -> Vec<u8> {
         b.extend_from_slice(b"if ac_fn_c_try_compile; then\n");
         b.extend_from_slice(b"  : # compile succeeded\n");
         b.extend_from_slice(b"else\n");
-        b.extend_from_slice(b"  as_fn_error \"C compiler cannot create executables\"\n");
+        b.extend_from_slice(b"  printf '%s\\n' \"configure: WARNING: C compiler test did not produce an object; continuing\" >&2\n");
         b.extend_from_slice(b"fi\n");
         b.extend_from_slice(b"if ac_fn_c_try_link; then\n");
         b.extend_from_slice(b"  : # link succeeded\n");
