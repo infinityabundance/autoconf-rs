@@ -241,34 +241,33 @@ impl TraceLog {
                         tarname,
                         origin,
                     } => {
-                        let mut a = vec![format!("[{}]", package), format!("[{}]", version)];
-                        if let Some(b) = bug_report {
-                            a.push(format!("[{}]", b));
-                        }
-                        if let Some(t) = tarname {
-                            a.push(format!("[{}]", t));
-                        }
+                        let _ = (bug_report, tarname); // trace records package:version only
+                        let a = vec![format!("[{}]", package), format!("[{}]", version)];
                         ("AC_INIT", a, origin.file.as_str(), origin.line)
                     }
                     AutoconfEvent::Subst {
                         name,
-                        value: _,
-                        origin,
-                    } => (
-                        "AC_SUBST",
-                        vec![format!("[{}]", name)],
-                        origin.file.as_str(),
-                        origin.line,
-                    ),
-                    AutoconfEvent::Define {
-                        name,
                         value,
                         origin,
-                        ..
                     } => {
                         let mut a = vec![format!("[{}]", name)];
                         if let Some(v) = value {
                             a.push(format!("[{}]", v));
+                        }
+                        ("AC_SUBST", a, origin.file.as_str(), origin.line)
+                    }
+                    AutoconfEvent::Define {
+                        name,
+                        value,
+                        description,
+                        origin,
+                    } => {
+                        let mut a = vec![format!("[{}]", name)];
+                        if let Some(v) = value {
+                            a.push(format!("[{}]", v));
+                        }
+                        if let Some(d) = description {
+                            a.push(format!("[{}]", d));
                         }
                         ("AC_DEFINE", a, origin.file.as_str(), origin.line)
                     }
@@ -382,15 +381,17 @@ impl TraceLog {
                     ),
                     _ => return None,
                 };
-                let args_str = if args.is_empty() {
+                // Colon-delimited trace: file:line:MACRO:arg:arg... (args carry no surrounding [ ]).
+                let stripped: Vec<String> = args
+                    .iter()
+                    .map(|a| a.trim_start_matches('[').trim_end_matches(']').to_string())
+                    .collect();
+                let args_str = if stripped.is_empty() {
                     String::new()
                 } else {
-                    format!("({})", args.join(", "))
+                    format!(":{}", stripped.join(":"))
                 };
-                Some(format!(
-                    "m4trace:{}:{}: -1- {}{}",
-                    file, line, macro_name, args_str
-                ))
+                Some(format!("{}:{}:{}{}", file, line, macro_name, args_str))
             })
             .collect()
     }
