@@ -447,7 +447,7 @@ pub fn generate_m4sh_functions() -> Vec<u8> {
     // as_fn_append
     f.extend_from_slice(b"# as_fn_append VAR VALUE\n# ----------------------\n");
     f.extend_from_slice(b"# Append the text in VALUE to the end of the definition in VAR.\n");
-    f.extend_from_slice(b"as_fn_append ()\n{\n  eval ${1}=\\$${1}\\$${2}\n}\n\n");
+    f.extend_from_slice(b"as_fn_append ()\n{\n  eval $1=\\$$1\\$2\n}\n\n");
 
     // as_fn_arith
     f.extend_from_slice(b"# as_fn_arith ARG...\n# ------------------\n");

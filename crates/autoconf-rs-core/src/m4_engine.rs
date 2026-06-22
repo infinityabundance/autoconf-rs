@@ -120,7 +120,7 @@ impl M4Engine {
         // AC_CONFIG_SUBDIRS — configure subdirectories recursively
         self.engine.macro_table.define(
             b"AC_CONFIG_SUBDIRS",
-            b"# Configure subdirectories\nfor ac_subdir in $1; do\n  if test -d \"$srcdir/$ac_subdir\"; then\n    printf '%s\\n' \"$as_me: configuring in $ac_subdir\" >&5\n    mkdir -p \"$ac_subdir\" 2>/dev/null || :\n    (cd \"$ac_subdir\" && \"$srcdir/$ac_subdir/configure\" --cache-file=../config.cache --srcdir=\"$srcdir/$ac_subdir\" $ac_configure_args) || exit 1\n  fi\ndone\n",
+            b"# Configure subdirectories\nfor ac_subdir in $1; do\n  if test -d \"$srcdir/$ac_subdir\"; then\n    printf '%s\\n' \"$as_me: configuring in $ac_subdir\"\n    mkdir -p \"$ac_subdir\" 2>/dev/null || :\n    if test -f \"$srcdir/$ac_subdir/configure\"; then\n      (cd \"$ac_subdir\" && \"$srcdir/$ac_subdir/configure\" --cache-file=../config.cache --srcdir=\"$srcdir/$ac_subdir\" $ac_configure_args) || exit 1\n    fi\n  fi\ndone\n",
         );
 
         // AC_MSG_* — generate shell echo commands
