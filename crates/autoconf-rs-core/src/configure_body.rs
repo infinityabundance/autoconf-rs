@@ -454,6 +454,14 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     let version = state.package_version.as_deref().unwrap_or("0.0");
     let mut b = Vec::new();
 
+    // Standard config.log creation, the exit-trap that logs the cache/output variables, and the
+    // ac_compile/ac_link command setup — emitted before the feature tests, exactly as the oracle does.
+    let config_log = include_str!("templates/config_log.sh")
+        .replace("{NAME}", name)
+        .replace("{VERSION}", version);
+    b.extend_from_slice(config_log.as_bytes());
+    b.extend_from_slice(b"\n");
+
     // === ECHO detection, compiler vars ===
     b.extend_from_slice(
         b"# Determine whether it's possible to make 'echo' print without a newline.\n# These variables are no longer used directly by Autoconf, but are AC_SUBSTed\n",

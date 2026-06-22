@@ -560,6 +560,21 @@ pub fn generate_configure_prologue(
     h.extend_from_slice(b"ac_fn_c_try_cpp () {\n  if { (eval \"$ac_cpp conftest.$ac_ext\") 2>&5; }; then ac_retval=0; else ac_retval=1; fi\n  return $ac_retval\n}\n\n");
     // Exit/signal trap: clean up conftest debris on EXIT (and on INT/TERM), preserving the exit status.
     h.extend_from_slice(b"ac_clean_files=\nac_exit_trap () { ac_status=$?; rm -f conftest* conf$$* core 2>/dev/null; exit $ac_status; }\ntrap 'ac_exit_trap' 0  # 0 = EXIT\ntrap 'ac_status=1; ac_exit_trap' 1 2 13 15\n\n");
+    // Standard m4sh command-line option parsing (--prefix, --bindir, --enable/--with, env-var
+    // capture, srcdir handling) and the --help/--version reports. These are static boilerplate in
+    // every Autoconf configure; emitting them here makes the dynamic script handle options exactly
+    // like the oracle instead of silently ignoring them.
+    let opts = include_str!("templates/option_parsing.sh")
+        .replace("{NAME}", package_name)
+        .replace("{VERSION}", package_version)
+        .replace("{BUGREPORT}", bug);
+    h.extend_from_slice(opts.as_bytes());
+    let help = include_str!("templates/help_version.sh")
+        .replace("{NAME}", package_name)
+        .replace("{VERSION}", package_version)
+        .replace("{BUGREPORT}", bug);
+    h.extend_from_slice(help.as_bytes());
+    h.extend_from_slice(b"\n");
     h
 }
 
