@@ -1,0 +1,99 @@
+{
+  "schema": "autoconf-rs-survival-vm-aggregate-v1",
+  "court": "AC.SURVIVAL.TIER1.1",
+  "phase": "post-fix",
+  "purpose": "Re-run after the shebang-first fix (commit fa41cee), installed from the patched GitHub source.",
+  "install_source": "git: cargo install --git github.com/infinityabundance/autoconf-rs --rev fa41ceeed85d autoconf-rs-cli (PATCHED, rustup stable)",
+  "generated_utc": "2026-06-22T16:29:03Z",
+  "per_distro": [
+    {
+      "distro": "almalinux",
+      "detail": "AlmaLinux 9.8 (Olive Jaguar)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 27,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 23
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 4
+      },
+      "verdict": "PASS"
+    },
+    {
+      "distro": "debian",
+      "detail": "Debian GNU/Linux 13 (trixie)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 27,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 23
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 4
+      },
+      "verdict": "PASS"
+    },
+    {
+      "distro": "fedora",
+      "detail": "Fedora Linux 43 (Cloud Edition)",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 27,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 23
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 4
+      },
+      "verdict": "PASS"
+    },
+    {
+      "distro": "opensuse",
+      "detail": "openSUSE Leap 16.0",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 27,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 23
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 4
+      },
+      "verdict": "PASS"
+    },
+    {
+      "distro": "ubuntu",
+      "detail": "Ubuntu 24.04.4 LTS",
+      "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+      "survived": 27,
+      "tested": 27,
+      "tier1": {
+        "tested": 23,
+        "survived": 23
+      },
+      "tier2": {
+        "tested": 4,
+        "survived": 4
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "result": {
+    "survived": "27/27",
+    "tier1": "23/23",
+    "tier2": "4/4",
+    "pass_on_all_5": true
+  },
+  "remaining_failures": [],
+  "vs_prefix": "Pre-fix: 22/27 on all 5 (curl, openssl, sqlite, zlib, stress_02_nested failed shebang-first). Post-fix: 27/27 on all 5.",
+  "verdict": "PASS on all 5 distros (27/27)"
+}

@@ -31,13 +31,27 @@ before the shebang, so the shebang is not line 1.
 **Vs. the sealed claim:** `survival-receipt.json` claims 18/18 Tier1 + 4/4 Tier2 survive;
 runtime is **19/23 Tier1 + 3/4 Tier2**. The "survive" claim is not reproduced at runtime.
 
-## Status: FIXED
+## Status: FIXED — re-verified across all 5 distros (27/27)
 
-Fixed in `M4Engine::process` (`ensure_shebang_first`): the generated `configure` now
-always begins with `#! /bin/sh`, dropping leading `.ac` comment lines (matching the
-GNU Autoconf 2.73 oracle). After the fix the full corpus survives **27/27** locally;
-the per-VM receipts here are the pre-fix runtime evidence that found the defect.
-Re-run the harvest to regenerate post-fix receipts once a patched release is published.
+Fixed in `M4Engine::process` (`ensure_shebang_first`, commit `3f28caa`): the generated
+`configure` now always begins with `#! /bin/sh`, dropping leading `.ac` comment lines
+(matching the GNU Autoconf 2.73 oracle).
+
+The harvest was re-run on all 5 distros against the **patched** crate (installed from
+the GitHub source pinned to the fix commit, since the patch is not yet on crates.io).
+Post-fix receipts are in [`post-fix/`](post-fix/):
+
+| distro | survived | Tier1 | Tier2 | verdict |
+|--------|----------|-------|-------|---------|
+| Ubuntu 24.04.4 | 27/27 | 23/23 | 4/4 | PASS |
+| Debian 13 | 27/27 | 23/23 | 4/4 | PASS |
+| Fedora 43 | 27/27 | 23/23 | 4/4 | PASS |
+| AlmaLinux 9.8 | 27/27 | 23/23 | 4/4 | PASS |
+| openSUSE Leap 16.0 | 27/27 | 23/23 | 4/4 | PASS |
+
+All previously-failing fixtures (`curl`, `openssl`, `sqlite`, `zlib`,
+`stress_02_nested`) now survive on every distro. The top-level receipts in this
+directory remain as the **pre-fix** evidence that found the defect.
 
 ## Files
 

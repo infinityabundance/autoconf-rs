@@ -1,0 +1,17 @@
+{
+  "schema": "autoconf-rs-survival-vm-v1",
+  "court": "AC.SURVIVAL.TIER1.1",
+  "distro": "debian",
+  "distro_detail": "Debian GNU/Linux 13 (trixie)",
+  "host": "qemu-kvm (user-net)",
+  "install_source": "git: cargo install --git github.com/infinityabundance/autoconf-rs --rev fa41ceeed85d autoconf-rs-cli (PATCHED, rustup stable)",
+  "autoconf_version_string": "autoconf-rs 0.1.0",
+  "cargo_version": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "timestamp_utc": "2026-06-22T16:27:09Z",
+  "criteria": "shebang '#! /bin/sh' AND size>100 AND contains config.status|AC_OUTPUT",
+  "totals": { "tested": 27, "survived": 27, "failed": 0 },
+  "tier1": { "tested": 23, "survived": 23 },
+  "tier2": { "tested": 4, "survived": 4 },
+  "results": [ {"fixture":"autoreconf_chain","tier":1,"size":25474,"shebang":true,"output_stage":true,"survived":true},{"fixture":"bison","tier":1,"size":21624,"shebang":true,"output_stage":true,"survived":true},{"fixture":"coreutils","tier":1,"size":24066,"shebang":true,"output_stage":true,"survived":true},{"fixture":"curl","tier":1,"size":52865,"shebang":true,"output_stage":true,"survived":true},{"fixture":"diffutils","tier":1,"size":22148,"shebang":true,"output_stage":true,"survived":true},{"fixture":"findutils","tier":1,"size":22206,"shebang":true,"output_stage":true,"survived":true},{"fixture":"flex","tier":1,"size":21434,"shebang":true,"output_stage":true,"survived":true},{"fixture":"gawk","tier":1,"size":22000,"shebang":true,"output_stage":true,"survived":true},{"fixture":"grep","tier":1,"size":31665,"shebang":true,"output_stage":true,"survived":true},{"fixture":"gzip","tier":1,"size":21784,"shebang":true,"output_stage":true,"survived":true},{"fixture":"hello","tier":1,"size":29784,"shebang":true,"output_stage":true,"survived":true},{"fixture":"libtool","tier":1,"size":21564,"shebang":true,"output_stage":true,"survived":true},{"fixture":"make","tier":1,"size":22964,"shebang":true,"output_stage":true,"survived":true},{"fixture":"openssl","tier":1,"size":49187,"shebang":true,"output_stage":true,"survived":true},{"fixture":"patch","tier":1,"size":21423,"shebang":true,"output_stage":true,"survived":true},{"fixture":"pkgconfig","tier":1,"size":21382,"shebang":true,"output_stage":true,"survived":true},{"fixture":"readline","tier":1,"size":21489,"shebang":true,"output_stage":true,"survived":true},{"fixture":"sed","tier":1,"size":22475,"shebang":true,"output_stage":true,"survived":true},{"fixture":"sqlite","tier":1,"size":45622,"shebang":true,"output_stage":true,"survived":true},{"fixture":"tar","tier":1,"size":22301,"shebang":true,"output_stage":true,"survived":true},{"fixture":"texinfo","tier":1,"size":21459,"shebang":true,"output_stage":true,"survived":true},{"fixture":"wget","tier":1,"size":21250,"shebang":true,"output_stage":true,"survived":true},{"fixture":"zlib","tier":1,"size":38439,"shebang":true,"output_stage":true,"survived":true},{"fixture":"stress_01_many_checks","tier":2,"size":96037,"shebang":true,"output_stage":true,"survived":true},{"fixture":"stress_02_nested","tier":2,"size":19585,"shebang":true,"output_stage":true,"survived":true},{"fixture":"stress_03_fortran_full","tier":2,"size":26023,"shebang":true,"output_stage":true,"survived":true},{"fixture":"stress_04_massive","tier":2,"size":137326,"shebang":true,"output_stage":true,"survived":true} ],
+  "verdict": "PASS"
+}
