@@ -501,7 +501,7 @@ pub fn generate_m4sh_functions() -> Vec<u8> {
 pub fn generate_configure_prologue(
     package_name: &str,
     package_version: &str,
-    _bug: Option<&str>,
+    bug: Option<&str>,
 ) -> Vec<u8> {
     let mut h = Vec::new();
     h.extend_from_slice(b"#! /bin/sh\n");
@@ -529,6 +529,24 @@ pub fn generate_configure_prologue(
     h.extend_from_slice(&generate_m4sh_functions());
     h.extend_from_slice(b"# Sanitize environment\n");
     h.extend_from_slice(b"LC_ALL=C\nexport LC_ALL\nLANGUAGE=C\nexport LANGUAGE\n\nCDPATH=\n\n");
+    // Identity of this package (set near the top, as GNU Autoconf does). These shell vars carry the
+    // AC_INIT arguments through the rest of configure; PACKAGE_BUGREPORT is the third AC_INIT arg.
+    let bug = bug.unwrap_or("");
+    h.extend_from_slice(
+        format!(
+            "# Identity of this package.\n\
+             PACKAGE_NAME='{name}'\n\
+             PACKAGE_TARNAME='{name}'\n\
+             PACKAGE_VERSION='{ver}'\n\
+             PACKAGE_STRING='{name} {ver}'\n\
+             PACKAGE_BUGREPORT='{bug}'\n\
+             PACKAGE_URL=''\n\n",
+            name = package_name,
+            ver = package_version,
+            bug = bug
+        )
+        .as_bytes(),
+    );
     h
 }
 

@@ -81,20 +81,23 @@ impl M4Engine {
     /// This must be called before processing configure.ac so that
     /// AC_INIT, AC_OUTPUT, etc. are recognized and expanded.
     /// The macros are defined with their expansion bodies (shell script text).
+    /// Inert sentinels for AC_INIT / AC_OUTPUT, replaced with verbatim shell text after M4 expansion. They
+    /// contain no `$`, `[`, `]`, `(`, `)`, `,` or defined-macro substrings, so M4 passes them through intact.
+    const AC_INIT_MARK: &'static str = "@@AUTOCONFRS_PROLOGUE@@";
+    const AC_OUTPUT_MARK: &'static str = "@@AUTOCONFRS_BODY@@";
+
     fn register_autoconf_macros(&mut self) {
-        // AC_INIT — expands to the full configure script prologue.
-        // Shell $N variables are protected via ${N} syntax in m4sh_init.rs
-        // to prevent M4 from consuming them as macro arguments.
-        let name = self.state.package_name.as_deref().unwrap_or("unknown");
-        let version = self.state.package_version.as_deref().unwrap_or("0.0");
-        let prologue = crate::m4sh_init::generate_configure_prologue(name, version, None);
-
-        // Register AC_INIT with the prologue body
-        self.engine.macro_table.define(b"AC_INIT", &prologue);
-
-        // AC_OUTPUT — expands to the configure body
-        let body = crate::configure_body::generate_configure_body(&self.state);
-        self.engine.macro_table.define(b"AC_OUTPUT", &body);
+        // AC_INIT / AC_OUTPUT expand to FINAL shell text (the m4sh prologue and the configure body, with
+        // name/version already baked in by Rust). That text must be emitted VERBATIM, never re-scanned as
+        // M4 -- otherwise shell tokens collide with M4: `eval` -> the eval builtin -> `0`; `$@`/`$1` -> the
+        // macro's own args; a `*[\\/]*` glob -> stripped as a quote. Register inert sentinels here; process()
+        // substitutes the verbatim text after expansion (see AC_INIT_MARK / AC_OUTPUT_MARK).
+        self.engine
+            .macro_table
+            .define(b"AC_INIT", Self::AC_INIT_MARK.as_bytes());
+        self.engine
+            .macro_table
+            .define(b"AC_OUTPUT", Self::AC_OUTPUT_MARK.as_bytes());
 
         // AC_CONFIG_FILES — no output, side effect only (handled by pre-scan)
         self.engine.macro_table.define(b"AC_CONFIG_FILES", b"");
@@ -2060,6 +2063,39 @@ impl M4Engine {
         // Collect all diversion output in correct order (lower diversion → earlier)
         let diversion_output = self.diversions.collect_all();
         let m4_output = String::from_utf8_lossy(&diversion_output).to_string();
+
+        // Substitute the verbatim prologue/body for their inert sentinels. AC_INIT/AC_OUTPUT were registered
+        // as sentinels so M4 never mangles the final shell text (eval, $@, $1, `[...]` globs); we splice the
+        // real text in now, after expansion. Regenerated from the (prescan-populated) state.
+        let m4_output =
+            if m4_output.contains(Self::AC_INIT_MARK) || m4_output.contains(Self::AC_OUTPUT_MARK) {
+                let name = self
+                    .state
+                    .package_name
+                    .as_deref()
+                    .unwrap_or("unknown")
+                    .to_string();
+                let version = self
+                    .state
+                    .package_version
+                    .as_deref()
+                    .unwrap_or("0.0")
+                    .to_string();
+                let bug = self.state.bug_report.clone();
+                let prologue = String::from_utf8_lossy(
+                    &crate::m4sh_init::generate_configure_prologue(&name, &version, bug.as_deref()),
+                )
+                .into_owned();
+                let body = String::from_utf8_lossy(
+                    &crate::configure_body::generate_configure_body(&self.state),
+                )
+                .into_owned();
+                m4_output
+                    .replace(Self::AC_INIT_MARK, &prologue)
+                    .replace(Self::AC_OUTPUT_MARK, &body)
+            } else {
+                m4_output
+            };
         // M4 expansion output is the canonical configure script source.
         // Template dispatch is a fallback, not the primary path (NC.ADMIT.2 addressed).
 
