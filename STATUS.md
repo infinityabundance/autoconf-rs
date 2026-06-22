@@ -31,7 +31,7 @@
 | AC.LIBRARY.FUNCTIONS.1 (Function check macros) | sealed | 40/40 imp, 0 part, 0 miss. SEALED. 45 tests. 42 AC_FUNC_* macros + AC_CHECK_FUNC/*. Receipt: functions-receipt.json |
 | AC.LIBRARY.HEADERS.1 (Header/type/struct check macros) | sealed | 25/25 imp, 0 part, 0 miss. SEALED. 35 tests. AC_HEADER_*/AC_TYPE_*/AC_STRUCT_*. Receipt: headers-receipt.json |
 | AC.DIAG.1 (Diagnostics taxonomy) | sealed | 10/10 imp, 0 part, 0 miss. SEALED. 30 tests. WarningCategory, DiagnosticManager. Receipt: diagnostics-receipt.json |
-| AC.SURVIVAL.TIER1.1 (Tier 1 package survival) | sealed | 18/18 imp, 0 part, 0 miss. SEALED. 25 tests. 18/18 Tier 1 + 4/4 Tier 2 survive. Self-host passes. Receipt: survival-receipt. |
+| AC.SURVIVAL.TIER1.1 (Tier 1 package survival) | sealed | 18/18 imp, 0 part, 0 miss. SEALED + runtime-verified. 25 court tests. Runtime: 27/27 fixtures survive on 5 distros (Ubuntu/D |
 
 ## Surface Taxonomy
 

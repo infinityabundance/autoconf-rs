@@ -10,8 +10,8 @@ New here? Start with `docs/REVIEW-IN-10-MINUTES.md`.
 
 | Metric | Value |
 |--------|-------|
-| Phase | 6 — Honest Assessment — 101 sealed, 6 partial, 0 missing. Prescan + template dispatch with --pure-m4 escape hatch. |
-| Overall completion | **94.4%** |
+| Phase | 6 — Honest Assessment — 280/290 features implemented, 12/12 courts sealed. Prescan + template dispatch with --pure-m4 escape hatch. |
+| Overall completion | **96.6%** |
 | Oracle | GNU Autoconf 2.73 (admitted) |
 | Courts sealed | 12 |
 | Tests passing | 2288 |

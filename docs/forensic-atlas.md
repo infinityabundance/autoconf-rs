@@ -1,6 +1,6 @@
 # Forensic Surface Atlas — GNU Autoconf → autoconf-rs
 
-**Generated:** 1782146712
+**Generated:** 1782147835
 **Source:** `sources/docs/forensic-atlas.json`
 **Methodology:** Clean-room, black-box forensic parity. Zero GPL code.
 **Oracle:** GNU Autoconf 2.73

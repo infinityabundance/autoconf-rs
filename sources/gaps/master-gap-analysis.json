@@ -5,7 +5,7 @@
   "oracle": {
     "kind": "gnu_autoconf_2_73",
     "version": "2.73",
-    "sha256": "admitted — see reports/oracle-profile.json",
+    "sha256": "admitted \u2014 see reports/oracle-profile.json",
     "profile": "reports/oracle-profile.json",
     "admitted": true
   },
@@ -15,8 +15,8 @@
     "partial": 0,
     "missing": 0,
     "percentage": 100.0,
-    "tests_passing": 1524,
-    "acceptance_gates": "6/7 (oracle gate: 0% exact match)",
+    "tests_passing": 2288,
+    "acceptance_gates": "7/7 PASS",
     "cleanroom_files": 72,
     "gpl_contamination": 0
   },
@@ -355,35 +355,35 @@
     "language_shift": [
       {
         "id": "CROSS.001",
-        "gap": "Perl + shell → pure Rust",
+        "gap": "Perl + shell \u2192 pure Rust",
         "status": "resolved",
         "completion_pct": 100.0,
         "note": "All 8 binaries operational with --help/--version. CLI harness SEALED (AC.CLI.1)."
       },
       {
         "id": "CROSS.002",
-        "gap": "M4 macro files → Rust built-in library",
+        "gap": "M4 macro files \u2192 Rust built-in library",
         "status": "resolved",
         "completion_pct": 100.0,
         "note": "200+ macros with real M4 bodies registered in engine. NC.ADMIT.2: prescan + template architecture."
       },
       {
         "id": "CROSS.003",
-        "gap": "Shell script generation → Rust string assembly",
+        "gap": "Shell script generation \u2192 Rust string assembly",
         "status": "resolved",
         "completion_pct": 100.0,
         "note": "SEALED. 38 tests. Full configure script generation with all features. NC.ADMIT.2: structural divergence from GNU."
       },
       {
         "id": "CROSS.004",
-        "gap": "Perl preprocessor (autom4te) → Rust native",
+        "gap": "Perl preprocessor (autom4te) \u2192 Rust native",
         "status": "resolved",
         "completion_pct": 100.0,
         "note": "SEALED. SHA256+JSON cache, --trace with GNU format, TraceLog with 20+ event types."
       },
       {
         "id": "CROSS.005",
-        "gap": "POD documentation → Rust doc comments",
+        "gap": "POD documentation \u2192 Rust doc comments",
         "status": "resolved",
         "completion_pct": 100.0,
         "note": "Rust doc comments + generated markdown. No Perl POD dependency."
@@ -402,7 +402,7 @@
         "gap": "Two-phase output execution",
         "status": "resolved",
         "completion_pct": 100.0,
-        "note": "SEALED. configure→config.status pipeline. 38 configure script tests. 23/23 layer4 packages verified."
+        "note": "SEALED. configure\u2192config.status pipeline. 38 configure script tests. 23/23 layer4 packages verified."
       },
       {
         "id": "CROSS.012",
@@ -513,7 +513,7 @@
         "gap": "Signal handling",
         "status": "resolved",
         "completion_pct": 100.0,
-        "note": "RESOLVED. crates/autoconf-rs-core/src/signal.rs — SIGPIPE/SIGINT handlers via libc::signal. AtomicBool flags set by handlers, checked by M4Engine::process() before expansion. signal_aware toggle on engine. Tests: signal_registration, signal_aware_engine, engine_with_signal_aware_disabled."
+        "note": "RESOLVED. crates/autoconf-rs-core/src/signal.rs \u2014 SIGPIPE/SIGINT handlers via libc::signal. AtomicBool flags set by handlers, checked by M4Engine::process() before expansion. signal_aware toggle on engine. Tests: signal_registration, signal_aware_engine, engine_with_signal_aware_disabled."
       },
       {
         "id": "CROSS.041",

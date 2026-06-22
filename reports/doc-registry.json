@@ -1,30 +1,30 @@
 {
   "schema": "autoconf-rs-doc-registry-v1",
-  "generated_at": "1782146712",
+  "generated_at": "1782147835",
   "documents": [
     {
       "path": "docs/negative-capabilities.md",
-      "sha256": "1ff9ce9e171e771d688cd7f4456c42fabc1930594b8318e0b712477be6572b4c",
+      "sha256": "607b6f3f654d89198443f3a925a3489f90c6b8d402acfd52f4ab023b0b687cb0",
       "sources": {
         "sources/negcaps/structured-negative-capabilities.json": "8c65e71144d03b8ca0a5b4d3a35ec80bcd53575dc6bf91e6f1b18180603512db"
       },
-      "dsse_signature": "601ed36a5c7f95f088db85504096dcde41ad73f88d40a669b123df687f387f06"
+      "dsse_signature": "a00135a4ac1468cb0bcf692ed4bbfc5ad89a1fdfb44cd8ea9ed86f84b658bd64"
     },
     {
       "path": "reports/FORENSIC-GAP-ANALYSIS.md",
-      "sha256": "6825069e8d16574f54c34669a3bde9ec210c659d35ed6c4856d4cc250cf6cd03",
+      "sha256": "1a60d4cd8f8c01d14e6a10c856fe9de7000e944676f5c11d358fca5cc944db3d",
       "sources": {
-        "sources/gaps/master-gap-analysis.json": "db3e51cbfe4795bb7c5aab427d0dae1647616cf46363eba478fc8056210062d9"
+        "sources/gaps/master-gap-analysis.json": "5c76db99f9259ab800ffb0c0eb88039f5672f5f28af42627e0ea3329ee83bafe"
       },
-      "dsse_signature": "c88375e20b7e851a791b4728997fb28fc03cce8eb577407d6de24ce0a8978b34"
+      "dsse_signature": "2267f0d75bbf1bb086472a1ce2df9b4ef919db5d9c819a199bac5061245faadc"
     },
     {
       "path": "reports/NEEDLE-REPORT.md",
-      "sha256": "aa46fb8fd9bf3284bee9fbb4bde803f8ce5ebd8a1af5e7524ce4154747992078",
+      "sha256": "a38b8031f1863aca4dc6a745e3bdc7ca4da2139b003958a70f85820883d3c88d",
       "sources": {
-        "sources/gaps/needle-metrics.json": "19db6c7492b4cbfaa9fa86089b53c58882e6425ee2a61d3d721f2e9c644f4a32"
+        "sources/gaps/needle-metrics.json": "08c5f1673e646d04aa53661ab583e602165184c277d6f99b1a1d0bb91b0f7fc8"
       },
-      "dsse_signature": "55816f81cca662c9b1f72ccb1960038c82b48036a5356bcf00be2f07afe29808"
+      "dsse_signature": "664215d21854b33a229554fed6189819428f174e97c0b42507cf7b065b382880"
     },
     {
       "path": "reports/claim-ladder.json",
@@ -36,35 +36,35 @@
     },
     {
       "path": "docs/REVIEW-IN-10-MINUTES.md",
-      "sha256": "01e6936ba597641c649922219ed9d8a18b6bd483bde9e3654f572f6fce3da683",
+      "sha256": "95ecd14874d4b51be0ac07008c1cdac7127ab66c3809b86fc78d79a3be4f1b54",
       "sources": {
-        "generated": "d415947df447bc370f7bcfbb9773da69c15a5992293c5e320a62af30745a58a8"
+        "generated": "74a8fb60339a68dd5b1634ebc47a92c96484439c7c2aa021f745abc5489cddd7"
       },
-      "dsse_signature": "e23cdd589886d91edfdbca9a9c3323c07c5768a9463302adfd98e9a9b30332f7"
+      "dsse_signature": "6db613fecc3bd2207c7ecd93c018644b72f09c7a282881eeb515c531dd941e6e"
     },
     {
       "path": "STATUS.md",
-      "sha256": "305b7657694941d4d6c331d676f16a612ff525db3f0f2e645410f008b67288c5",
+      "sha256": "0c29ae1bbc142bae194b77d6c4d68bbbfef381fd33e2b8a28aaf8fe39258c7cb",
       "sources": {
-        "generated": "d415947df447bc370f7bcfbb9773da69c15a5992293c5e320a62af30745a58a8"
+        "generated": "74a8fb60339a68dd5b1634ebc47a92c96484439c7c2aa021f745abc5489cddd7"
       },
-      "dsse_signature": "6063a743e56ec1684d7ece34252d98e2c41d1656818e0991a8b20d388a181659"
+      "dsse_signature": "1051599279cb83ceb0d70d6b09a8a19c9ae84230e2b35eb7ce6b9fbca9fff3af"
     },
     {
       "path": "docs/forensic-atlas.md",
-      "sha256": "0e1964b7009cb999b95509e45b8c2f4674076cfc595c05387495a31cc4482039",
+      "sha256": "d21594b35371bbdbf29b04a1b9d5cdcbbdcfeeaa08e945273b18ecae9284a9b9",
       "sources": {
         "sources/docs/forensic-atlas.json": "6376efa273a3c9f719348fa95a738eefcc656ebe510109f9e669352754647799"
       },
-      "dsse_signature": "3b9a5d7449057a78c048ff0ef885de5ed88a2e35cac5b0d069bf80d2f3a5cde3"
+      "dsse_signature": "9235c548052770fca901cd925a2eae05e3be79d38c25246da12908399706c77e"
     },
     {
       "path": "README.md",
-      "sha256": "e5a6cfaf03242d1e7a9c0d0693c7a76c7fecc62cc58a05d33c57d4f499b61ff8",
+      "sha256": "b7ef4a9348838d7c972ff7e1bbeb66ea7f9c0ceadffb16460d5274fd61230d4c",
       "sources": {
-        "sources/docs/status.json": "529cd9f60379d56dc4732f5f69cb8bcbba83a5a48d13ce9074ea12f2fc244e3e"
+        "sources/docs/status.json": "66482a3cf94a529f2f07b8a90aa216ed1dc12de694e274835f54b9af699fb48f"
       },
-      "dsse_signature": "9c5b2f746f24d7990f4457f16e823d50a34258bac084710a4f46b4cfdb3ac8ad"
+      "dsse_signature": "a4c0fbe9ded26bde3ade7199e45db8903270fbadf06926086f181755d5a116a5"
     }
   ]
 }

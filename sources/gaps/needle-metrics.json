@@ -141,7 +141,7 @@
       "missing": 0,
       "percentage": 100.0,
       "sealed": true,
-      "note": "SEALED. 25 tests. 18/18 Tier 1 + 4/4 Tier 2 survive. Self-host passes. Receipt: survival-receipt.json"
+      "note": "SEALED + runtime-verified. 25 court tests. Runtime: 27/27 fixtures survive on 5 distros (Ubuntu/Debian/Fedora/AlmaLinux/openSUSE), Tier1 23/23, Tier2 4/4. Self-host passes. Receipts: reports/vm-survival-receipts/."
     }
   ],
   "surface_taxonomy": {
@@ -196,7 +196,7 @@
         "status": "SEALED. 38 tests."
       }
     ],
-    "total": 290,
+    "total": 279,
     "overall_implemented_pct": 100
   }
 }
