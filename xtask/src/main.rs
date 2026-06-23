@@ -134,7 +134,13 @@ fn run_check() -> ExitCode {
     // gate deterministic; every test still runs and must pass (no test is ignored or weakened).
     let test = Command::new("cargo")
         .args([
-            "test", "--all", "--", "--skip", "test_runtime", "--skip", "test_layer4",
+            "test",
+            "--all",
+            "--",
+            "--skip",
+            "test_runtime",
+            "--skip",
+            "test_layer4",
         ])
         .status();
     let rt = Command::new("cargo")

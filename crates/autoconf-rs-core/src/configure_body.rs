@@ -584,7 +584,7 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     .iter()
     .map(|s| s.to_string())
     .collect();
-    for (var, _) in &state.substitutions {
+    for var in state.substitutions.keys() {
         if !names.contains(var) {
             names.push(var.clone());
         }
