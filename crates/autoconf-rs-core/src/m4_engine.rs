@@ -104,6 +104,20 @@ impl M4Engine {
 
         // AC_CONFIG_HEADERS — no output
         self.engine.macro_table.define(b"AC_CONFIG_HEADERS", b"");
+        // AC_CONFIG_HEADER (older alias) + Automake/libtool macros: recognized so they are
+        // consumed (no literal leftover -> shell syntax error). Their AC_SUBST surface is
+        // defaulted in config.status (see shell_gen STD_VAR_*).
+        for m in [
+            "AC_CONFIG_HEADER", "AC_CONFIG_MACRO_DIR", "AC_CONFIG_MACRO_DIRS", "AC_CONFIG_AUX_DIR",
+            "AC_CONFIG_TESTDIR", "AM_INIT_AUTOMAKE", "AM_MAINTAINER_MODE", "AM_SILENT_RULES",
+            "AM_PROG_AR", "AM_PROG_CC_C_O", "AM_PROG_LEX", "AM_PROG_LIBTOOL", "AM_PROG_INSTALL_STRIP",
+            "AM_PROG_MKDIR_P", "AM_SANITY_CHECK", "AM_SET_DEPDIR", "AM_DEP_TRACK",
+            "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_RUN_LOG", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
+            "AM_GNU_GETTEXT_VERSION", "AM_ICONV", "LT_INIT", "AC_PROG_LIBTOOL", "LT_LANG",
+            "LT_PREREQ", "AM_CONDITIONAL",
+        ] {
+            self.engine.macro_table.define(m.as_bytes(), b"");
+        }
 
         // AC_SUBST — no output
         self.engine.macro_table.define(b"AC_SUBST", b"");

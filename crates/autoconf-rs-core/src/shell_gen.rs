@@ -7,6 +7,48 @@
 //! Receipt family: AC.SHELL.*
 //! Status: Phase 5 — full configure generation with shell sanitization (panel mandate).
 
+/// Standard build-variable defaults emitted inside config.status's `substitute()` so that the
+/// Automake-generated Makefile.in's `@VAR@` references resolve. Without these, config.status left
+/// `@CC@`/`@AR@`/`@top_srcdir@`/`@SET_MAKE@`/... literal -> `make` aborted ("missing separator").
+/// Functional values (cc/ar/...) suffice for `make`; install-time vars use the conventional forms.
+const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
+  : ${prefix=/usr/local}; : ${exec_prefix=$prefix}
+  test -n "${top_srcdir:-}" || top_srcdir=$srcdir
+  test -n "${top_builddir:-}" || top_builddir=.
+  builddir=.
+  abs_srcdir=`cd "$srcdir" 2>/dev/null && pwd || pwd`
+  abs_builddir=`pwd`; abs_top_srcdir=$abs_srcdir; abs_top_builddir=$abs_builddir
+  : ${CC=cc}; : ${CFLAGS=-g -O2}; : ${CPPFLAGS=}; : ${LDFLAGS=}; : ${LIBS=}
+  : ${CXX=c++}; : ${CXXFLAGS=-g -O2}; CPP="$CC -E"
+  : ${AR=ar}; : ${RANLIB=ranlib}; : ${STRIP=strip}; : ${AWK=awk}; : ${LN_S=ln -s}
+  OBJEXT=o; EXEEXT=; SET_MAKE=; am__leading_dot=.
+  : ${SHELL=/bin/sh}; MKDIR_P="mkdir -p"; DEPDIR=.deps
+  INSTALL="$abs_srcdir/install-sh -c"; INSTALL_PROGRAM='${INSTALL}'; INSTALL_DATA='${INSTALL} -m 644'; INSTALL_SCRIPT='${INSTALL}'
+  DEFS=; ECHO_C=; ECHO_N=; ECHO_T=; LIBTOOL=; LIBOBJS=; LTLIBOBJS=; ALLOCA=
+  build=x86_64-pc-linux-gnu; host=$build; target=$build
+  build_alias=; host_alias=; target_alias=
+  build_cpu=x86_64; build_vendor=pc; build_os=linux-gnu
+  host_cpu=x86_64; host_vendor=pc; host_os=linux-gnu
+  configure_input="Generated from Makefile.in by autoconf-rs."
+  bindir='${exec_prefix}/bin'; sbindir='${exec_prefix}/sbin'; libexecdir='${exec_prefix}/libexec'
+  datarootdir='${prefix}/share'; datadir='${datarootdir}'; sysconfdir='${prefix}/etc'
+  sharedstatedir='${prefix}/com'; localstatedir='${prefix}/var'; runstatedir='${localstatedir}/run'
+  includedir='${prefix}/include'; oldincludedir=/usr/include; libdir='${exec_prefix}/lib'
+  infodir='${datarootdir}/info'; localedir='${datarootdir}/locale'; mandir='${datarootdir}/man'
+  docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'; htmldir='${docdir}'; dvidir='${docdir}'
+  pdfdir='${docdir}'; psdir='${docdir}'
+  lispdir='${datarootdir}/emacs/site-lisp'; pkgpyexecdir=; pkgpythondir=; pyexecdir=; pythondir=
+  AMDEP_TRUE=; AMDEP_FALSE='#'; am__include=include; am__quote=; am__isrc=; am__nodep=
+  am__fastdepCC_TRUE=; am__fastdepCC_FALSE='#'; am__fastdepCXX_TRUE=; am__fastdepCXX_FALSE='#'
+  ACLOCAL=:; AUTOCONF=:; AUTOMAKE=:; AUTOHEADER=:; MAKEINFO=:; install_sh="$INSTALL"
+  AMTAR=tar; am__tar='tar cf - .'; am__untar='tar xf -'; CTAGS=ctags; ETAGS=etags; CSCOPE=cscope
+  ACLOCAL_AMFLAGS=; MAINT='#'; MAINTAINER_MODE_TRUE='#'; MAINTAINER_MODE_FALSE=
+"#;
+
+/// The sed expressions for the standard build variables (double-quoted so the values set by
+/// STD_VAR_DEFAULTS expand when config.status runs). Appended to config.status's `substitute()` sed.
+const STD_VAR_SED: &str = r#" -e "s|@top_srcdir@|$top_srcdir|g" -e "s|@top_builddir@|$top_builddir|g" -e "s|@builddir@|$builddir|g" -e "s|@abs_srcdir@|$abs_srcdir|g" -e "s|@abs_builddir@|$abs_builddir|g" -e "s|@abs_top_srcdir@|$abs_top_srcdir|g" -e "s|@abs_top_builddir@|$abs_top_builddir|g" -e "s|@CC@|$CC|g" -e "s|@CFLAGS@|$CFLAGS|g" -e "s|@CPPFLAGS@|$CPPFLAGS|g" -e "s|@LDFLAGS@|$LDFLAGS|g" -e "s|@LIBS@|$LIBS|g" -e "s|@CXX@|$CXX|g" -e "s|@CXXFLAGS@|$CXXFLAGS|g" -e "s|@CPP@|$CPP|g" -e "s|@AR@|$AR|g" -e "s|@ARFLAGS@|cr|g" -e "s|@RANLIB@|$RANLIB|g" -e "s|@STRIP@|$STRIP|g" -e "s|@AWK@|$AWK|g" -e "s|@LN_S@|$LN_S|g" -e "s|@OBJEXT@|$OBJEXT|g" -e "s|@EXEEXT@|$EXEEXT|g" -e "s|@SET_MAKE@|$SET_MAKE|g" -e "s|@SHELL@|$SHELL|g" -e "s|@MKDIR_P@|$MKDIR_P|g" -e "s|@DEPDIR@|$DEPDIR|g" -e "s|@INSTALL@|$INSTALL|g" -e "s|@INSTALL_PROGRAM@|$INSTALL_PROGRAM|g" -e "s|@INSTALL_DATA@|$INSTALL_DATA|g" -e "s|@INSTALL_SCRIPT@|$INSTALL_SCRIPT|g" -e "s|@am__leading_dot@|$am__leading_dot|g" -e "s|@DEFS@|$DEFS|g" -e "s|@ECHO_C@|$ECHO_C|g" -e "s|@ECHO_N@|$ECHO_N|g" -e "s|@ECHO_T@|$ECHO_T|g" -e "s|@LIBTOOL@|$LIBTOOL|g" -e "s|@LIBOBJS@|$LIBOBJS|g" -e "s|@LTLIBOBJS@|$LTLIBOBJS|g" -e "s|@ALLOCA@|$ALLOCA|g" -e "s|@build@|$build|g" -e "s|@host@|$host|g" -e "s|@target@|$target|g" -e "s|@build_alias@|$build_alias|g" -e "s|@host_alias@|$host_alias|g" -e "s|@target_alias@|$target_alias|g" -e "s|@build_cpu@|$build_cpu|g" -e "s|@build_vendor@|$build_vendor|g" -e "s|@build_os@|$build_os|g" -e "s|@host_cpu@|$host_cpu|g" -e "s|@host_vendor@|$host_vendor|g" -e "s|@host_os@|$host_os|g" -e "s|@configure_input@|$configure_input|g" -e "s|@bindir@|$bindir|g" -e "s|@sbindir@|$sbindir|g" -e "s|@libexecdir@|$libexecdir|g" -e "s|@datarootdir@|$datarootdir|g" -e "s|@datadir@|$datadir|g" -e "s|@sysconfdir@|$sysconfdir|g" -e "s|@sharedstatedir@|$sharedstatedir|g" -e "s|@localstatedir@|$localstatedir|g" -e "s|@runstatedir@|$runstatedir|g" -e "s|@includedir@|$includedir|g" -e "s|@oldincludedir@|$oldincludedir|g" -e "s|@libdir@|$libdir|g" -e "s|@infodir@|$infodir|g" -e "s|@localedir@|$localedir|g" -e "s|@mandir@|$mandir|g" -e "s|@docdir@|$docdir|g" -e "s|@htmldir@|$htmldir|g" -e "s|@dvidir@|$dvidir|g" -e "s|@pdfdir@|$pdfdir|g" -e "s|@psdir@|$psdir|g" -e "s|@lispdir@|$lispdir|g" -e "s|@AMDEP_TRUE@|$AMDEP_TRUE|g" -e "s|@AMDEP_FALSE@|$AMDEP_FALSE|g" -e "s|@am__include@|$am__include|g" -e "s|@am__quote@|$am__quote|g" -e "s|@am__isrc@|$am__isrc|g" -e "s|@am__nodep@|$am__nodep|g" -e "s|@am__fastdepCC_TRUE@|$am__fastdepCC_TRUE|g" -e "s|@am__fastdepCC_FALSE@|$am__fastdepCC_FALSE|g" -e "s|@am__fastdepCXX_TRUE@|$am__fastdepCXX_TRUE|g" -e "s|@am__fastdepCXX_FALSE@|$am__fastdepCXX_FALSE|g" -e "s|@ACLOCAL@|$ACLOCAL|g" -e "s|@AUTOCONF@|$AUTOCONF|g" -e "s|@AUTOMAKE@|$AUTOMAKE|g" -e "s|@AUTOHEADER@|$AUTOHEADER|g" -e "s|@MAKEINFO@|$MAKEINFO|g" -e "s|@install_sh@|$install_sh|g" -e "s|@AMTAR@|$AMTAR|g" -e "s|@am__tar@|$am__tar|g" -e "s|@am__untar@|$am__untar|g" -e "s|@CTAGS@|$CTAGS|g" -e "s|@ETAGS@|$ETAGS|g" -e "s|@CSCOPE@|$CSCOPE|g" -e "s|@ACLOCAL_AMFLAGS@|$ACLOCAL_AMFLAGS|g" -e "s|@MAINT@|$MAINT|g" -e "s|@MAINTAINER_MODE_TRUE@|$MAINTAINER_MODE_TRUE|g" -e "s|@MAINTAINER_MODE_FALSE@|$MAINTAINER_MODE_FALSE|g" -e "s|@pkgpyexecdir@|$pkgpyexecdir|g" -e "s|@pkgpythondir@|$pkgpythondir|g" -e "s|@pyexecdir@|$pyexecdir|g" -e "s|@pythondir@|$pythondir|g""#;
+
 /// Generates a configure shell script from parsed Autoconf input.
 pub struct ShellGenerator;
 
@@ -201,17 +243,21 @@ pub fn generate_dynamic_configure(
     s.push_str("substitute() {\n");
     s.push_str("  # Create output directory if needed\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
+    s.push_str(STD_VAR_DEFAULTS);
     s.push_str("  sed");
     // Always substitute standard Autoconf variables
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
     s.push_str(&format!(" -e 's|@PACKAGE_STRING@|{} {}|g'", name, version));
     s.push_str(&format!(" -e 's|@PACKAGE_TARNAME@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@PACKAGE@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@VERSION@|{}|g'", version));
     s.push_str(" -e 's|@PACKAGE_BUGREPORT@||g'");
     s.push_str(" -e 's|@PACKAGE_URL@||g'");
     s.push_str(" -e 's|@srcdir@|$srcdir|g'");
     s.push_str(" -e 's|@prefix@|$prefix|g'");
     s.push_str(" -e 's|@exec_prefix@|$exec_prefix|g'");
+    s.push_str(STD_VAR_SED);
     // Explicit substitutions (always include, even for empty values)
     for (var, value) in &state.substitutions {
         let escaped_val = if value.is_empty() {
@@ -285,17 +331,21 @@ pub fn generate_dynamic_configure(
     s.push_str("fi\n");
     s.push_str("substitute() {\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
+    s.push_str(STD_VAR_DEFAULTS);
     s.push_str("  sed");
     // Always substitute standard Autoconf variables
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
     s.push_str(&format!(" -e 's|@PACKAGE_STRING@|{} {}|g'", name, version));
     s.push_str(&format!(" -e 's|@PACKAGE_TARNAME@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@PACKAGE@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@VERSION@|{}|g'", version));
     s.push_str(" -e 's|@PACKAGE_BUGREPORT@||g'");
     s.push_str(" -e 's|@PACKAGE_URL@||g'");
     s.push_str(" -e 's|@srcdir@|$srcdir|g'");
     s.push_str(" -e 's|@prefix@|$prefix|g'");
     s.push_str(" -e 's|@exec_prefix@|$exec_prefix|g'");
+    s.push_str(STD_VAR_SED);
     // Explicit substitutions (always include, even for empty values)
     for (var, value) in &state.substitutions {
         let escaped_val = if value.is_empty() {
@@ -341,11 +391,14 @@ pub fn generate_config_status_section(
     ));
     s.push_str("substitute() {\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
+    s.push_str(STD_VAR_DEFAULTS);
     s.push_str("  sed");
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
     s.push_str(&format!(" -e 's|@PACKAGE_STRING@|{} {}|g'", name, version));
     s.push_str(&format!(" -e 's|@PACKAGE_TARNAME@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@PACKAGE@|{}|g'", name));
+    s.push_str(&format!(" -e 's|@VERSION@|{}|g'", version));
     s.push_str(&format!(
         " -e 's|@PACKAGE_BUGREPORT@|{}|g'",
         state.bug_report.as_deref().unwrap_or("")
@@ -354,6 +407,7 @@ pub fn generate_config_status_section(
     s.push_str(" -e 's|@srcdir@|$srcdir|g'");
     s.push_str(" -e 's|@prefix@|$prefix|g'");
     s.push_str(" -e 's|@exec_prefix@|$exec_prefix|g'");
+    s.push_str(STD_VAR_SED);
     for (var, value) in &state.substitutions {
         let escaped_val = if value.is_empty() {
             match var.as_str() {
