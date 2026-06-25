@@ -115,6 +115,20 @@ impl M4Engine {
             "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_RUN_LOG", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
             "AM_GNU_GETTEXT_VERSION", "AM_ICONV", "LT_INIT", "AC_PROG_LIBTOOL", "LT_LANG",
             "LT_PREREQ", "AM_CONDITIONAL",
+            // Common pure-setup Autoconf macros that otherwise leak literal (their vars/defines are
+            // defaulted in config.status). NOT the feature-probe macros (those are handled elsewhere).
+            "AC_USE_SYSTEM_EXTENSIONS", "AC_GNU_SOURCE", "AC_SYS_LARGEFILE", "AC_SYS_LONG_FILE_NAMES",
+            "AC_PROG_SED", "AC_PROG_GREP", "AC_PROG_EGREP", "AC_PROG_FGREP", "AC_PROG_AWK",
+            "AC_PROG_LN_S", "AC_PROG_MKDIR_P", "AC_PROG_RANLIB", "AC_PROG_CPP", "AC_PROG_MAKE_SET",
+            "AC_C_CONST", "AC_C_INLINE", "AC_C_VOLATILE", "AC_C_RESTRICT", "AC_C_BIGENDIAN",
+            "AC_HEADER_STDC", "AC_HEADER_TIME", "AC_HEADER_SYS_WAIT", "AC_HEADER_ASSERT",
+            "AC_TYPE_SIZE_T", "AC_TYPE_PID_T", "AC_TYPE_OFF_T", "AC_TYPE_UID_T", "AC_TYPE_MODE_T",
+            "AC_TYPE_SSIZE_T", "AC_TYPE_INT8_T", "AC_TYPE_INT16_T", "AC_TYPE_INT32_T",
+            "AC_TYPE_INT64_T", "AC_TYPE_UINT8_T", "AC_TYPE_UINT16_T", "AC_TYPE_UINT32_T",
+            "AC_TYPE_UINT64_T", "AC_STRUCT_TM", "AC_PROG_GCC_TRADITIONAL", "AC_CANONICAL_HOST",
+            "AC_CANONICAL_BUILD", "AC_CANONICAL_TARGET", "AC_CANONICAL_SYSTEM", "AC_GNU_SOURCE",
+            "AC_PROG_CC_C99",
+            "AC_REQUIRE_AUX_FILE", "AC_SUBST_FILE", "AC_PRESERVE_HELP_ORDER",
         ] {
             self.engine.macro_table.define(m.as_bytes(), b"");
         }
