@@ -742,9 +742,11 @@ impl M4Engine {
         );
         self.engine.macro_table.define(b"m4_text_wrap", b"$1");
         // Conditionals: m4_if / m4_ifval / m4_ifblank
-        self.engine
-            .macro_table
-            .define(b"m4_if", b"ifelse([$1], [$2], [$3], [$4])");
+        // m4_if is MULTI-WAY: m4_if(a,b,val, c,d,val2, ..., else). The old 4-arg wrapper truncated
+        // it to a single comparison, so e.g. AX_CXX_COMPILE_STDCXX's m4_if([$1],[11],[],[$1],[14],
+        // [],[$1],[17],[],[fatal]) wrongly returned the 4th arg ("17") -> leaked into configure.
+        // The base ifelse builtin already handles arbitrary argument counts; just pass them through.
+        self.engine.macro_table.define(b"m4_if", b"ifelse($@)");
         // m4_ifdef / m4_ifndef — m4sugar wrappers over the base `ifdef` builtin. Without these,
         // `m4_ifdef([AM_SILENT_RULES], [...])` (extremely common in configure.ac) was left literal
         // -> shell "syntax error near unexpected token". m4_ifdef(NAME, IF-DEF, IF-NOT).
