@@ -630,7 +630,8 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         ] {
             b.extend_from_slice(format!(" -e 's|{pat}|{val}|g'").as_bytes());
         }
-        b.extend_from_slice(format!(" '{h}.in' > '{h}'; fi\n").as_bytes());
+        // ATOMIC write (temp + mv) so a concurrent compile never reads a half-written config.h.
+        b.extend_from_slice(format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'; fi\n").as_bytes());
     }
 
     // Emit the standard config.status framework (writes a runnable config.status and invokes it),

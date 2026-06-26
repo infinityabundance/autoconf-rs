@@ -105,14 +105,23 @@ fn main() -> ExitCode {
             // makes config.h correct regardless of which header-generation path runs. Packages
             // routinely `#include config.h` and use PACKAGE_NAME/VERSION.
             let (pname, pver) = parse_ac_init(&input);
+            // The PACKAGE_* forms come from AC_INIT and are always safe.
             println!("#define PACKAGE_NAME \"{}\"", pname);
             println!("#define PACKAGE_TARNAME \"{}\"", pname);
             println!("#define PACKAGE_VERSION \"{}\"", pver);
             println!("#define PACKAGE_STRING \"{} {}\"", pname, pver);
             println!("#define PACKAGE_BUGREPORT \"\"");
             println!("#define PACKAGE_URL \"\"");
-            println!("#define PACKAGE \"{}\"", pname);
-            println!("#define VERSION \"{}\"", pver);
+            // The bare PACKAGE / VERSION macros are defined ONLY by AM_INIT_AUTOMAKE, and ONLY when
+            // its `no-define` option is absent. Emitting them unconditionally breaks projects that
+            // use `VERSION`/`PACKAGE` as their own identifiers under `no-define` (e.g. pgpdump's
+            // `private int VERSION;`). Honor that here.
+            let amopts = init_automake_options(&input);
+            let emit_bare = amopts.is_some() && !amopts.as_deref().unwrap_or("").contains("no-define");
+            if emit_bare {
+                println!("#define PACKAGE \"{}\"", pname);
+                println!("#define VERSION \"{}\"", pver);
+            }
 
             // NB: do NOT emit the `@%:@undef` "template" lines here. `@%:@` is the m4 quadrigraph
             // for `#`, but config.status's `#undef X -> #define X` substitution does not process it,
@@ -153,11 +162,58 @@ fn parse_ac_init(input: &str) -> (String, String) {
                 let args_str = &after[open + 1..e];
                 let strip = |s: &str| s.trim().trim_start_matches('[').trim_end_matches(']').trim().to_string();
                 let parts: Vec<&str> = args_str.splitn(3, ',').collect();
-                let name = parts.first().map(|s| strip(s)).unwrap_or_default();
-                let version = parts.get(1).map(|s| strip(s)).unwrap_or_default();
+                let name = sanitize_token(&parts.first().map(|s| strip(s)).unwrap_or_default(), "config");
+                let version = sanitize_token(&parts.get(1).map(|s| strip(s)).unwrap_or_default(), "0");
                 return (name, version);
             }
         }
     }
     (String::new(), String::new())
+}
+
+/// Sanitize an AC_INIT token (name/version) so it's safe to embed in config.h as a C string.
+/// AC_INIT args can be unevaluated m4 (e.g. version = `m4_esyscmd_s([git describe...])` with `dnl`
+/// comments) which autoconf-rs cannot run (esyscmd blocked). Strip `dnl` comments and reject any
+/// value that still looks like m4/multi-word garbage, falling back to a safe default.
+fn sanitize_token(v: &str, fallback: &str) -> String {
+    // drop `dnl ...` to end of line, join lines
+    let no_dnl: String = v
+        .lines()
+        .map(|l| l.split("dnl").next().unwrap_or(""))
+        .collect::<Vec<_>>()
+        .join(" ");
+    let t = no_dnl.trim().trim_matches('"').trim();
+    if t.is_empty()
+        || t.contains("m4_")
+        || t.contains("esyscmd")
+        || t.contains('[')
+        || t.contains(']')
+        || t.contains('(')
+        || t.chars().any(|c| c.is_whitespace())
+    {
+        return fallback.to_string();
+    }
+    t.to_string()
+}
+
+/// Return the AM_INIT_AUTOMAKE option string (the macro's args), or None if the project doesn't
+/// use AM_INIT_AUTOMAKE. Used to honor `no-define` (whether bare PACKAGE/VERSION are defined).
+fn init_automake_options(input: &str) -> Option<String> {
+    let pos = input.find("AM_INIT_AUTOMAKE")?;
+    let after = &input[pos + "AM_INIT_AUTOMAKE".len()..];
+    let open = after.find('(')?;
+    let mut depth = 0i32;
+    for (i, c) in after[open..].char_indices() {
+        match c {
+            '(' => depth += 1,
+            ')' => {
+                depth -= 1;
+                if depth == 0 {
+                    return Some(after[open + 1..open + i].to_string());
+                }
+            }
+            _ => {}
+        }
+    }
+    Some(String::new())
 }

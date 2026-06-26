@@ -2419,7 +2419,20 @@ impl M4Engine {
                         var_name, var_name, var_value
                     ));
                 }
-                output.push_str(&format!(" '{}.in' > '{}'\n", hdr, hdr));
+                // Standard AC_INIT defines (also covered by config.h.in via autoheader, but emitted
+                // here too so this path is self-sufficient). $-anchor bare PACKAGE/VERSION.
+                output.push_str(&format!(" -e 's|#undef PACKAGE_NAME|#define PACKAGE_NAME \"{}\"|g'", name));
+                output.push_str(&format!(" -e 's|#undef PACKAGE_TARNAME|#define PACKAGE_TARNAME \"{}\"|g'", name));
+                output.push_str(&format!(" -e 's|#undef PACKAGE_VERSION|#define PACKAGE_VERSION \"{}\"|g'", version));
+                output.push_str(&format!(" -e 's|#undef PACKAGE_STRING|#define PACKAGE_STRING \"{} {}\"|g'", name, version));
+                output.push_str(" -e 's|#undef PACKAGE_BUGREPORT|#define PACKAGE_BUGREPORT \"\"|g'");
+                output.push_str(" -e 's|#undef PACKAGE_URL|#define PACKAGE_URL \"\"|g'");
+                output.push_str(&format!(" -e 's|#undef PACKAGE$|#define PACKAGE \"{}\"|g'", name));
+                output.push_str(&format!(" -e 's|#undef VERSION$|#define VERSION \"{}\"|g'", version));
+                // ATOMIC write: generate into a temp then mv, so a concurrent compile can never read
+                // a half-written / pre-substitution config.h (the cause of intermittent
+                // "PACKAGE_NAME undeclared" under parallel make).
+                output.push_str(&format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'\n", h = hdr));
             }
             let dyn_part =
                 crate::shell_gen::generate_config_status_section(&self.state, name, version);
