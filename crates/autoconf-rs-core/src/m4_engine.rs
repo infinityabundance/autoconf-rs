@@ -737,6 +737,25 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_if", b"ifelse([$1], [$2], [$3], [$4])");
+        // m4_ifdef / m4_ifndef — m4sugar wrappers over the base `ifdef` builtin. Without these,
+        // `m4_ifdef([AM_SILENT_RULES], [...])` (extremely common in configure.ac) was left literal
+        // -> shell "syntax error near unexpected token". m4_ifdef(NAME, IF-DEF, IF-NOT).
+        self.engine
+            .macro_table
+            .define(b"m4_ifdef", b"ifdef([$1], [$2], [$3])");
+        self.engine
+            .macro_table
+            .define(b"m4_ifndef", b"ifdef([$1], [$3], [$2])");
+        // m4_default(EXPR, DEFAULT) -> EXPR if non-empty else DEFAULT; m4_default_nblank similar.
+        self.engine
+            .macro_table
+            .define(b"m4_default", b"ifelse([$1], [], [$2], [$1])");
+        self.engine
+            .macro_table
+            .define(b"m4_default_nblank", b"ifelse(m4_normalize([$1]), [], [$2], [$1])");
+        self.engine
+            .macro_table
+            .define(b"m4_ifset", b"ifelse([$1], [], [$3], [$2])");
         self.engine
             .macro_table
             .define(b"m4_ifval", b"ifelse([$1], [], [$3], [$2])");
