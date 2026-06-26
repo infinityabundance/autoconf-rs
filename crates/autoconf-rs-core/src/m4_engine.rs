@@ -120,6 +120,10 @@ impl M4Engine {
             "AC_USE_SYSTEM_EXTENSIONS", "AC_GNU_SOURCE", "AC_SYS_LARGEFILE", "AC_SYS_LONG_FILE_NAMES",
             "AC_PROG_SED", "AC_PROG_GREP", "AC_PROG_EGREP", "AC_PROG_FGREP", "AC_PROG_AWK",
             "AC_PROG_LN_S", "AC_PROG_MKDIR_P", "AC_PROG_RANLIB", "AC_PROG_CPP", "AC_PROG_MAKE_SET",
+            // Deprecated/obsolete macros (folded into AC_PROG_CC/CXX in autoconf >=2.70, or X11
+            // detection) that still appear in older configure.ac and otherwise leak literal.
+            "AC_PROG_CC_STDC", "AC_PROG_CC_C99", "AC_PROG_CC_C89", "AC_PROG_CXX_C_O",
+            "AC_PROG_CC_C_O", "AC_PATH_XTRA", "AC_PATH_X", "AC_AIX", "AC_MINIX",
             "AC_C_CONST", "AC_C_INLINE", "AC_C_VOLATILE", "AC_C_RESTRICT", "AC_C_BIGENDIAN",
             "AC_HEADER_STDC", "AC_HEADER_TIME", "AC_HEADER_SYS_WAIT", "AC_HEADER_ASSERT",
             "AC_TYPE_SIZE_T", "AC_TYPE_PID_T", "AC_TYPE_OFF_T", "AC_TYPE_UID_T", "AC_TYPE_MODE_T",
@@ -1458,6 +1462,23 @@ impl M4Engine {
             for arg in &args {
                 for file in arg.split_whitespace() {
                     self.state.config_files.push(file.to_string());
+                }
+            }
+        }
+        // Extract old-style AC_OUTPUT(FILES...) positional file list (legacy configure.in, e.g.
+        // dcfldd's `AC_OUTPUT(Makefile)`). Modern AC_OUTPUT takes no args. The first arg is a
+        // space-separated output-file list; without this such projects never create their Makefile
+        // ("make: No targets specified and no makefile found").
+        for args in extract_all_macro_args(input, "AC_OUTPUT") {
+            if let Some(first) = args.first() {
+                for file in first.split_whitespace() {
+                    if !file.is_empty()
+                        && !file.contains('=')
+                        && !file.contains('$')
+                        && !self.state.config_files.contains(&file.to_string())
+                    {
+                        self.state.config_files.push(file.to_string());
+                    }
                 }
             }
         }
