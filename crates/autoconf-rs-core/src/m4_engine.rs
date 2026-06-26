@@ -108,7 +108,7 @@ impl M4Engine {
         // consumed (no literal leftover -> shell syntax error). Their AC_SUBST surface is
         // defaulted in config.status (see shell_gen STD_VAR_*).
         for m in [
-            "AC_CONFIG_HEADER", "AC_CONFIG_MACRO_DIR", "AC_CONFIG_MACRO_DIRS", "AC_CONFIG_AUX_DIR",
+            "AC_CONFIG_HEADER", "AM_CONFIG_HEADER", "AC_CONFIG_MACRO_DIR", "AC_CONFIG_MACRO_DIRS", "AC_CONFIG_AUX_DIR",
             "AC_CONFIG_TESTDIR", "AM_INIT_AUTOMAKE", "AM_MAINTAINER_MODE", "AM_SILENT_RULES",
             "AM_PROG_AR", "AM_PROG_CC_C_O", "AM_PROG_LEX", "AM_PROG_LIBTOOL", "AM_PROG_INSTALL_STRIP",
             "AM_PROG_MKDIR_P", "AM_SANITY_CHECK", "AM_SET_DEPDIR", "AM_DEP_TRACK",
@@ -1474,6 +1474,16 @@ impl M4Engine {
         // so a generated config.h is actually created by config.status (otherwise `make` fails with
         // "config.h: No such file"). Distinct from the plural macro (the char after HEADER is `S`).
         for args in extract_all_macro_args(input, "AC_CONFIG_HEADER") {
+            if let Some(first) = args.first() {
+                for hdr in first.split_whitespace() {
+                    self.state.config_headers.push(hdr.to_string());
+                }
+            }
+        }
+        // Extract AM_CONFIG_HEADER (deprecated Automake alias for AC_CONFIG_HEADER). Old-style
+        // configure.ac (e.g. dcfldd, pwsafe) still use it; without this it leaked literally
+        // (`AM_CONFIG_HEADER(config.h)` -> shell "syntax error near (") and config.h was never made.
+        for args in extract_all_macro_args(input, "AM_CONFIG_HEADER") {
             if let Some(first) = args.first() {
                 for hdr in first.split_whitespace() {
                     self.state.config_headers.push(hdr.to_string());
