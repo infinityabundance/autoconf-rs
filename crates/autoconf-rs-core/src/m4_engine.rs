@@ -796,9 +796,14 @@ impl M4Engine {
             b"m4_map_sep",
             b"m4_foreach([_m4_e], m4_cdr($3), [$1(_m4_e)[$2]])[$1(m4_car($3))]",
         );
-        // List: m4_car / m4_cdr
+        // List: m4_car / m4_cdr / m4_shift. m4_shift was USED by m4_cdr/m4_foreach/m4_map_args but
+        // never defined -> it leaked literally thousands of times (2948× in one configure), breaking
+        // every list-processing macro. It is m4sugar's wrapper over the base `shift` builtin.
         self.engine.macro_table.define(b"m4_car", b"$1");
         self.engine.macro_table.define(b"m4_cdr", b"m4_shift($@)");
+        self.engine.macro_table.define(b"m4_shift", b"shift($@)");
+        self.engine.macro_table.define(b"m4_shift2", b"m4_shift(m4_shift($@))");
+        self.engine.macro_table.define(b"m4_shift3", b"m4_shift(m4_shift(m4_shift($@)))");
         self.engine.macro_table.define(
             b"m4_list_cmp",
             b"ifelse([$1], [], [0], [$1], [$2], [0], [1])",
