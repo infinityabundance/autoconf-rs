@@ -107,11 +107,24 @@ pub fn collect_args(tokens: &[Token]) -> (Vec<Vec<Token>>, usize) {
 /// Text tokens are concatenated directly.
 pub fn arg_text(tokens: &[Token]) -> Vec<u8> {
     let mut result = Vec::new();
-
+    // m4 strips exactly ONE level of quotes on argument collection; inner (nested) quotes are kept
+    // as literal text so a nested macro's own quoting survives to be rescanned. Stripping every
+    // level (the previous behavior) destroyed nested macros, e.g. AS_IF inside another AS_IF's
+    // argument leaked as a bare `AS_IF` token.
+    let mut qdepth: usize = 0;
     for token in tokens {
         match token.kind {
-            TokenKind::QuoteOpen | TokenKind::QuoteClose => {
-                // Quote delimiters are stripped from output
+            TokenKind::QuoteOpen => {
+                if qdepth > 0 {
+                    result.extend_from_slice(&token.text);
+                }
+                qdepth += 1;
+            }
+            TokenKind::QuoteClose => {
+                qdepth = qdepth.saturating_sub(1);
+                if qdepth > 0 {
+                    result.extend_from_slice(&token.text);
+                }
             }
             _ => {
                 result.extend_from_slice(&token.text);
