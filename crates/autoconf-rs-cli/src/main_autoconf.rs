@@ -108,12 +108,26 @@ fn run() -> ExitCode {
     }
 
     // Cache miss — process through M4 engine
-    let input = match read_input(&path) {
+    let configure_ac = match read_input(&path) {
         Ok(s) => s,
         Err(e) => {
             eprintln!("autoconf: {}", e);
             return ExitCode::from(2);
         }
+    };
+
+    // Prepend aclocal.m4 (if present beside configure.ac). GNU autoconf always includes aclocal.m4
+    // before the configure.ac body: it carries the AC_DEFUN definitions for AM_*, AX_*, gl_*, PKG_*,
+    // LT_* and other third-party macros gathered from the project's m4/ dir. Without this, those
+    // macro calls were left literal -> shell "syntax error" / "COMMAND: command not found". The
+    // AC_DEFUN bodies expand to nothing, so prepending only registers macros (no stray output).
+    let aclocal_path = Path::new(&path)
+        .parent()
+        .unwrap_or_else(|| Path::new("."))
+        .join("aclocal.m4");
+    let input = match std::fs::read_to_string(&aclocal_path) {
+        Ok(acm4) => format!("{}\n{}", acm4, configure_ac),
+        Err(_) => configure_ac,
     };
 
     let _ac = ConfigureAc::parse(&input);

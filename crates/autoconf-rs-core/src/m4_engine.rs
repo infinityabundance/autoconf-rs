@@ -756,6 +756,17 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_ifset", b"ifelse([$1], [], [$3], [$2])");
+        // m4_esyscmd / m4_esyscmd_s — m4sugar wrappers over the esyscmd builtin. These MUST be
+        // defined unconditionally so they never leak literally into configure (a literal
+        // `m4_esyscmd_s([git describe])` -> shell "syntax error"). They delegate to `esyscmd`,
+        // which is the real command bridge when --allow-syscmd is on and expands to empty (via the
+        // blocked-stub) otherwise. _s strips trailing newlines (the "single-line" variant).
+        self.engine
+            .macro_table
+            .define(b"m4_esyscmd", b"esyscmd([$1])");
+        self.engine
+            .macro_table
+            .define(b"m4_esyscmd_s", b"patsubst(esyscmd([$1]), [\n+$], [])");
         self.engine
             .macro_table
             .define(b"m4_ifval", b"ifelse([$1], [], [$3], [$2])");
