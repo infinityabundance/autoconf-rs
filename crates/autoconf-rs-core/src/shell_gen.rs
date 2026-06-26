@@ -290,6 +290,17 @@ pub fn generate_dynamic_configure(
                 var, var, value
             ));
         }
+        // Standard AC_INIT-derived defines (config.h.in carries `#undef PACKAGE_NAME` etc. via
+        // autoheader). `$`-anchored so `#undef PACKAGE`/`#undef VERSION` don't corrupt the longer
+        // PACKAGE_* names. Without these a package that uses PACKAGE_NAME/VERSION fails to compile.
+        s.push_str(&format!(" -e 's|#undef PACKAGE_NAME|#define PACKAGE_NAME \"{}\"|g'", name));
+        s.push_str(&format!(" -e 's|#undef PACKAGE_TARNAME|#define PACKAGE_TARNAME \"{}\"|g'", name));
+        s.push_str(&format!(" -e 's|#undef PACKAGE_VERSION|#define PACKAGE_VERSION \"{}\"|g'", version));
+        s.push_str(&format!(" -e 's|#undef PACKAGE_STRING|#define PACKAGE_STRING \"{} {}\"|g'", name, version));
+        s.push_str(" -e 's|#undef PACKAGE_BUGREPORT|#define PACKAGE_BUGREPORT \"\"|g'");
+        s.push_str(" -e 's|#undef PACKAGE_URL|#define PACKAGE_URL \"\"|g'");
+        s.push_str(&format!(" -e 's|#undef PACKAGE$|#define PACKAGE \"{}\"|g'", name));
+        s.push_str(&format!(" -e 's|#undef VERSION$|#define VERSION \"{}\"|g'", version));
         s.push_str(&format!(" '{}.in' > '{}'\n", hdr, hdr));
     }
 

@@ -99,17 +99,19 @@ fn main() -> ExitCode {
                 }
             }
 
-            // Also emit AH_TEMPLATE-compatible output for autoheader consumers
-            println!();
-            println!("/* Template entries for autoheader compatibility */");
-            for (var, value) in &defines {
-                let desc = value.unwrap_or("");
-                if !desc.is_empty() {
-                    println!("@%:@undef {} /* {} */", var, desc);
-                } else {
-                    println!("@%:@undef {}", var);
-                }
+            // Standard AC_INIT defines — always present in a real config.h.in so config.status can
+            // define PACKAGE_NAME/VERSION/etc. (packages routinely #include config.h and use them).
+            for v in [
+                "PACKAGE_NAME", "PACKAGE_TARNAME", "PACKAGE_VERSION", "PACKAGE_STRING",
+                "PACKAGE_BUGREPORT", "PACKAGE_URL", "PACKAGE", "VERSION",
+            ] {
+                println!("#undef {}", v);
             }
+
+            // NB: do NOT emit the `@%:@undef` "template" lines here. `@%:@` is the m4 quadrigraph
+            // for `#`, but config.status's `#undef X -> #define X` substitution does not process it,
+            // so those lines reach config.h literally as `@%:@undef ...` -> "stray '@' in program".
+            // The plain `#undef X` lines above are the correct, substitutable template entries.
 
             eprintln!(
                 "autoheader: generated {} with {} #undef entries (trace-driven)",

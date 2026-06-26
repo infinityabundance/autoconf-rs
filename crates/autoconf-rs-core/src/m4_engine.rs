@@ -953,10 +953,13 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AS_ECHO_N", b"printf '%s' \"$1\"");
-        // AS_IF: portable if/then/elif/else/fi
+        // AS_IF: portable if/then[/else]/fi. The `:` no-op guards each branch so an empty body
+        // (e.g. a then-branch that is only AC_DEFINE, which expands to nothing) does not produce
+        // `if c; then fi` -> shell "syntax error near fi". The else branch carries the 3-arg form
+        // (`AS_IF([c],[t],[e])`); for the 2-arg form $3 is empty and the else is a harmless `:`.
         self.engine
             .macro_table
-            .define(b"AS_IF", b"if $1; then\n  $2\nfi");
+            .define(b"AS_IF", b"if $1; then\n:\n$2\nelse\n:\n$3\nfi");
         // AS_CASE: portable case/esac
         self.engine
             .macro_table
@@ -1428,6 +1431,16 @@ impl M4Engine {
         for args in extract_all_macro_args(input, "AC_CONFIG_HEADERS") {
             for arg in &args {
                 for hdr in arg.split_whitespace() {
+                    self.state.config_headers.push(hdr.to_string());
+                }
+            }
+        }
+        // Extract AC_CONFIG_HEADER (older singular alias) — only the first arg names the header(s),
+        // so a generated config.h is actually created by config.status (otherwise `make` fails with
+        // "config.h: No such file"). Distinct from the plural macro (the char after HEADER is `S`).
+        for args in extract_all_macro_args(input, "AC_CONFIG_HEADER") {
+            if let Some(first) = args.first() {
+                for hdr in first.split_whitespace() {
                     self.state.config_headers.push(hdr.to_string());
                 }
             }
