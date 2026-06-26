@@ -615,6 +615,21 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
                 format!(" -e 's|#undef {var}|#define {var} {}|g'", esc(value)).as_bytes(),
             );
         }
+        // Standard AC_INIT-derived defines (config.h.in carries `#undef PACKAGE_NAME` etc. via
+        // autoheader). `$`-anchor the bare PACKAGE/VERSION so they don't corrupt PACKAGE_*; without
+        // these, packages that use PACKAGE_NAME/VERSION from config.h fail to compile.
+        for (pat, val) in [
+            ("#undef PACKAGE_NAME".to_string(), format!("#define PACKAGE_NAME \"{name}\"")),
+            ("#undef PACKAGE_TARNAME".to_string(), format!("#define PACKAGE_TARNAME \"{name}\"")),
+            ("#undef PACKAGE_VERSION".to_string(), format!("#define PACKAGE_VERSION \"{version}\"")),
+            ("#undef PACKAGE_STRING".to_string(), format!("#define PACKAGE_STRING \"{name} {version}\"")),
+            ("#undef PACKAGE_BUGREPORT".to_string(), "#define PACKAGE_BUGREPORT \"\"".to_string()),
+            ("#undef PACKAGE_URL".to_string(), "#define PACKAGE_URL \"\"".to_string()),
+            ("#undef PACKAGE$".to_string(), format!("#define PACKAGE \"{name}\"")),
+            ("#undef VERSION$".to_string(), format!("#define VERSION \"{version}\"")),
+        ] {
+            b.extend_from_slice(format!(" -e 's|{pat}|{val}|g'").as_bytes());
+        }
         b.extend_from_slice(format!(" '{h}.in' > '{h}'; fi\n").as_bytes());
     }
 

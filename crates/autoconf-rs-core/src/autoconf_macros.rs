@@ -1098,6 +1098,28 @@ fn generate_configure_output(state: &AutoconfState) -> Vec<u8> {
             script.extend_from_slice(value.as_bytes());
             script.extend_from_slice(b"/' ");
         }
+        // Standard AC_INIT-derived defines (config.h.in carries `#undef PACKAGE_NAME` etc. via
+        // autoheader). Use `|` as the sed delimiter to tolerate `/` in values; `$`-anchor the bare
+        // PACKAGE/VERSION so they don't corrupt the longer PACKAGE_* names. Without these a package
+        // that uses PACKAGE_NAME/VERSION from config.h fails to compile.
+        let pname = state.package_name.clone().unwrap_or_default();
+        let pver = state.package_version.clone().unwrap_or_default();
+        for (pat, val) in [
+            ("#undef PACKAGE_NAME".to_string(), format!("#define PACKAGE_NAME \"{}\"", pname)),
+            ("#undef PACKAGE_TARNAME".to_string(), format!("#define PACKAGE_TARNAME \"{}\"", pname)),
+            ("#undef PACKAGE_VERSION".to_string(), format!("#define PACKAGE_VERSION \"{}\"", pver)),
+            ("#undef PACKAGE_STRING".to_string(), format!("#define PACKAGE_STRING \"{} {}\"", pname, pver)),
+            ("#undef PACKAGE_BUGREPORT".to_string(), "#define PACKAGE_BUGREPORT \"\"".to_string()),
+            ("#undef PACKAGE_URL".to_string(), "#define PACKAGE_URL \"\"".to_string()),
+            ("#undef PACKAGE$".to_string(), format!("#define PACKAGE \"{}\"", pname)),
+            ("#undef VERSION$".to_string(), format!("#define VERSION \"{}\"", pver)),
+        ] {
+            script.extend_from_slice(b"-e 's|");
+            script.extend_from_slice(pat.as_bytes());
+            script.extend_from_slice(b"|");
+            script.extend_from_slice(val.as_bytes());
+            script.extend_from_slice(b"|' ");
+        }
         script.extend_from_slice(b"'");
         script.extend_from_slice(template.as_bytes());
         script.extend_from_slice(b"' > '");

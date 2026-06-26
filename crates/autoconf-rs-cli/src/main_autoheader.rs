@@ -99,14 +99,20 @@ fn main() -> ExitCode {
                 }
             }
 
-            // Standard AC_INIT defines — always present in a real config.h.in so config.status can
-            // define PACKAGE_NAME/VERSION/etc. (packages routinely #include config.h and use them).
-            for v in [
-                "PACKAGE_NAME", "PACKAGE_TARNAME", "PACKAGE_VERSION", "PACKAGE_STRING",
-                "PACKAGE_BUGREPORT", "PACKAGE_URL", "PACKAGE", "VERSION",
-            ] {
-                println!("#undef {}", v);
-            }
+            // Standard AC_INIT defines. We emit them already as `#define` with the values parsed
+            // from AC_INIT (rather than `#undef` + config.status substitution): config.status's
+            // header sed only converts the AC_DEFINE `#undef`s, and emitting these resolved here
+            // makes config.h correct regardless of which header-generation path runs. Packages
+            // routinely `#include config.h` and use PACKAGE_NAME/VERSION.
+            let (pname, pver) = parse_ac_init(&input);
+            println!("#define PACKAGE_NAME \"{}\"", pname);
+            println!("#define PACKAGE_TARNAME \"{}\"", pname);
+            println!("#define PACKAGE_VERSION \"{}\"", pver);
+            println!("#define PACKAGE_STRING \"{} {}\"", pname, pver);
+            println!("#define PACKAGE_BUGREPORT \"\"");
+            println!("#define PACKAGE_URL \"\"");
+            println!("#define PACKAGE \"{}\"", pname);
+            println!("#define VERSION \"{}\"", pver);
 
             // NB: do NOT emit the `@%:@undef` "template" lines here. `@%:@` is the m4 quadrigraph
             // for `#`, but config.status's `#undef X -> #define X` substitution does not process it,
@@ -125,4 +131,33 @@ fn main() -> ExitCode {
             ExitCode::from(2)
         }
     }
+}
+
+/// Parse AC_INIT([name],[version],...) from configure.ac text. Returns (name, version),
+/// stripping m4 `[]` quotes and whitespace; empty strings if not found.
+fn parse_ac_init(input: &str) -> (String, String) {
+    if let Some(pos) = input.find("AC_INIT") {
+        let after = &input[pos + "AC_INIT".len()..];
+        if let Some(open) = after.find('(') {
+            // collect to matching close paren
+            let mut depth = 0i32;
+            let mut end = None;
+            for (i, c) in after[open..].char_indices() {
+                match c {
+                    '(' => depth += 1,
+                    ')' => { depth -= 1; if depth == 0 { end = Some(open + i); break; } }
+                    _ => {}
+                }
+            }
+            if let Some(e) = end {
+                let args_str = &after[open + 1..e];
+                let strip = |s: &str| s.trim().trim_start_matches('[').trim_end_matches(']').trim().to_string();
+                let parts: Vec<&str> = args_str.splitn(3, ',').collect();
+                let name = parts.first().map(|s| strip(s)).unwrap_or_default();
+                let version = parts.get(1).map(|s| strip(s)).unwrap_or_default();
+                return (name, version);
+            }
+        }
+    }
+    (String::new(), String::new())
 }
