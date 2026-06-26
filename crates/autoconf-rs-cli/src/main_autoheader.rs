@@ -99,6 +99,27 @@ fn main() -> ExitCode {
                 }
             }
 
+            // Emit `#undef HAVE_X` templates for AC_CHECK_HEADERS/FUNCS/LIB. configure's real probes
+            // append `#define HAVE_X 1` to confdefs.h on success, and config.status converts these
+            // `#undef` lines accordingly. Without the templates here there is nothing to convert, so
+            // detected features never reach config.h (-> `optind undeclared`, missing struct members).
+            let mut have_seen = std::collections::BTreeSet::new();
+            for e in &trace_log.events {
+                let macro_name = match e {
+                    AutoconfEvent::CheckHeader { header, .. } => Some(have_macro(header)),
+                    AutoconfEvent::CheckFunc { function, .. } => Some(have_macro(function)),
+                    AutoconfEvent::CheckLib { library, .. } => {
+                        Some(format!("HAVE_LIB{}", library.to_ascii_uppercase()))
+                    }
+                    _ => None,
+                };
+                if let Some(m) = macro_name {
+                    if have_seen.insert(m.clone()) {
+                        println!("#undef {}", m);
+                    }
+                }
+            }
+
             // Standard AC_INIT defines. We emit them already as `#define` with the values parsed
             // from AC_INIT (rather than `#undef` + config.status substitution): config.status's
             // header sed only converts the AC_DEFINE `#undef`s, and emitting these resolved here
@@ -216,4 +237,15 @@ fn init_automake_options(input: &str) -> Option<String> {
         }
     }
     Some(String::new())
+}
+
+/// The C preprocessor macro a successful AC_CHECK_HEADER/FUNC defines (mirrors
+/// autoconf_rs_core::configure_body::have_macro): `sys/time.h` -> `HAVE_SYS_TIME_H`.
+fn have_macro(name: &str) -> String {
+    let up: String = name
+        .trim()
+        .chars()
+        .map(|c| if c.is_ascii_alphanumeric() { c.to_ascii_uppercase() } else { '_' })
+        .collect();
+    format!("HAVE_{}", up)
 }

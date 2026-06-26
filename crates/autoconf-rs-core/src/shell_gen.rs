@@ -47,7 +47,7 @@ const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
 
 /// The sed expressions for the standard build variables (double-quoted so the values set by
 /// STD_VAR_DEFAULTS expand when config.status runs). Appended to config.status's `substitute()` sed.
-const STD_VAR_SED: &str = r#" -e "s|@top_srcdir@|$top_srcdir|g" -e "s|@top_builddir@|$top_builddir|g" -e "s|@builddir@|$builddir|g" -e "s|@abs_srcdir@|$abs_srcdir|g" -e "s|@abs_builddir@|$abs_builddir|g" -e "s|@abs_top_srcdir@|$abs_top_srcdir|g" -e "s|@abs_top_builddir@|$abs_top_builddir|g" -e "s|@CC@|$CC|g" -e "s|@CFLAGS@|$CFLAGS|g" -e "s|@CPPFLAGS@|$CPPFLAGS|g" -e "s|@LDFLAGS@|$LDFLAGS|g" -e "s|@LIBS@|$LIBS|g" -e "s|@CXX@|$CXX|g" -e "s|@CXXFLAGS@|$CXXFLAGS|g" -e "s|@CPP@|$CPP|g" -e "s|@AR@|$AR|g" -e "s|@ARFLAGS@|cr|g" -e "s|@RANLIB@|$RANLIB|g" -e "s|@STRIP@|$STRIP|g" -e "s|@AWK@|$AWK|g" -e "s|@LN_S@|$LN_S|g" -e "s|@OBJEXT@|$OBJEXT|g" -e "s|@EXEEXT@|$EXEEXT|g" -e "s|@SET_MAKE@|$SET_MAKE|g" -e "s|@SHELL@|$SHELL|g" -e "s|@MKDIR_P@|$MKDIR_P|g" -e "s|@DEPDIR@|$DEPDIR|g" -e "s|@INSTALL@|$INSTALL|g" -e "s|@INSTALL_PROGRAM@|$INSTALL_PROGRAM|g" -e "s|@INSTALL_DATA@|$INSTALL_DATA|g" -e "s|@INSTALL_SCRIPT@|$INSTALL_SCRIPT|g" -e "s|@am__leading_dot@|$am__leading_dot|g" -e "s|@DEFS@|$DEFS|g" -e "s|@ECHO_C@|$ECHO_C|g" -e "s|@ECHO_N@|$ECHO_N|g" -e "s|@ECHO_T@|$ECHO_T|g" -e "s|@LIBTOOL@|$LIBTOOL|g" -e "s|@LIBOBJS@|$LIBOBJS|g" -e "s|@LTLIBOBJS@|$LTLIBOBJS|g" -e "s|@ALLOCA@|$ALLOCA|g" -e "s|@build@|$build|g" -e "s|@host@|$host|g" -e "s|@target@|$target|g" -e "s|@build_alias@|$build_alias|g" -e "s|@host_alias@|$host_alias|g" -e "s|@target_alias@|$target_alias|g" -e "s|@build_cpu@|$build_cpu|g" -e "s|@build_vendor@|$build_vendor|g" -e "s|@build_os@|$build_os|g" -e "s|@host_cpu@|$host_cpu|g" -e "s|@host_vendor@|$host_vendor|g" -e "s|@host_os@|$host_os|g" -e "s|@configure_input@|$configure_input|g" -e "s|@bindir@|$bindir|g" -e "s|@sbindir@|$sbindir|g" -e "s|@libexecdir@|$libexecdir|g" -e "s|@datarootdir@|$datarootdir|g" -e "s|@datadir@|$datadir|g" -e "s|@sysconfdir@|$sysconfdir|g" -e "s|@sharedstatedir@|$sharedstatedir|g" -e "s|@localstatedir@|$localstatedir|g" -e "s|@runstatedir@|$runstatedir|g" -e "s|@includedir@|$includedir|g" -e "s|@oldincludedir@|$oldincludedir|g" -e "s|@libdir@|$libdir|g" -e "s|@infodir@|$infodir|g" -e "s|@localedir@|$localedir|g" -e "s|@mandir@|$mandir|g" -e "s|@docdir@|$docdir|g" -e "s|@htmldir@|$htmldir|g" -e "s|@dvidir@|$dvidir|g" -e "s|@pdfdir@|$pdfdir|g" -e "s|@psdir@|$psdir|g" -e "s|@lispdir@|$lispdir|g" -e "s|@AMDEP_TRUE@|$AMDEP_TRUE|g" -e "s|@AMDEP_FALSE@|$AMDEP_FALSE|g" -e "s|@am__include@|$am__include|g" -e "s|@am__quote@|$am__quote|g" -e "s|@am__isrc@|$am__isrc|g" -e "s|@am__nodep@|$am__nodep|g" -e "s|@am__fastdepCC_TRUE@|$am__fastdepCC_TRUE|g" -e "s|@am__fastdepCC_FALSE@|$am__fastdepCC_FALSE|g" -e "s|@am__fastdepCXX_TRUE@|$am__fastdepCXX_TRUE|g" -e "s|@am__fastdepCXX_FALSE@|$am__fastdepCXX_FALSE|g" -e "s|@ACLOCAL@|$ACLOCAL|g" -e "s|@AUTOCONF@|$AUTOCONF|g" -e "s|@AUTOMAKE@|$AUTOMAKE|g" -e "s|@AUTOHEADER@|$AUTOHEADER|g" -e "s|@MAKEINFO@|$MAKEINFO|g" -e "s|@install_sh@|$install_sh|g" -e "s|@AMTAR@|$AMTAR|g" -e "s|@am__tar@|$am__tar|g" -e "s|@am__untar@|$am__untar|g" -e "s|@CTAGS@|$CTAGS|g" -e "s|@ETAGS@|$ETAGS|g" -e "s|@CSCOPE@|$CSCOPE|g" -e "s|@ACLOCAL_AMFLAGS@|$ACLOCAL_AMFLAGS|g" -e "s|@MAINT@|$MAINT|g" -e "s|@MAINTAINER_MODE_TRUE@|$MAINTAINER_MODE_TRUE|g" -e "s|@MAINTAINER_MODE_FALSE@|$MAINTAINER_MODE_FALSE|g" -e "s|@pkgpyexecdir@|$pkgpyexecdir|g" -e "s|@pkgpythondir@|$pkgpythondir|g" -e "s|@pyexecdir@|$pyexecdir|g" -e "s|@pythondir@|$pythondir|g""#;
+pub const STD_VAR_SED: &str = r#" -e "s|@top_srcdir@|$top_srcdir|g" -e "s|@top_builddir@|$top_builddir|g" -e "s|@builddir@|$builddir|g" -e "s|@abs_srcdir@|$abs_srcdir|g" -e "s|@abs_builddir@|$abs_builddir|g" -e "s|@abs_top_srcdir@|$abs_top_srcdir|g" -e "s|@abs_top_builddir@|$abs_top_builddir|g" -e "s|@CC@|$CC|g" -e "s|@CFLAGS@|$CFLAGS|g" -e "s|@CPPFLAGS@|$CPPFLAGS|g" -e "s|@LDFLAGS@|$LDFLAGS|g" -e "s|@LIBS@|$LIBS|g" -e "s|@CXX@|$CXX|g" -e "s|@CXXFLAGS@|$CXXFLAGS|g" -e "s|@CPP@|$CPP|g" -e "s|@AR@|$AR|g" -e "s|@ARFLAGS@|cr|g" -e "s|@RANLIB@|$RANLIB|g" -e "s|@STRIP@|$STRIP|g" -e "s|@AWK@|$AWK|g" -e "s|@LN_S@|$LN_S|g" -e "s|@OBJEXT@|$OBJEXT|g" -e "s|@EXEEXT@|$EXEEXT|g" -e "s|@SET_MAKE@|$SET_MAKE|g" -e "s|@SHELL@|$SHELL|g" -e "s|@MKDIR_P@|$MKDIR_P|g" -e "s|@DEPDIR@|$DEPDIR|g" -e "s|@INSTALL@|$INSTALL|g" -e "s|@INSTALL_PROGRAM@|$INSTALL_PROGRAM|g" -e "s|@INSTALL_DATA@|$INSTALL_DATA|g" -e "s|@INSTALL_SCRIPT@|$INSTALL_SCRIPT|g" -e "s|@am__leading_dot@|$am__leading_dot|g" -e "s|@DEFS@|$DEFS|g" -e "s|@ECHO_C@|$ECHO_C|g" -e "s|@ECHO_N@|$ECHO_N|g" -e "s|@ECHO_T@|$ECHO_T|g" -e "s|@LIBTOOL@|$LIBTOOL|g" -e "s|@LIBOBJS@|$LIBOBJS|g" -e "s|@LTLIBOBJS@|$LTLIBOBJS|g" -e "s|@ALLOCA@|$ALLOCA|g" -e "s|@build@|$build|g" -e "s|@host@|$host|g" -e "s|@target@|$target|g" -e "s|@build_alias@|$build_alias|g" -e "s|@host_alias@|$host_alias|g" -e "s|@target_alias@|$target_alias|g" -e "s|@build_cpu@|$build_cpu|g" -e "s|@build_vendor@|$build_vendor|g" -e "s|@build_os@|$build_os|g" -e "s|@host_cpu@|$host_cpu|g" -e "s|@host_vendor@|$host_vendor|g" -e "s|@host_os@|$host_os|g" -e "s|@configure_input@|$configure_input|g" -e "s|@bindir@|$bindir|g" -e "s|@sbindir@|$sbindir|g" -e "s|@libexecdir@|$libexecdir|g" -e "s|@datarootdir@|$datarootdir|g" -e "s|@datadir@|$datadir|g" -e "s|@sysconfdir@|$sysconfdir|g" -e "s|@sharedstatedir@|$sharedstatedir|g" -e "s|@localstatedir@|$localstatedir|g" -e "s|@runstatedir@|$runstatedir|g" -e "s|@includedir@|$includedir|g" -e "s|@oldincludedir@|$oldincludedir|g" -e "s|@libdir@|$libdir|g" -e "s|@infodir@|$infodir|g" -e "s|@localedir@|$localedir|g" -e "s|@mandir@|$mandir|g" -e "s|@docdir@|$docdir|g" -e "s|@htmldir@|$htmldir|g" -e "s|@dvidir@|$dvidir|g" -e "s|@pdfdir@|$pdfdir|g" -e "s|@psdir@|$psdir|g" -e "s|@lispdir@|$lispdir|g" -e "s|@AMDEP_TRUE@|$AMDEP_TRUE|g" -e "s|@AMDEP_FALSE@|$AMDEP_FALSE|g" -e "s|@am__include@|$am__include|g" -e "s|@am__quote@|$am__quote|g" -e "s|@am__isrc@|$am__isrc|g" -e "s|@am__nodep@|$am__nodep|g" -e "s|@am__fastdepCC_TRUE@|$am__fastdepCC_TRUE|g" -e "s|@am__fastdepCC_FALSE@|$am__fastdepCC_FALSE|g" -e "s|@am__fastdepCXX_TRUE@|$am__fastdepCXX_TRUE|g" -e "s|@am__fastdepCXX_FALSE@|$am__fastdepCXX_FALSE|g" -e "s|@ACLOCAL@|$ACLOCAL|g" -e "s|@AUTOCONF@|$AUTOCONF|g" -e "s|@AUTOMAKE@|$AUTOMAKE|g" -e "s|@AUTOHEADER@|$AUTOHEADER|g" -e "s|@MAKEINFO@|$MAKEINFO|g" -e "s|@install_sh@|$install_sh|g" -e "s|@AMTAR@|$AMTAR|g" -e "s|@am__tar@|$am__tar|g" -e "s|@am__untar@|$am__untar|g" -e "s|@CTAGS@|$CTAGS|g" -e "s|@ETAGS@|$ETAGS|g" -e "s|@CSCOPE@|$CSCOPE|g" -e "s|@ACLOCAL_AMFLAGS@|$ACLOCAL_AMFLAGS|g" -e "s|@MAINT@|$MAINT|g" -e "s|@MAINTAINER_MODE_TRUE@|$MAINTAINER_MODE_TRUE|g" -e "s|@MAINTAINER_MODE_FALSE@|$MAINTAINER_MODE_FALSE|g" -e "s|@pkgpyexecdir@|$pkgpyexecdir|g" -e "s|@pkgpythondir@|$pkgpythondir|g" -e "s|@pyexecdir@|$pyexecdir|g" -e "s|@pythondir@|$pythondir|g""#;
 
 /// Generates a configure shell script from parsed Autoconf input.
 pub struct ShellGenerator;
@@ -274,6 +274,26 @@ pub fn generate_dynamic_configure(
     s.push_str(" \"$1\" > \"$2\"\n");
     s.push_str("}\n\n");
 
+    // --- Feature test body (real AC_CHECK_* probes) --- MUST run BEFORE config headers are
+    // created: each successful probe appends `#define HAVE_X 1` to confdefs.h, and the header loop
+    // below bakes confdefs.h into config.h. (Previously the probes ran AFTER config.h was written,
+    // so detected features never reached it.)
+    let feature_body = crate::configure_body::generate_feature_test_body(state);
+    let feature_str = String::from_utf8_lossy(&feature_body);
+    let has_actual_tests = state.has_compiler_check
+        || !state.checked_funcs.is_empty()
+        || !state.checked_headers.is_empty()
+        || !state.checked_libs.is_empty()
+        || !state.checked_types.is_empty()
+        || !state.checked_progs.is_empty()
+        || !state.checked_sizeofs.is_empty()
+        || !state.c_conformance_checks.is_empty();
+    if has_actual_tests {
+        s.push_str("# Feature tests\n");
+        s.push_str(&feature_str);
+        s.push('\n');
+    }
+
     // Process config files
     for file in &state.config_files {
         s.push_str(&format!("printf '%s\\n' 'creating {}'\n", file));
@@ -283,7 +303,12 @@ pub fn generate_dynamic_configure(
     // Process config headers
     for hdr in &state.config_headers {
         s.push_str(&format!("printf '%s\\n' 'creating {}'\n", hdr));
-        s.push_str("sed");
+        // Build a sed script from confdefs.h (the RUNTIME probe results: each `#define HAVE_X 1` an
+        // AC_CHECK_* appended) -> `s|#undef X|#define X V|`, applied to the header template so
+        // detected features actually land in config.h. \x01 (SOH) is the sed delimiter to avoid
+        // colliding with `|`/`/` in values. The static `-e` seds below cover AC_DEFINE/PACKAGE.
+        s.push_str("sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null\n");
+        s.push_str("sed -f conf_defs$$.sed");
         for (var, value) in &state.defines {
             s.push_str(&format!(
                 " -e 's|#undef {}|#define {} {}|g'",
@@ -301,30 +326,11 @@ pub fn generate_dynamic_configure(
         s.push_str(" -e 's|#undef PACKAGE_URL|#define PACKAGE_URL \"\"|g'");
         s.push_str(&format!(" -e 's|#undef PACKAGE$|#define PACKAGE \"{}\"|g'", name));
         s.push_str(&format!(" -e 's|#undef VERSION$|#define VERSION \"{}\"|g'", version));
-        s.push_str(&format!(" '{}.in' > '{}'\n", hdr, hdr));
+        // ATOMIC write so a concurrent compile never reads a half-written header.
+        s.push_str(&format!(" '{hdr}.in' > '{hdr}.tmp$$' && mv -f '{hdr}.tmp$$' '{hdr}'; rm -f conf_defs$$.sed\n"));
     }
 
     s.push_str("\necho 'configure: creating config.status'\n");
-
-    // --- Feature test body (C conformance, function checks, etc.) ---
-    // Inserted here: after variable setup, before config.status generation.
-    // Only emit if there are actual feature tests from the prescan.
-    let feature_body = crate::configure_body::generate_feature_test_body(state);
-    let feature_str = String::from_utf8_lossy(&feature_body);
-    // Only emit if there are actual feature tests beyond just confdefs.h
-    let has_actual_tests = state.has_compiler_check
-        || !state.checked_funcs.is_empty()
-        || !state.checked_headers.is_empty()
-        || !state.checked_libs.is_empty()
-        || !state.checked_types.is_empty()
-        || !state.checked_progs.is_empty()
-        || !state.checked_sizeofs.is_empty()
-        || !state.c_conformance_checks.is_empty();
-    if has_actual_tests {
-        s.push_str("# Feature tests\n");
-        s.push_str(&feature_str);
-        s.push('\n');
-    }
 
     // Write config.status with --recheck support
     s.push_str("cat >config.status <<\\_ACEOF\n");

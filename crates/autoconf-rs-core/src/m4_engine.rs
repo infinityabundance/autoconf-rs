@@ -2449,6 +2449,11 @@ impl M4Engine {
                     let escaped_val = value.replace('&', "\\&").replace('/', "\\/");
                     output.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
                 }
+                // Standard AC_SUBST vars resolved with their RUNTIME values ($LIBS, $CC, $CFLAGS,
+                // ...). This inline substitution runs in configure's own scope, so probe-accumulated
+                // values (e.g. AC_CHECK_LIB appending `-lz` to $LIBS) are present here. Without this
+                // `LIBS = @LIBS@`/empty in the Makefile -> link fails with undefined references.
+                output.push_str(crate::shell_gen::STD_VAR_SED);
                 output.push_str(&format!(
                     " \"${{srcdir}}/{}.in\" > '{}' 2>/dev/null\n",
                     file, file
@@ -2457,7 +2462,12 @@ impl M4Engine {
             }
             for hdr in &self.state.config_headers {
                 output.push_str(&format!("printf '%s\\n' 'creating {}'\n", hdr));
-                output.push_str("sed");
+                // Bake confdefs.h (runtime AC_CHECK_* probe results: `#define HAVE_X 1`) into the
+                // header: each becomes `s|#undef X|#define X V|` applied to the template, so detected
+                // features land in config.h. \x01 (SOH) is the sed delimiter. Static `-e` seds below
+                // cover compile-time AC_DEFINE/PACKAGE values.
+                output.push_str("sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null\n");
+                output.push_str("sed -f conf_defs$$.sed");
                 for (var_name, var_value) in &self.state.defines {
                     output.push_str(&format!(
                         " -e 's|#undef {}|#define {} {}|g'",
@@ -2477,7 +2487,7 @@ impl M4Engine {
                 // ATOMIC write: generate into a temp then mv, so a concurrent compile can never read
                 // a half-written / pre-substitution config.h (the cause of intermittent
                 // "PACKAGE_NAME undeclared" under parallel make).
-                output.push_str(&format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'\n", h = hdr));
+                output.push_str(&format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'; rm -f conf_defs$$.sed\n", h = hdr));
             }
             let dyn_part =
                 crate::shell_gen::generate_config_status_section(&self.state, name, version);
@@ -2496,6 +2506,10 @@ impl M4Engine {
             output.push_str("  test \"$silent\" = yes &&\n");
             output.push_str("    ac_config_status_args=\"$ac_config_status_args --quiet\"\n");
             output.push_str("  exec 5>/dev/null\n");
+            // Export probe-accumulated AC_SUBST vars so config.status (a separate $SHELL process)
+            // inherits their RUNTIME values; otherwise its re-substitution would overwrite the good
+            // inline output with empty `$LIBS`/`$CC`/etc.
+            output.push_str("  export CC CFLAGS CPPFLAGS LDFLAGS LIBS CXX CXXFLAGS CPP DEFS LIBOBJS LTLIBOBJS ALLOCA AR RANLIB 2>/dev/null || :\n");
             output.push_str(
                 "  $SHELL ./config.status $ac_config_status_args || ac_cs_success=false\n",
             );
