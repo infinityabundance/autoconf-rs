@@ -124,6 +124,10 @@ impl M4Engine {
             // detection) that still appear in older configure.ac and otherwise leak literal.
             "AC_PROG_CC_STDC", "AC_PROG_CC_C99", "AC_PROG_CC_C89", "AC_PROG_CXX_C_O",
             "AC_PROG_CC_C_O", "AC_PATH_XTRA", "AC_PATH_X", "AC_AIX", "AC_MINIX",
+            // AC_LANG family: selects the probe language (C/C++). We probe in C by default and the
+            // selection is otherwise inert here; left literal it was `AC_LANG(C)` -> shell syntax
+            // error near `(`. Common in C++ projects (preseq, yarrp) and older C ones (aprs).
+            "AC_LANG", "AC_LANG_PUSH", "AC_LANG_POP", "AC_LANG_SAVE", "AC_LANG_RESTORE", "AC_LANG_C",
             "AC_C_CONST", "AC_C_INLINE", "AC_C_VOLATILE", "AC_C_RESTRICT", "AC_C_BIGENDIAN",
             "AC_HEADER_STDC", "AC_HEADER_TIME", "AC_HEADER_SYS_WAIT", "AC_HEADER_ASSERT",
             "AC_TYPE_SIZE_T", "AC_TYPE_PID_T", "AC_TYPE_OFF_T", "AC_TYPE_UID_T", "AC_TYPE_MODE_T",
