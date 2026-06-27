@@ -1071,15 +1071,19 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AS_VAR_ARITH", b"$1=$(( $2 ))");
-        // AS_VAR_PUSHDEF: push variable definition
-        self.engine.macro_table.define(
-            b"AS_VAR_PUSHDEF",
-            b"ac_pushdef_$1=\"$2\"\n$1=\"$ac_pushdef_$1\"",
-        );
-        // AS_VAR_POPDEF: pop variable definition
+        // AS_VAR_PUSHDEF/POPDEF are M4-LEVEL (not shell): they push an m4 macro $1 whose expansion
+        // is the shell variable name $2, so subsequent uses of $1 reference that var. The previous
+        // shell-emitting version produced garbage multi-line assignments (AX_SAVE_FLAGS broke with a
+        // newline-laden value). Map to m4 pushdef/popdef -> no shell output, correct aliasing.
         self.engine
             .macro_table
-            .define(b"AS_VAR_POPDEF", b"$1=\"$ac_pushdef_$1\"");
+            .define(b"AS_VAR_PUSHDEF", b"m4_pushdef([$1], [$2])");
+        self.engine
+            .macro_table
+            .define(b"AS_VAR_POPDEF", b"m4_popdef([$1])");
+        // AS_VAR_COPY(DEST, SRC): copy SRC's value into DEST (both are shell var names after the
+        // AS_VAR_PUSHDEF aliasing expands). Was undefined -> leaked literal `AS_VAR_COPY(...)`.
+        self.engine.macro_table.define(b"AS_VAR_COPY", b"$1=$$2");
         // AS_UNSET: portable unset
         self.engine.macro_table.define(b"AS_UNSET", b"unset $1");
         // AS_EXIT: exit with optional status
