@@ -132,6 +132,9 @@ impl M4Engine {
             // Obsolete/libtool/gettext/no-result macros that otherwise leak literal -> command-not-found
             // in real configure.ac. Their effects are either defaulted elsewhere or irrelevant here.
             "AM_NLS", "AM_GNU_GETTEXT_REQUIRE_VERSION", "AM_PO_SUBDIRS", "AM_XGETTEXT_OPTION",
+            // High-frequency unregistered macros from the corpus bug-map (atlas): assembler, OpenMP,
+            // Vala, script-interpreter — leaked literal as command-not-found across many repos.
+            "AM_PROG_AS", "AC_OPENMP", "AM_PROG_VALAC", "AC_SYS_INTERPRETER", "AC_PATH_PROG_FLEX",
             "AM_DISABLE_STATIC", "AM_ENABLE_STATIC", "AM_DISABLE_SHARED", "AM_ENABLE_SHARED",
             "AM_PROG_LD", "AM_PROG_NM", "AM_WITH_DMALLOC", "AM_PATH_LISPDIR",
             "AC_LIBTOOL_DLOPEN", "AC_LIBTOOL_WIN32_DLL", "AC_LIBTOOL_SETUP", "AC_DISABLE_STATIC",
