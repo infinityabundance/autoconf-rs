@@ -54,3 +54,7 @@ serde_json = "1"
 sha2 = "0.10"
 
 
+
+
+[patch.crates-io]
+m4-rs-core = { path = "/home/one/m4-rs/crates/m4-rs-core" }

@@ -809,13 +809,20 @@ impl M4Engine {
             .macro_table
             .define(b"m4_bmatch", b"ifelse([$1], [$2], [$3], [$4], [$5])");
         // Iteration: m4_foreach / m4_map
+        // m4_foreach (standard m4sugar shape): pass the list UNQUOTED into _m4_foreach so a
+        // macro-call list ([_AX_SAVE_FLAGS_LIST()]) expands+rescans into separate args, then iterate
+        // with m4_shift3. Relies on the engine's rescan-after-expansion (rescan_into_args).
         self.engine.macro_table.define(
             b"m4_foreach",
-            b"ifelse([$2], [], [], [pushdef([$1], m4_car($2))$3[]popdef([$1])m4_foreach([$1], m4_cdr($2), [$3])])",
+            b"ifelse([$2], [], [], [_m4_foreach([$1], [$3], $2)])",
+        );
+        self.engine.macro_table.define(
+            b"_m4_foreach",
+            b"pushdef([$1], [$3])$2[]ifelse([$#], [3], [popdef([$1])], [_m4_foreach([$1], [$2], m4_shift3($@))])",
         );
         self.engine.macro_table.define(
             b"m4_foreach_w",
-            b"m4_foreach([$1], m4_split(m4_normalize([$2])), [$3])",
+            b"m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])",
         );
         self.engine
             .macro_table
