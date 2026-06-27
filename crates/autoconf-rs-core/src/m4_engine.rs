@@ -135,6 +135,9 @@ impl M4Engine {
             // High-frequency unregistered macros from the corpus bug-map (atlas): assembler, OpenMP,
             // Vala, script-interpreter — leaked literal as command-not-found across many repos.
             "AM_PROG_AS", "AC_OPENMP", "AM_PROG_VALAC", "AC_SYS_INTERPRETER", "AC_PATH_PROG_FLEX",
+            // AH_* are autoheader directives (they shape config.h.in, NOT configure). Left active they
+            // leaked `m4_define(_ah_top, ...)` into configure -> shell syntax error (9 corpus repos).
+            "AH_TOP", "AH_BOTTOM", "AH_VERBATIM", "AH_TEMPLATE", "AH_HEADER", "AH_CHECK_HEADERS",
             "AM_DISABLE_STATIC", "AM_ENABLE_STATIC", "AM_DISABLE_SHARED", "AM_ENABLE_SHARED",
             "AM_PROG_LD", "AM_PROG_NM", "AM_WITH_DMALLOC", "AM_PATH_LISPDIR",
             "AC_LIBTOOL_DLOPEN", "AC_LIBTOOL_WIN32_DLL", "AC_LIBTOOL_SETUP", "AC_DISABLE_STATIC",
@@ -1225,20 +1228,14 @@ impl M4Engine {
             b"define([_m4_wrap_text], ifdef([_m4_wrap_text], [defn([_m4_wrap_text])$1], [$1]))",
         );
 
-        // --- Autoheader (config.h.in) macros ---
-        self.engine
-            .macro_table
-            .define(b"AH_TEMPLATE", b"m4_define([_ah_template_$1], [$2])");
-        self.engine
-            .macro_table
-            .define(b"AH_VERBATIM", b"m4_define([_ah_verbatim_$1], [$2])");
-        self.engine
-            .macro_table
-            .define(b"AH_TOP", b"m4_define([_ah_top], defn([_ah_top])$1\n)");
-        self.engine.macro_table.define(
-            b"AH_BOTTOM",
-            b"m4_define([_ah_bottom], defn([_ah_bottom])$1\n)",
-        );
+        // --- Autoheader (config.h.in) macros --- These shape config.h.in, NOT configure. In the
+        // configure stream they must expand to NOTHING; the previous `m4_define([_ah_top], ...)`
+        // bodies leaked literally into configure -> shell syntax error near `_ah_top,` (9 corpus
+        // repos). config.h.in's top/bottom text is cosmetic and handled by autoheader separately.
+        self.engine.macro_table.define(b"AH_TEMPLATE", b"");
+        self.engine.macro_table.define(b"AH_VERBATIM", b"");
+        self.engine.macro_table.define(b"AH_TOP", b"");
+        self.engine.macro_table.define(b"AH_BOTTOM", b"");
 
         // --- M4 engine edge cases ---
         self.register_changeword();
