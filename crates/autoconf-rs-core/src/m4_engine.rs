@@ -770,6 +770,11 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_default", b"ifelse([$1], [], [$2], [$1])");
+        // m4_pushdef/m4_popdef — m4sugar wrappers over the pushdef/popdef builtins. Used by pkg.m4
+        // (PKG_INSTALLDIR's `m4_pushdef([pkg_default], ...)`) and many others; undefined -> leaked
+        // literal -> shell syntax error.
+        self.engine.macro_table.define(b"m4_pushdef", b"pushdef([$1], [$2])");
+        self.engine.macro_table.define(b"m4_popdef", b"popdef([$1])");
         self.engine
             .macro_table
             .define(b"m4_default_nblank", b"ifelse(m4_normalize([$1]), [], [$2], [$1])");
@@ -2476,6 +2481,9 @@ impl M4Engine {
                 }
             }
 
+            // Ensure the runtime AC_SUBST sink exists (config files apply it via `sed -f`); a
+            // missing file would make sed error and blank out every generated file.
+            output.push_str("test -f conf_subst.sed || : > conf_subst.sed\n");
             for file in &self.state.config_files {
                 output.push_str(&format!("printf '%s\\n' 'creating {}'\n", file));
                 output.push_str(&format!(
@@ -2496,6 +2504,8 @@ impl M4Engine {
                     let escaped_val = value.replace('&', "\\&").replace('/', "\\/");
                     output.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
                 }
+                // Runtime AC_SUBST substitutions (PKG_CHECK_MODULES PFX_CFLAGS/LIBS etc.).
+                output.push_str(" -f conf_subst.sed");
                 // Standard AC_SUBST vars resolved with their RUNTIME values ($LIBS, $CC, $CFLAGS,
                 // ...). This inline substitution runs in configure's own scope, so probe-accumulated
                 // values (e.g. AC_CHECK_LIB appending `-lz` to $LIBS) are present here. Without this

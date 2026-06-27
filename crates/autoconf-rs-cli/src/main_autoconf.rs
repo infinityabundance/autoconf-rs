@@ -125,9 +125,14 @@ fn run() -> ExitCode {
         .parent()
         .unwrap_or_else(|| Path::new("."))
         .join("aclocal.m4");
+    // Macro OVERRIDES injected AFTER aclocal.m4 but BEFORE configure.ac, so they win over the
+    // project's third-party definitions (pkg.m4 etc.) that autoconf-rs cannot yet expand correctly
+    // (the real pkg.m4 leaks `pkg_default`/`glib_minimum` -> shell syntax error). We emit clean,
+    // self-contained shell instead. Real pkg-config runs at configure time and sets PFX_CFLAGS/LIBS.
+    let overrides = autoconf_rs_core::macro_overrides();
     let input = match std::fs::read_to_string(&aclocal_path) {
-        Ok(acm4) => format!("{}\n{}", acm4, configure_ac),
-        Err(_) => configure_ac,
+        Ok(acm4) => format!("{}\n{}\n{}", acm4, overrides, configure_ac),
+        Err(_) => format!("{}\n{}", overrides, configure_ac),
     };
 
     let _ac = ConfigureAc::parse(&input);

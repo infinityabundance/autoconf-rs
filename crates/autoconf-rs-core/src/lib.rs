@@ -49,3 +49,50 @@ pub use configure_ac::ConfigureAc;
 pub use diagnostics::{Diagnostic, DiagnosticLevel};
 pub use m4_engine::M4Engine;
 pub use shell_gen::ShellGenerator;
+
+/// m4 macro definitions injected AFTER aclocal.m4 (so they override the project's third-party
+/// definitions) and BEFORE configure.ac. autoconf-rs cannot yet correctly expand some standard
+/// third-party macros (notably pkg.m4's PKG_CHECK_MODULES, whose internals leak
+/// `pkg_default`/`glib_minimum` -> shell syntax errors). We replace them with clean, self-contained
+/// shell that does the real work: run pkg-config at configure time, set PFX_CFLAGS/PFX_LIBS, and
+/// record `@PFX_CFLAGS@`/`@PFX_LIBS@` substitutions into conf_subst.sed (consumed when config files
+/// are created, mirroring confdefs.h -> config.h).
+pub fn macro_overrides() -> &'static str {
+    r#"dnl --- autoconf-rs macro overrides ---
+m4_define([PKG_CHECK_MODULES], [dnl
+printf %s "checking for $2... "
+if pkg-config --exists "$2" 2>/dev/null; then
+  printf '%s\n' "yes"
+  $1_CFLAGS=`pkg-config --cflags "$2" 2>/dev/null`
+  $1_LIBS=`pkg-config --libs "$2" 2>/dev/null`
+  printf '%s\n' "s|@$1_CFLAGS@|$$1_CFLAGS|g" >> conf_subst.sed 2>/dev/null
+  printf '%s\n' "s|@$1_LIBS@|$$1_LIBS|g" >> conf_subst.sed 2>/dev/null
+  :
+  $3
+else
+  printf '%s\n' "no"
+  $1_CFLAGS=
+  $1_LIBS=
+  printf '%s\n' "s|@$1_CFLAGS@||g" >> conf_subst.sed 2>/dev/null
+  printf '%s\n' "s|@$1_LIBS@||g" >> conf_subst.sed 2>/dev/null
+  :
+  $4
+fi
+])dnl
+m4_define([PKG_CHECK_EXISTS], [dnl
+if pkg-config --exists "$1" 2>/dev/null; then
+  :
+  $2
+else
+  :
+  $3
+fi
+])dnl
+m4_define([PKG_PROG_PKG_CONFIG], [PKG_CONFIG=`command -v pkg-config 2>/dev/null`
+printf '%s\n' "s|@PKG_CONFIG@|$PKG_CONFIG|g" >> conf_subst.sed 2>/dev/null])dnl
+m4_define([PKG_INSTALLDIR], [pkgconfigdir=${libdir}/pkgconfig
+printf '%s\n' "s|@pkgconfigdir@|$pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
+m4_define([PKG_NOARCH_INSTALLDIR], [noarch_pkgconfigdir=${datadir}/pkgconfig
+printf '%s\n' "s|@noarch_pkgconfigdir@|$noarch_pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
+"#
+}
