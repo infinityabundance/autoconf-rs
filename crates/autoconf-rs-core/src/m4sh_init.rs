@@ -530,6 +530,12 @@ pub fn generate_configure_prologue(
     );
     h.extend_from_slice(&generate_m4sh_init(package_name, package_version));
     h.extend_from_slice(&generate_m4sh_functions());
+    // _acrs_write_libtool: writes the native libtool wrapper + sets/substitutes LIBTOOL. Called by
+    // our LT_INIT/LT_OUTPUT/AC_PROG_LIBTOOL overrides. Defined here (prologue) so it exists before
+    // any LT_INIT call in the configure.ac body.
+    h.extend_from_slice(b"_acrs_write_libtool () {\ncat > ./libtool <<'_ACRS_LTEOF'\n");
+    h.extend_from_slice(crate::libtool_script().as_bytes());
+    h.extend_from_slice(b"_ACRS_LTEOF\nchmod +x ./libtool\nLIBTOOL=\"${CONFIG_SHELL:-/bin/sh} `pwd`/libtool\"\ntest -f conf_subst.sed || : > conf_subst.sed\nprintf '%s\\n' \"s|@LIBTOOL@|$LIBTOOL|g\" >> conf_subst.sed\n}\n");
     h.extend_from_slice(b"# Sanitize environment\n");
     h.extend_from_slice(b"LC_ALL=C\nexport LC_ALL\nLANGUAGE=C\nexport LANGUAGE\n\nCDPATH=\n\n");
     // Identity of this package (set near the top, as GNU Autoconf does). These shell vars carry the
