@@ -472,8 +472,11 @@ pub fn generate_m4sh_functions() -> Vec<u8> {
         b"  printf '%s\\n' \"$as_me: error: ${2}\" >&2\n  as_fn_exit $as_status\n}\n\n",
     );
 
-    // as_dirname / as_basename
-    f.extend_from_slice(b"if (as_dir=.; test -r \"$as_dir/chmod\") >/dev/null 2>&1; then :\n");
+    // as_dirname / as_basename. The probe MUST actually exercise `dirname`: the previous test
+    // (`test -r "./chmod"`) checked for an unrelated file in the cwd, so it almost always failed ->
+    // as_dirname=false -> the fragile inline-sed dirname fallback, which INFINITE-LOOPS in
+    // as_fn_mkdir_p when it can't shorten the path (hung configure on essentially every project).
+    f.extend_from_slice(b"if (dirname -- / || dirname /) >/dev/null 2>&1; then :\n");
     f.extend_from_slice(b"  as_dirname=dirname\nelse\n  as_dirname=false\nfi\n\n");
 
     // as_basename — portable basename with fallbacks
@@ -559,7 +562,10 @@ pub fn generate_configure_prologue(
     h.extend_from_slice(b"ac_fn_c_try_run () {\n  if { ac_try='$ac_link'; (eval \"$ac_try\") 2>&5; } && test -s conftest$ac_exeext && { ac_try='./conftest$ac_exeext'; (eval \"$ac_try\") 2>&5; }; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
     h.extend_from_slice(b"ac_fn_c_try_cpp () {\n  if { (eval \"$ac_cpp conftest.$ac_ext\") 2>&5; }; then ac_retval=0; else ac_retval=1; fi\n  return $ac_retval\n}\n\n");
     // Exit/signal trap: clean up conftest debris on EXIT (and on INT/TERM), preserving the exit status.
-    h.extend_from_slice(b"ac_clean_files=\nac_exit_trap () { ac_status=$?; rm -f conftest* conf$$* core 2>/dev/null; exit $ac_status; }\ntrap 'ac_exit_trap' 0  # 0 = EXIT\ntrap 'ac_status=1; ac_exit_trap' 1 2 13 15\n\n");
+    // ac_exit_trap MUST disarm the EXIT(0) trap before calling `exit`, otherwise `exit $ac_status`
+    // re-triggers the EXIT trap -> infinite recursion that HANGS configure (observed on nearly every
+    // real-world project). `trap - 0 1 2 13 15` disarms it so the final exit terminates the shell.
+    h.extend_from_slice(b"ac_clean_files=\nac_exit_trap () { ac_status=$?; trap - 0 1 2 13 15; rm -f conftest* conf$$* core 2>/dev/null; exit $ac_status; }\ntrap 'ac_exit_trap' 0  # 0 = EXIT\ntrap 'ac_status=1; ac_exit_trap' 1 2 13 15\n\n");
     // Standard m4sh command-line option parsing (--prefix, --bindir, --enable/--with, env-var
     // capture, srcdir handling) and the --help/--version reports. These are static boilerplate in
     // every Autoconf configure; emitting them here makes the dynamic script handle options exactly

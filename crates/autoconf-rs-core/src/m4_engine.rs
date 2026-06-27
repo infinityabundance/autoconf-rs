@@ -2223,9 +2223,16 @@ impl M4Engine {
                     &crate::configure_body::generate_configure_body(&self.state),
                 )
                 .into_owned();
+                // Insert the prologue/body for the FIRST sentinel only, and strip any extras. The
+                // token AC_INIT/AC_OUTPUT can appear more than once in configure.ac — notably inside
+                // `#` lines, which are SHELL comments but NOT m4 comments, so the macro still expands
+                // (e.g. goaccess: "# NOTE: Needs to go after AC_INIT ..."). Emitting the prologue
+                // twice duplicated the m4sh re-exec machinery -> infinite exec loop / hung configure.
                 m4_output
-                    .replace(Self::AC_INIT_MARK, &prologue)
-                    .replace(Self::AC_OUTPUT_MARK, &body)
+                    .replacen(Self::AC_INIT_MARK, &prologue, 1)
+                    .replace(Self::AC_INIT_MARK, "")
+                    .replacen(Self::AC_OUTPUT_MARK, &body, 1)
+                    .replace(Self::AC_OUTPUT_MARK, "")
             } else {
                 m4_output
             };
