@@ -19,7 +19,14 @@ pub fn generate_feature_test_body(state: &AutoconfState) -> Vec<u8> {
     b.extend_from_slice(b"_ACEOF\n");
     // Runtime AC_SUBST sink for dynamic vars (e.g. PKG_CHECK_MODULES' PFX_CFLAGS/PFX_LIBS). Macros
     // append `s|@VAR@|value|` lines here; config-file creation applies them via `sed -f`.
-    b.extend_from_slice(b": > conf_subst.sed\n\n");
+    b.extend_from_slice(b": > conf_subst.sed\n");
+    // @DEFS@ is -DHAVE_CONFIG_H when a config header is used (the standard idiom): programs guard
+    // `#ifdef HAVE_CONFIG_H #include "config.h"`, so without it the header is never included and its
+    // PACKAGE/HAVE_* defines are invisible (`PACKAGE undeclared`). config.status substitutes @DEFS@.
+    if !state.config_headers.is_empty() {
+        b.extend_from_slice(b"DEFS=-DHAVE_CONFIG_H\n");
+    }
+    b.extend_from_slice(b"\n");
 
     // --- conftest compile/link helpers: the shell functions the AC_CHECK_* probes call to actually
     // build a test program. Without these definitions, `if ac_fn_c_try_compile` was a

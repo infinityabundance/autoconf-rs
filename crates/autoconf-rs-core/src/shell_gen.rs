@@ -24,7 +24,7 @@ const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
   OBJEXT=o; EXEEXT=; SET_MAKE=; am__leading_dot=.
   : ${SHELL=/bin/sh}; MKDIR_P="mkdir -p"; DEPDIR=.deps
   INSTALL="$abs_srcdir/install-sh -c"; INSTALL_PROGRAM='${INSTALL}'; INSTALL_DATA='${INSTALL} -m 644'; INSTALL_SCRIPT='${INSTALL}'
-  DEFS=; ECHO_C=; ECHO_N=; ECHO_T=; LIBTOOL=; LIBOBJS=; LTLIBOBJS=; ALLOCA=
+  : ${DEFS=}; ECHO_C=; ECHO_N=; ECHO_T=; : ${LIBTOOL=}; LIBOBJS=; LTLIBOBJS=; ALLOCA=
   build=x86_64-pc-linux-gnu; host=$build; target=$build
   build_alias=; host_alias=; target_alias=
   build_cpu=x86_64; build_vendor=pc; build_os=linux-gnu
