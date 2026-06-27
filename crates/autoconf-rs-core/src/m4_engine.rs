@@ -2529,6 +2529,13 @@ impl M4Engine {
                     " \"${{srcdir}}/{}.in\" > '{}' 2>/dev/null\n",
                     file, file
                 ));
+                // Generic AC_SUBST fallback: replace any @VAR@ still left in the generated file with
+                // the RUNTIME value of $VAR. Catches AC_SUBST'd vars set inside macros (e.g. EMACS via
+                // AM_PATH_LISPDIR) that the prescan can't see; an unset var correctly becomes empty.
+                output.push_str(&format!(
+                    "for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*@' '{}' 2>/dev/null | sort -u`; do _vn=`printf '%%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%%s' \"$_vv\" | sed 's/[&|\\\\]/\\\\\\\\&/g'`; sed \"s|$_ph|$_ve|g\" '{}' > '{}.t$$' && mv -f '{}.t$$' '{}'; done\n",
+                    file, file, file, file, file
+                ));
                 output.push_str(&format!("  if test ! -f '{}'; then\n    printf '%%s\\n' 'creating {} (from {}.in)'\n  fi\n", file, file, file));
             }
             for hdr in &self.state.config_headers {
