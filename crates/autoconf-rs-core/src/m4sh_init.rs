@@ -535,7 +535,11 @@ pub fn generate_configure_prologue(
     // any LT_INIT call in the configure.ac body.
     h.extend_from_slice(b"_acrs_write_libtool () {\ncat > ./libtool <<'_ACRS_LTEOF'\n");
     h.extend_from_slice(crate::libtool_script().as_bytes());
-    h.extend_from_slice(b"_ACRS_LTEOF\nchmod +x ./libtool\nLIBTOOL=\"${CONFIG_SHELL:-/bin/sh} `pwd`/libtool\"\ntest -f conf_subst.sed || : > conf_subst.sed\nprintf '%s\\n' \"s|@LIBTOOL@|$LIBTOOL|g\" >> conf_subst.sed\n}\n");
+    h.extend_from_slice(b"_ACRS_LTEOF\nchmod +x ./libtool\nLIBTOOL=\"${CONFIG_SHELL:-/bin/sh} `pwd`/libtool\"\nexport LIBTOOL\ntest -f conf_subst.sed || : > conf_subst.sed\nprintf '%s\\n' \"s|@LIBTOOL@|$LIBTOOL|g\" >> conf_subst.sed\n}\n");
+    // Create the runtime AC_SUBST sink ONCE, here in the prologue (before the configure.ac body), so
+    // macros called early in the body (LT_INIT -> _acrs_write_libtool, PKG_CHECK_MODULES) can append
+    // to it without a later `: > conf_subst.sed` truncating their entries.
+    h.extend_from_slice(b": > conf_subst.sed\n");
     h.extend_from_slice(b"# Sanitize environment\n");
     h.extend_from_slice(b"LC_ALL=C\nexport LC_ALL\nLANGUAGE=C\nexport LANGUAGE\n\nCDPATH=\n\n");
     // Identity of this package (set near the top, as GNU Autoconf does). These shell vars carry the

@@ -2504,6 +2504,15 @@ impl M4Engine {
                     "mkdir -p \"$(dirname '{}')\" 2>/dev/null || :\n",
                     file
                 ));
+                // top_builddir/top_srcdir relative to THIS file's directory (subdir Makefiles need
+                // `..` so -I$(top_builddir) reaches the top-level config.h). Computed from the depth.
+                let depth = file.matches('/').count();
+                let rel = if depth == 0 {
+                    ".".to_string()
+                } else {
+                    vec![".."; depth].join("/")
+                };
+                output.push_str(&format!("top_builddir={rel}; top_srcdir={rel}\n"));
                 output.push_str("sed");
                 output.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
                 output.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));

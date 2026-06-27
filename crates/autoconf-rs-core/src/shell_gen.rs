@@ -409,6 +409,9 @@ pub fn generate_config_status_section(
     s.push_str("substitute() {\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
     s.push_str(STD_VAR_DEFAULTS);
+    // top_builddir/top_srcdir are relative to the OUTPUT file's directory, not always `.`: a subdir
+    // Makefile (lib/Makefile) needs top_builddir=.. so -I$(top_builddir) finds the top config.h.
+    s.push_str("  ac_d=`dirname \"$2\"`; case $ac_d in .|\"\") top_builddir=. ;; *) top_builddir=`printf '%s' \"$ac_d\" | sed 's,[^/][^/]*,..,g'` ;; esac; top_srcdir=$top_builddir\n");
     s.push_str("  sed");
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
