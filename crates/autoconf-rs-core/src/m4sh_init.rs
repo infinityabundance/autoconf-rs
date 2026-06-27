@@ -17,6 +17,10 @@ pub fn generate_m4sh_init(_pn: &str, _pv: &str) -> Vec<u8> {
     // Shell portability
     i.extend_from_slice(b"\n# Be more Bourne compatible\n");
     i.extend_from_slice(b"DUALCASE=1; export DUALCASE # for MKS sh\n");
+    // Create confdefs.h as the VERY FIRST thing so every compile probe's `cat confdefs.h - <<EOF`
+    // works — even AC_CHECK_LIB/AC_COMPILE_IFELSE emitted early (before the standard confdefs init).
+    // `cat: confdefs.h: No such file` was the single most common corpus failure (36/138 repos).
+    i.extend_from_slice(b"test -f confdefs.h || printf '%s\\n' '/* confdefs.h */' > confdefs.h\n");
     i.extend_from_slice(b"if test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1\n");
     i.extend_from_slice(b"then :\n  emulate sh\n  NULLCMD=:\n");
     i.extend_from_slice(b"  # Pre-4.2 versions of Zsh do word splitting on ${1+\"$@\"}, which\n");
@@ -540,6 +544,11 @@ pub fn generate_configure_prologue(
     // macros called early in the body (LT_INIT -> _acrs_write_libtool, PKG_CHECK_MODULES) can append
     // to it without a later `: > conf_subst.sed` truncating their entries.
     h.extend_from_slice(b": > conf_subst.sed\n");
+    // Create confdefs.h ONCE here in the prologue too. The compile probes do `cat confdefs.h - ...`;
+    // a project AC_COMPILE_IFELSE/AC_CHECK in the configure.ac body runs BEFORE the generated
+    // feature-test section, so confdefs.h must already exist — otherwise `cat: confdefs.h: No such
+    // file` (the single most common corpus failure, 36/138 repos) corrupts every early probe.
+    h.extend_from_slice(b"test -f confdefs.h || printf '%s\\n' '/* confdefs.h */' > confdefs.h\n");
     h.extend_from_slice(b"# Sanitize environment\n");
     h.extend_from_slice(b"LC_ALL=C\nexport LC_ALL\nLANGUAGE=C\nexport LANGUAGE\n\nCDPATH=\n\n");
     // Identity of this package (set near the top, as GNU Autoconf does). These shell vars carry the

@@ -246,19 +246,19 @@ impl M4Engine {
         // AC_CHECK_FUNC — check for C library function
         self.engine.macro_table.define(
             b"AC_CHECK_FUNC",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_HEADER — check for C header
         self.engine.macro_table.define(
             b"AC_CHECK_HEADER",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_LIB — check for library
         self.engine.macro_table.define(
             b"AC_CHECK_LIB",
-            b"printf %s \"checking for $2 in -l$1... \"\nLIBS=\"-l$1 $LIBS\"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nchar $2();\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $2 in -l$1... \"\nLIBS=\"-l$1 $LIBS\"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $2();\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_FUNCS — plural: check multiple functions
@@ -331,7 +331,7 @@ impl M4Engine {
         // AC_CHECK_TYPE — check for C type
         self.engine.macro_table.define(
             b"AC_CHECK_TYPE",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\nint main() { $1 x; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\nint main() { $1 x; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_TYPES — plural
@@ -343,7 +343,7 @@ impl M4Engine {
         // AC_CHECK_MEMBER — check for struct member
         self.engine.macro_table.define(
             b"AC_CHECK_MEMBER",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$2\nint main() { $1 x; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$2\nint main() { $1 x; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_PROG_SED — find sed
@@ -863,7 +863,7 @@ impl M4Engine {
         // Sets _FILE_OFFSET_BITS=64 and _LARGEFILE_SOURCE on platforms that need it.
         self.engine.macro_table.define(
             b"AC_SYS_LARGEFILE",
-            b"# Check for large file support\nprintf %s \"checking for 64-bit off_t... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\nint main() { return sizeof(off_t) >= 8 ? 0 : 1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no, enabling _FILE_OFFSET_BITS=64\"\n  CPPFLAGS=\"$CPPFLAGS -D_FILE_OFFSET_BITS=64\"\n  printf %s \"checking for large file support with -D_FILE_OFFSET_BITS=64... \"\n  if ac_fn_c_try_compile; then\n    printf '%s\\n' \"yes\"\n  else\n    CPPFLAGS=\"$CPPFLAGS -D_LARGEFILE_SOURCE -D_LARGE_FILES\"\n    printf '%s\\n' \"no, enabling _LARGEFILE_SOURCE\"\n  fi\nfi",
+            b"# Check for large file support\nprintf %s \"checking for 64-bit off_t... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\nint main() { return sizeof(off_t) >= 8 ? 0 : 1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no, enabling _FILE_OFFSET_BITS=64\"\n  CPPFLAGS=\"$CPPFLAGS -D_FILE_OFFSET_BITS=64\"\n  printf %s \"checking for large file support with -D_FILE_OFFSET_BITS=64... \"\n  if ac_fn_c_try_compile; then\n    printf '%s\\n' \"yes\"\n  else\n    CPPFLAGS=\"$CPPFLAGS -D_LARGEFILE_SOURCE -D_LARGE_FILES\"\n    printf '%s\\n' \"no, enabling _LARGEFILE_SOURCE\"\n  fi\nfi",
         );
         self.engine.macro_table.define(
             b"AC_SYS_LONG_FILE_NAMES",
@@ -871,11 +871,11 @@ impl M4Engine {
         );
         self.engine.macro_table.define(
             b"AC_SYS_POSIX_TERMIOS",
-            b"# Check for POSIX termios\nprintf %s \"checking for POSIX termios... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <termios.h>\nint main() { struct termios t; tcgetattr(0, &t); return 0; }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  AC_DEFINE([HAVE_POSIX_TERMIOS], [1])\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"# Check for POSIX termios\nprintf %s \"checking for POSIX termios... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <termios.h>\nint main() { struct termios t; tcgetattr(0, &t); return 0; }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  AC_DEFINE([HAVE_POSIX_TERMIOS], [1])\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         self.engine.macro_table.define(
             b"AC_SYS_RESTARTABLE_SYSCALLS",
-            b"# Check for restartable syscalls (SA_RESTART)\nprintf %s \"checking for restartable system calls... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <signal.h>\nint main() { struct sigaction sa; sa.sa_flags = SA_RESTART; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  AC_DEFINE([HAVE_RESTARTABLE_SYSCALLS], [1])\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"# Check for restartable syscalls (SA_RESTART)\nprintf %s \"checking for restartable system calls... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <signal.h>\nint main() { struct sigaction sa; sa.sa_flags = SA_RESTART; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  AC_DEFINE([HAVE_RESTARTABLE_SYSCALLS], [1])\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_SYS_SIGLIST_DECLARED (obsolete, replaced by AC_CHECK_DECLS)
         self.engine.macro_table.define(
@@ -887,52 +887,52 @@ impl M4Engine {
         // AC_C_CONST: check if compiler supports 'const'
         self.engine.macro_table.define(
             b"AC_C_CONST",
-            b"printf %s \"checking for working const... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { const int x = 1; return x-1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for working const... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { const int x = 1; return x-1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_VOLATILE: check if compiler supports 'volatile'
         self.engine.macro_table.define(
             b"AC_C_VOLATILE",
-            b"printf %s \"checking for working volatile... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { volatile int x = 0; return x; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for working volatile... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { volatile int x = 0; return x; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_INLINE: check for inline keyword support
         self.engine.macro_table.define(
             b"AC_C_INLINE",
-            b"printf %s \"checking for inline... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\ninline int foo() { return 0; }\nint main() { return foo(); }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for inline... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\ninline int foo() { return 0; }\nint main() { return foo(); }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_RESTRICT: check for restrict keyword support
         self.engine.macro_table.define(
             b"AC_C_RESTRICT",
-            b"printf %s \"checking for restrict... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nvoid foo(char * restrict p) { *p = 0; }\nint main() { char c; foo(&c); return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for restrict... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nvoid foo(char * restrict p) { *p = 0; }\nint main() { char c; foo(&c); return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_BIGENDIAN: check CPU endianness
         self.engine.macro_table.define(
             b"AC_C_BIGENDIAN",
-            b"printf %s \"checking endianness... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { int x = 1; return *(char*)&x; }\n_ACEOF\nif ac_fn_c_try_run; then\n  printf '%s\\n' \"little-endian\"\nelse\n  printf '%s\\n' \"big-endian\"\nfi",
+            b"printf %s \"checking endianness... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { int x = 1; return *(char*)&x; }\n_ACEOF\nif ac_fn_c_try_run; then\n  printf '%s\\n' \"little-endian\"\nelse\n  printf '%s\\n' \"big-endian\"\nfi",
         );
         // AC_C_CHAR_UNSIGNED: check if char is unsigned
         self.engine.macro_table.define(
             b"AC_C_CHAR_UNSIGNED",
-            b"printf %s \"checking if char is unsigned... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { char c = -1; return c < 0; }\n_ACEOF\nif ac_fn_c_try_run; then\n  printf '%s\\n' \"no (signed)\"\nelse\n  printf '%s\\n' \"yes\"\nfi",
+            b"printf %s \"checking if char is unsigned... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { char c = -1; return c < 0; }\n_ACEOF\nif ac_fn_c_try_run; then\n  printf '%s\\n' \"no (signed)\"\nelse\n  printf '%s\\n' \"yes\"\nfi",
         );
         // AC_C_PROTOTYPES: check for function prototypes
         self.engine.macro_table.define(
             b"AC_C_PROTOTYPES",
-            b"printf %s \"checking for function prototypes... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint foo(int x);\nint foo(int x) { return x; }\nint main() { return foo(0); }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for function prototypes... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint foo(int x);\nint foo(int x) { return x; }\nint main() { return foo(0); }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_STRINGIZE: check for preprocessor stringize (#)
         self.engine.macro_table.define(
             b"AC_C_STRINGIZE",
-            b"printf %s \"checking for stringize... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#define STR(x) #x\nconst char *s = STR(hello);\nint main() { return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for stringize... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#define STR(x) #x\nconst char *s = STR(hello);\nint main() { return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_VARARRAYS: check for C99 variable-length arrays
         self.engine.macro_table.define(
             b"AC_C_VARARRAYS",
-            b"printf %s \"checking for variable-length arrays... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { int n = 10; int a[n]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for variable-length arrays... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { int n = 10; int a[n]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
         // AC_C_TYPEOF: check for typeof/__typeof__
         self.engine.macro_table.define(
             b"AC_C_TYPEOF",
-            b"printf %s \"checking for typeof... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\nint main() { int x; __typeof__(x) y = 1; return y-1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for typeof... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nint main() { int x; __typeof__(x) y = 1; return y-1; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // --- AC_CACHE_* ---
@@ -951,15 +951,15 @@ impl M4Engine {
         // no command is a shell SYNTAX ERROR ("syntax error near unexpected token `fi'").
         self.engine.macro_table.define(
             b"AC_COMPILE_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_compile; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_compile; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine.macro_table.define(
             b"AC_LINK_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_link; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_link; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine.macro_table.define(
             b"AC_RUN_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine
             .macro_table
@@ -992,7 +992,7 @@ impl M4Engine {
         // --- AC_CHECK_SIZEOF (real implementation) ---
         self.engine.macro_table.define(
             b"AC_CHECK_SIZEOF",
-            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { static int test_array[1 - 2 * !((long int) (sizeof ($1)) <= 0)]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"done\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [$(($ac_cv_sizeof_$1))])\nelse\n  printf '%s\\n' \"0 (type not found)\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [0])\nfi",
+            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { static int test_array[1 - 2 * !((long int) (sizeof ($1)) <= 0)]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"done\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [$(($ac_cv_sizeof_$1))])\nelse\n  printf '%s\\n' \"0 (type not found)\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [0])\nfi",
         );
 
         // --- AC_MSG_NOTICE / AC_MSG_FAILURE ---
