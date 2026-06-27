@@ -158,7 +158,7 @@ fn run() -> ExitCode {
     engine.pure_m4 = pure_m4;
 
     let configure_script = match engine.process(&input) {
-        Ok(s) => s,
+        Ok(s) => guard_empty_shell_blocks(&s),
         Err(e) => {
             eprintln!("autoconf: M4 error: {}", e);
             return ExitCode::from(2);
@@ -182,4 +182,50 @@ fn run() -> ExitCode {
 
     print!("{}", configure_script);
     ExitCode::SUCCESS
+}
+
+/// Insert a `:` no-op into otherwise-empty shell blocks (`then`/`else`/`do` immediately followed by
+/// `fi`/`else`/`elif`/`done`). autoconf macros that legitimately expand to nothing (no-op'd or
+/// m4_ifdef-gated-unavailable) leave empty `if ...; then <nothing> fi` blocks, which are a shell
+/// syntax error ("syntax error near unexpected token `fi'"). Real autoconf never emits empty blocks;
+/// this defends against the whole class generically without touching the project's control flow.
+fn guard_empty_shell_blocks(input: &str) -> String {
+    let lines: Vec<&str> = input.lines().collect();
+    let mut out: Vec<String> = Vec::with_capacity(lines.len() + 8);
+    let opens_block = |t: &str| -> bool {
+        let tt = t.trim();
+        if tt == "else" {
+            return true;
+        }
+        // last shell word before EOL is `then` or `do`
+        match tt.rsplit(|c| c == ' ' || c == ';' || c == '\t').next() {
+            Some("then") | Some("do") => true,
+            _ => false,
+        }
+    };
+    let mut i = 0;
+    while i < lines.len() {
+        out.push(lines[i].to_string());
+        if opens_block(lines[i]) {
+            // peek past blank/whitespace-only lines
+            let mut j = i + 1;
+            while j < lines.len() && lines[j].trim().is_empty() {
+                j += 1;
+            }
+            if j < lines.len() {
+                let nt = lines[j].trim_start();
+                if nt.starts_with("fi") || nt == "else" || nt.starts_with("else ")
+                    || nt.starts_with("elif") || nt.starts_with("done")
+                {
+                    out.push(":".to_string());
+                }
+            }
+        }
+        i += 1;
+    }
+    let mut result = out.join("\n");
+    if input.ends_with('\n') {
+        result.push('\n');
+    }
+    result
 }
