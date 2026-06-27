@@ -162,8 +162,11 @@ impl M4Engine {
             "AC_LANG_PROGRAM", "AC_LANG_SOURCE", "AC_EGREP_HEADER", "AC_EGREP_CPP", "AC_TRY_COMPILE",
             "AC_TRY_LINK", "AC_TRY_RUN", "AC_TRY_CPP", "AC_STRUCT_ST_BLOCKS", "AC_HEADER_DIRENT",
             "AC_HEADER_STDBOOL", "AC_HEADER_MAJOR", "AC_HEADER_RESOLV", "AC_FUNC_OBSTACK",
-            "PKG_CHECK_MODULES", "PKG_PROG_PKG_CONFIG", "PKG_CHECK_EXISTS", "PKG_INSTALLDIR",
-            "AX_PTHREAD", "AX_CHECK_COMPILE_FLAG", "AX_CXX_COMPILE_STDCXX", "AX_CXX_COMPILE_STDCXX_11",
+            // NB: PKG_CHECK_MODULES / PKG_* / AX_CXX_COMPILE_STDCXX* are NOT listed here — they are
+            // implemented natively in macro_overrides() (real pkg-config / C++-std probes). A
+            // no-output entry here would shadow those overrides (empty expansion -> empty then/else
+            // -> shell syntax errors).
+            "AX_PTHREAD", "AX_CHECK_COMPILE_FLAG",
             "AX_REQUIRE_DEFINED", "AX_APPEND_FLAG", "AX_APPEND_COMPILE_FLAGS", "gl_INIT", "gl_EARLY", "AC_CHECK_INCLUDES_DEFAULT", "AC_USE_SYSTEM_EXTENSIONS", "AC_SYS_LARGEFILE",
         ] {
             self.engine.macro_table.define(m.as_bytes(), b"");

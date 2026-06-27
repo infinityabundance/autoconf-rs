@@ -130,9 +130,26 @@ fn run() -> ExitCode {
     // (the real pkg.m4 leaks `pkg_default`/`glib_minimum` -> shell syntax error). We emit clean,
     // self-contained shell instead. Real pkg-config runs at configure time and sets PFX_CFLAGS/LIBS.
     let overrides = autoconf_rs_core::macro_overrides();
+    // Splice the overrides INTO the configure.ac text (right before AC_INIT) rather than prepending
+    // them to the whole input: a define that leads the input stream is not honored by the engine,
+    // but the identical text positioned just before AC_INIT in the body IS. (aclocal.m4 still goes
+    // first so its AC_DEFUNs are registered before our overrides redefine the ones we own.)
+    let configure_ac = match configure_ac.find("AC_INIT") {
+        Some(pos) => {
+            // back up to the start of the AC_INIT line
+            let line_start = configure_ac[..pos].rfind('\n').map(|i| i + 1).unwrap_or(0);
+            format!(
+                "{}{}\n{}",
+                &configure_ac[..line_start],
+                overrides,
+                &configure_ac[line_start..]
+            )
+        }
+        None => format!("{}\n{}", overrides, configure_ac),
+    };
     let input = match std::fs::read_to_string(&aclocal_path) {
-        Ok(acm4) => format!("{}\n{}\n{}", acm4, overrides, configure_ac),
-        Err(_) => format!("{}\n{}", overrides, configure_ac),
+        Ok(acm4) => format!("{}\n{}", acm4, configure_ac),
+        Err(_) => configure_ac,
     };
 
     let _ac = ConfigureAc::parse(&input);

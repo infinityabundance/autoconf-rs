@@ -59,7 +59,7 @@ pub use shell_gen::ShellGenerator;
 /// are created, mirroring confdefs.h -> config.h).
 pub fn macro_overrides() -> &'static str {
     r#"dnl --- autoconf-rs macro overrides ---
-m4_define([PKG_CHECK_MODULES], [dnl
+define([PKG_CHECK_MODULES], [dnl
 printf %s "checking for $2... "
 if pkg-config --exists "$2" 2>/dev/null; then
   printf '%s\n' "yes"
@@ -79,7 +79,7 @@ else
   $4
 fi
 ])dnl
-m4_define([PKG_CHECK_EXISTS], [dnl
+define([PKG_CHECK_EXISTS], [dnl
 if pkg-config --exists "$1" 2>/dev/null; then
   :
   $2
@@ -88,13 +88,13 @@ else
   $3
 fi
 ])dnl
-m4_define([PKG_PROG_PKG_CONFIG], [PKG_CONFIG=`command -v pkg-config 2>/dev/null`
+define([PKG_PROG_PKG_CONFIG], [PKG_CONFIG=`command -v pkg-config 2>/dev/null`
 printf '%s\n' "s|@PKG_CONFIG@|$PKG_CONFIG|g" >> conf_subst.sed 2>/dev/null])dnl
-m4_define([PKG_INSTALLDIR], [pkgconfigdir=${libdir}/pkgconfig
+define([PKG_INSTALLDIR], [pkgconfigdir=${libdir}/pkgconfig
 printf '%s\n' "s|@pkgconfigdir@|$pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
-m4_define([PKG_NOARCH_INSTALLDIR], [noarch_pkgconfigdir=${datadir}/pkgconfig
+define([PKG_NOARCH_INSTALLDIR], [noarch_pkgconfigdir=${datadir}/pkgconfig
 printf '%s\n' "s|@noarch_pkgconfigdir@|$noarch_pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
-m4_define([AX_CXX_COMPILE_STDCXX], [dnl
+define([AX_CXX_COMPILE_STDCXX], [dnl
 printf %s "checking for C++$1 support... "
 ax_cxx_std_ok=no
 for ax_sw in -std=c++$1 -std=gnu++$1 -std=c++0x; do
@@ -109,9 +109,9 @@ printf '%s\n' "s|@CXX@|$CXX|g" >> conf_subst.sed 2>/dev/null
 printf '%s\n' "s|@CXXFLAGS@|$CXXFLAGS|g" >> conf_subst.sed 2>/dev/null
 :
 ])dnl
-m4_define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
-m4_define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
-m4_define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl
-m4_define([AX_CXX_COMPILE_STDCXX_20], [AX_CXX_COMPILE_STDCXX([20])])dnl
+define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
+define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
+define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl
+define([AX_CXX_COMPILE_STDCXX_20], [AX_CXX_COMPILE_STDCXX([20])])dnl
 "#
 }
