@@ -128,6 +128,16 @@ impl M4Engine {
             // selection is otherwise inert here; left literal it was `AC_LANG(C)` -> shell syntax
             // error near `(`. Common in C++ projects (preseq, yarrp) and older C ones (aprs).
             "AC_LANG", "AC_LANG_PUSH", "AC_LANG_POP", "AC_LANG_SAVE", "AC_LANG_RESTORE", "AC_LANG_C",
+            "AC_LANG_CPLUSPLUS", "AC_LANG_C_PLUS_PLUS",
+            // Obsolete/libtool/gettext/no-result macros that otherwise leak literal -> command-not-found
+            // in real configure.ac. Their effects are either defaulted elsewhere or irrelevant here.
+            "AM_NLS", "AM_GNU_GETTEXT_REQUIRE_VERSION", "AM_PO_SUBDIRS", "AM_XGETTEXT_OPTION",
+            "AM_DISABLE_STATIC", "AM_ENABLE_STATIC", "AM_DISABLE_SHARED", "AM_ENABLE_SHARED",
+            "AM_PROG_LD", "AM_PROG_NM", "AM_WITH_DMALLOC", "AM_PATH_LISPDIR",
+            "AC_LIBTOOL_DLOPEN", "AC_LIBTOOL_WIN32_DLL", "AC_LIBTOOL_SETUP", "AC_DISABLE_STATIC",
+            "AC_DISABLE_SHARED", "AC_ENABLE_STATIC", "AC_ENABLE_SHARED", "AC_LIBTOOL_PICMODE",
+            "AC_FUNC_SETVBUF_REVERSED", "AC_EXEEXT", "AC_OBJEXT", "AC_CACHE_SAVE", "AC_CACHE_LOAD",
+            "AC_CHECK_HEADER_STDBOOL", "AC_HEADER_STDBOOL", "AC_PROG_LIBTOOL", "AC_LTDL_DLLIB",
             "AC_C_CONST", "AC_C_INLINE", "AC_C_VOLATILE", "AC_C_RESTRICT", "AC_C_BIGENDIAN",
             "AC_HEADER_STDC", "AC_HEADER_TIME", "AC_HEADER_SYS_WAIT", "AC_HEADER_ASSERT",
             "AC_TYPE_SIZE_T", "AC_TYPE_PID_T", "AC_TYPE_OFF_T", "AC_TYPE_UID_T", "AC_TYPE_MODE_T",
@@ -921,17 +931,20 @@ impl M4Engine {
             .define(b"AC_CACHE_LOAD", b". ./config.cache 2>/dev/null || :");
 
         // --- AC_COMPILE_IFELSE / AC_LINK_IFELSE / AC_RUN_IFELSE (real implementations) ---
+        // The `:` guards in BOTH branches are essential: an action-if-true/false can expand to
+        // empty (e.g. AX_PTHREAD's `AC_LINK_IFELSE([...],[ok=yes],[])`), and a then/else clause with
+        // no command is a shell SYNTAX ERROR ("syntax error near unexpected token `fi'").
         self.engine.macro_table.define(
             b"AC_COMPILE_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_compile; then\n  $2\nelse\n  $3\nfi",
+            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_compile; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine.macro_table.define(
             b"AC_LINK_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_link; then\n  $2\nelse\n  $3\nfi",
+            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_link; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine.macro_table.define(
             b"AC_RUN_IFELSE",
-            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  $2\nelse\n  $3\nfi",
+            b"cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
         self.engine
             .macro_table
