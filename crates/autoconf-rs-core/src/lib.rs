@@ -119,6 +119,12 @@ define([AC_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([AM_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([LT_LANG], [])dnl
 define([LTOPTIONS_VERSION], [])dnl
+dnl AH_* are autoheader (config.h.in) directives; they must emit nothing into configure. Override the
+dnl m4sugar definitions that aclocal.m4 may pull in (they leak `m4_define([_ah_top], ...)`).
+define([AH_TOP], [])dnl
+define([AH_BOTTOM], [])dnl
+define([AH_VERBATIM], [])dnl
+define([AH_TEMPLATE], [])dnl
 "#
 }
 
