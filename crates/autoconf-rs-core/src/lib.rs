@@ -94,5 +94,24 @@ m4_define([PKG_INSTALLDIR], [pkgconfigdir=${libdir}/pkgconfig
 printf '%s\n' "s|@pkgconfigdir@|$pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
 m4_define([PKG_NOARCH_INSTALLDIR], [noarch_pkgconfigdir=${datadir}/pkgconfig
 printf '%s\n' "s|@noarch_pkgconfigdir@|$noarch_pkgconfigdir|g" >> conf_subst.sed 2>/dev/null])dnl
+m4_define([AX_CXX_COMPILE_STDCXX], [dnl
+printf %s "checking for C++$1 support... "
+ax_cxx_std_ok=no
+for ax_sw in -std=c++$1 -std=gnu++$1 -std=c++0x; do
+  printf '%s\n' "int main(){return 0;}" > conftest.cpp
+  if ${CXX:-c++} $ax_sw -c conftest.cpp -o conftest.o >/dev/null 2>&1; then
+    CXX="${CXX:-c++} $ax_sw"; CXXFLAGS="$CXXFLAGS $ax_sw"; ax_cxx_std_ok=yes; HAVE_CXX$1=1; break
+  fi
+done
+rm -f conftest.cpp conftest.o
+printf '%s\n' "$ax_cxx_std_ok"
+printf '%s\n' "s|@CXX@|$CXX|g" >> conf_subst.sed 2>/dev/null
+printf '%s\n' "s|@CXXFLAGS@|$CXXFLAGS|g" >> conf_subst.sed 2>/dev/null
+:
+])dnl
+m4_define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
+m4_define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
+m4_define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl
+m4_define([AX_CXX_COMPILE_STDCXX_20], [AX_CXX_COMPILE_STDCXX([20])])dnl
 "#
 }
