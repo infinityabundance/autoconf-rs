@@ -119,6 +119,15 @@ define([AC_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([AM_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([LT_LANG], [])dnl
 define([LTOPTIONS_VERSION], [])dnl
+dnl No-result macros that aclocal.m4's m4sugar/automake definitions otherwise leak as command-not-found
+dnl (the engine no-output defaults lose to aclocal.m4; these overrides win, spliced after it).
+define([AM_PROG_AS], [])dnl
+define([AC_OPENMP], [])dnl
+define([AC_ISC_POSIX], [])dnl
+define([AM_PROG_VALAC], [])dnl
+define([AC_SYS_INTERPRETER], [])dnl
+define([AM_PROG_AR], [])dnl
+define([AM_SILENT_RULES], [])dnl
 dnl AH_* are autoheader (config.h.in) directives; they must emit nothing into configure. Override the
 dnl m4sugar definitions that aclocal.m4 may pull in (they leak `m4_define([_ah_top], ...)`).
 define([AH_TOP], [])dnl
