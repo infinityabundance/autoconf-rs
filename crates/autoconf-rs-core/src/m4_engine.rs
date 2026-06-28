@@ -804,6 +804,28 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_ifval", b"ifelse([$1], [], [$3], [$2])");
+        // m4sugar roots surfaced by the atlas leaked-macro ranking. m4_define is the cascade root:
+        // a configure.ac/aclocal that does m4_define([M],[...]) otherwise never defines M, so M AND
+        // its body (AC_MSG_ERROR/AC_DEFINE/... — the top "leaked" symptoms) all spill into the shell.
+        self.engine
+            .macro_table
+            .define(b"m4_define", b"define([$1], [$2])");
+        self.engine
+            .macro_table
+            .define(b"m4_define_default", b"ifdef([$1], [], [define([$1], [$2])])");
+        self.engine
+            .macro_table
+            .define(b"m4_defun", b"define([$1], [$2])");
+        // m4_ifvaln: like m4_ifval (newline-tolerant) — branch on whether $1 is empty.
+        self.engine
+            .macro_table
+            .define(b"m4_ifvaln", b"ifelse([$1], [], [$3], [$2])");
+        // m4_case(SWITCH, VAL, IF-VAL, ..., [DEFAULT]): compare SWITCH to each VAL, recursing on the
+        // m4sugar shape. 2 args left -> that's the DEFAULT; <2 -> empty.
+        self.engine.macro_table.define(
+            b"m4_case",
+            b"ifelse([$#], [0], [], [$#], [1], [], [$#], [2], [$2], [$1], [$2], [$3], [m4_case([$1], m4_shift3($@))])",
+        );
         self.engine
             .macro_table
             .define(b"m4_ifblank", b"ifelse(m4_normalize([$1]), [], [$2], [$3])");
