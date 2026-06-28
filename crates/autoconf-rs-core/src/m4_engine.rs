@@ -283,7 +283,11 @@ impl M4Engine {
             b"for ac_func in $1; do AC_CHECK_FUNC($ac_func); done",
         );
 
-        // AC_CHECK_HEADERS — plural: check multiple headers
+        // AC_CHECK_HEADERS — plural: check multiple headers.
+        // NOTE: the conftest `#include <$ac_hdr>` here is still mangled to `# <$ac_hdr>` by a deep,
+        // autoconf-rs-specific rescan interaction (m4-rs core preserves the identical pattern; plain,
+        // single-level macro-body, and the singular AC_CHECK_HEADER all work). Captured per recipe in
+        // deep_expansion.conftest_corruption as the next root to defeat.
         self.engine.macro_table.define(
             b"AC_CHECK_HEADERS",
             b"for ac_hdr in $1; do AC_CHECK_HEADER($ac_hdr); done",
