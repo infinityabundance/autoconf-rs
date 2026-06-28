@@ -942,11 +942,14 @@ impl M4Engine {
         );
 
         // --- AC_CACHE_* ---
+        // `${$2+set}` (NOT `${}$2+set}` — the stray empty `${}` produced `if test "${}name+set}"`
+        // -> shell syntax error near `(`/the name, the C++ cache-check cluster, 8 corpus repos).
         self.engine.macro_table.define(
             b"AC_CACHE_CHECK",
-            b"printf %s \"$1... \"\nif test \"${}$2+set}\" = set; then\n  printf '%s\\n' \"(cached) \\$$2\"\nelse\n  $3\nfi",
+            b"printf %s \"$1... \"\nif test \"${$2+set}\" = set; then\n  printf '%s\\n' \"(cached) \\$$2\"\nelse\n  :\n  $3\nfi",
         );
-        self.engine.macro_table.define(b"AC_CACHE_VAL", b"$2=$1");
+        // AC_CACHE_VAL(cache-id, commands-to-set-it): run the commands (we don't persist a cache).
+        self.engine.macro_table.define(b"AC_CACHE_VAL", b"$2");
         self.engine
             .macro_table
             .define(b"AC_CACHE_LOAD", b". ./config.cache 2>/dev/null || :");
