@@ -261,10 +261,20 @@ impl M4Engine {
             b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
-        // AC_CHECK_LIB — check for library
+        // AC_CHECK_LIB(LIBRARY, FUNCTION, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): link-test FUNCTION
+        // against -lLIBRARY. Only KEEP -lLIBRARY in LIBS on success (was kept unconditionally); run
+        // IF-FOUND/IF-NOT (were ignored -> AC_CHECK_LIB([m],[pow],[],[AC_MSG_ERROR(...)]) never fired
+        // the right branch). Default IF-FOUND prepends -lLIBRARY to LIBS.
         self.engine.macro_table.define(
             b"AC_CHECK_LIB",
-            b"printf %s \"checking for $2 in -l$1... \"\nLIBS=\"-l$1 $LIBS\"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $2();\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $2 in -l$1... \"\n_acl_save_LIBS=$LIBS\nLIBS=\"-l$1 $5 $LIBS\"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $2();\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  LIBS=$_acl_save_LIBS\n  ifelse([$3], [], [LIBS=\"-l$1 $LIBS\"], [$3])\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acl_save_LIBS\n  :\n  $4\nfi",
+        );
+        // AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): was UNDEFINED, so
+        // it leaked and the math/zlib/crypto lib searches never ran -> 'X library required' errors.
+        // Try FUNCTION with no lib, then each of SEARCH-LIBS; keep the winning -llib in LIBS.
+        self.engine.macro_table.define(
+            b"AC_SEARCH_LIBS",
+            b"printf %s \"checking for library containing $1... \"\n_acs_save_LIBS=$LIBS\nac_res=\nfor ac_lib in '' $2; do\n  if test -z \"$ac_lib\"; then LIBS=\"$5 $_acs_save_LIBS\"; else LIBS=\"-l$ac_lib $5 $_acs_save_LIBS\"; fi\n  cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $1 ();\nint main() { return $1 (); }\n_ACEOF\n  if ac_fn_c_try_link; then\n    if test -z \"$ac_lib\"; then ac_res=\"none required\"; else ac_res=\"-l$ac_lib\"; fi\n    break\n  fi\ndone\nif test -n \"$ac_res\"; then\n  printf '%s\\n' \"$ac_res\"\n  :\n  $3\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acs_save_LIBS\n  :\n  $4\nfi",
         );
 
         // AC_CHECK_FUNCS — plural: check multiple functions
@@ -1107,6 +1117,25 @@ impl M4Engine {
         self.engine.macro_table.define(
             b"AC_COMPUTE_INT",
             b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$3\n#include <stdio.h>\nint main() { printf(\"%ld\", (long)($2)); return 0; }\n_ACEOF\nif ac_fn_c_try_run >/dev/null 2>&1 && test -x ./conftest$ac_exeext; then\n  $1=`./conftest$ac_exeext 2>/dev/null`\nelse\n  $1=$4\nfi",
+        );
+        // AM_COND_IF(COND, [IF-TRUE], [IF-FALSE]): branch on an automake conditional. AM_CONDITIONAL
+        // sets ${COND_TRUE}='' when true (and ='#' when false), so test -z picks the true branch.
+        // (oracle-diff backlog: bic et al. leaked AM_COND_IF -> configure syntax error.)
+        self.engine.macro_table.define(
+            b"AM_COND_IF",
+            b"if test -z \"${$1_TRUE}\"; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
+        );
+        // AM_PATH_PYTHON([min], [if-found], [if-not-found]): locate python + export the dir vars that
+        // automake's python rules reference. (oracle-diff backlog: libsmbios, fs-uae.)
+        self.engine.macro_table.define(
+            b"AM_PATH_PYTHON",
+            b"printf %s \"checking for python... \"\nPYTHON=`command -v python3 2>/dev/null || command -v python 2>/dev/null || command -v python2 2>/dev/null`\nif test -n \"$PYTHON\"; then\n  PYTHON_VERSION=`$PYTHON -c 'import sys; print(\"%d.%d\" % sys.version_info[:2])' 2>/dev/null`\n  printf '%s\\n' \"$PYTHON\"\n  pythondir=\"${prefix}/lib/python${PYTHON_VERSION}/site-packages\"\n  pkgpythondir=\"${pythondir}/${PACKAGE}\"\n  pyexecdir=\"${exec_prefix}/lib/python${PYTHON_VERSION}/site-packages\"\n  pkgpyexecdir=\"${pyexecdir}/${PACKAGE}\"\n  export PYTHON PYTHON_VERSION pythondir pkgpythondir pyexecdir pkgpyexecdir\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  :\n  $3\nfi",
+        );
+        // IT_PROG_INTLTOOL([min], [flags]): intltool toolchain. Minimal stub: export the INTLTOOL_*
+        // substitution vars so @INTLTOOL_*@ resolve (empty rules) rather than leaking the macro.
+        self.engine.macro_table.define(
+            b"IT_PROG_INTLTOOL",
+            b"INTLTOOL_EXTRACT='${top_srcdir}/intltool-extract'\nINTLTOOL_MERGE='${top_srcdir}/intltool-merge'\nINTLTOOL_UPDATE='${top_srcdir}/intltool-update'\nexport INTLTOOL_EXTRACT INTLTOOL_MERGE INTLTOOL_UPDATE",
         );
         // AS_VAR_GET: get a shell variable value
         self.engine

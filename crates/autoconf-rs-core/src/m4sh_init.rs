@@ -576,6 +576,14 @@ pub fn generate_configure_prologue(
     // them, whatever generation path produced the checks (otherwise: "ac_fn_c_try_compile: command not
     // found"). They reference $ac_compile/$ac_link/$ac_ext at call time, which the body sets up.
     h.extend_from_slice(b"ac_ext=c\nac_objext=o\nac_exeext=\n");
+    // Set the compile/link/cpp command strings HERE, in the prologue — not in the footer. They are
+    // eval'd at each check, resolving $CC/$CFLAGS/$LIBS then, so defining the strings early is safe
+    // and REQUIRED: otherwise the first AC_CHECK_LIB/FUNC/HEADER (emitted before the footer) runs
+    // `eval ''` -> empty link command -> every compile/link test spuriously fails ("math library
+    // required" etc. when the lib is actually present). The footer re-sets these identically.
+    h.extend_from_slice(b"ac_cpp='$CPP $CPPFLAGS'\n");
+    h.extend_from_slice(b"ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'\n");
+    h.extend_from_slice(b"ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'\n");
     h.extend_from_slice(b"ac_fn_c_try_compile () {\n  rm -f conftest.$ac_objext conftest$ac_exeext\n  if { (eval \"$ac_compile\") 2>&5; } && test -s conftest.$ac_objext; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_objext conftest.$ac_ext\n  return $ac_retval\n}\n");
     h.extend_from_slice(b"ac_fn_c_try_link () {\n  rm -f conftest.$ac_objext conftest$ac_exeext\n  if { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_objext conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
     h.extend_from_slice(b"ac_fn_c_try_run () {\n  if { ac_try='$ac_link'; (eval \"$ac_try\") 2>&5; } && test -s conftest$ac_exeext && { ac_try='./conftest$ac_exeext'; (eval \"$ac_try\") 2>&5; }; then ac_retval=0; else printf '%s\\n' \"configure: failed program was:\" >&5; cat conftest.$ac_ext >&5 2>/dev/null; ac_retval=1; fi\n  rm -f conftest.$ac_ext conftest$ac_exeext\n  return $ac_retval\n}\n");
