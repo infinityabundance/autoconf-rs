@@ -1191,17 +1191,12 @@ impl M4Engine {
             .macro_table
             .define(b"AS_SET_CATFILE", b"$1=\"$2/$3\"");
 
-        // --- M4 builtins for include/sinclude support ---
-        // include: read and expand file content (delegated to m4-rs-core)
-        self.engine.macro_table.define(
-            b"include",
-            b"esyscmd([cat $1 2>/dev/null || printf '%%s' ''; exit 0])",
-        );
-        // sinclude: silently include if file exists
-        self.engine.macro_table.define(
-            b"sinclude",
-            b"esyscmd([if test -f $1; then cat $1; fi; exit 0])",
-        );
+        // --- M4 include/sinclude ---
+        // Do NOT override include/sinclude with esyscmd([cat $1]): that made `include` a USER macro, so
+        // a bare `#include <stdio.h>` in C conftest text expanded it (no args -> cat "" -> empty) ->
+        // `# <stdio.h>`, shredding every compile probe. The m4-rs-core BUILTIN include (a) is protected
+        // from bare expansion by builtin_needs_args (literal when not followed by `(`), and (b) properly
+        // tokenizes+processes the file when called as m4_include([file]). Let the builtin handle both.
         // m4_include: include file content (m4-rs-core builtin)
         self.engine
             .macro_table
