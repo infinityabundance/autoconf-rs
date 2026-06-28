@@ -2440,8 +2440,12 @@ impl M4Engine {
         );
         output = output.replace("PATH_SEPARATOR=:", &format!("PATH_SEPARATOR={}", path_sep));
 
-        // For complex configure.ac files, inject feature test body and config.status
-        if has_complex || has_substs || has_files || has_headers || has_defines {
+        // For complex configure.ac files, inject feature test body and config.status.
+        // ONLY in the template-fallback path: when the M4 expansion IS the configure (m4_is_configure),
+        // it already carries every feature test + the config.status tail (via the AC_OUTPUT_MARK ->
+        // generate_configure_body), so injecting again here triple-emitted each check (the unconditional
+        // AC_MSG_ERROR bug). Gate the whole legacy injection on the fallback path.
+        if !m4_is_configure && (has_complex || has_substs || has_files || has_headers || has_defines) {
             // Cut off right before the template's config.status heredoc.
             // We keep the CONFIG_STATUS variable assignment and case statement,
             // then inject our dynamic config.status, then add the execution logic.

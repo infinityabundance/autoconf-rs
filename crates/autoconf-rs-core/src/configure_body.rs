@@ -597,8 +597,12 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     b.extend_from_slice(b"  fi\nfi\n");
     b.extend_from_slice(b"rm -f confcache\n\n");
 
-    // === Feature tests (reuse generate_feature_test_body) ===
-    b.extend_from_slice(&generate_feature_test_body(state));
+    // NOTE: feature tests are NOT emitted here. This function only fills the AC_OUTPUT_MARK in the
+    // m4-canonical path, where the M4 expansion has ALREADY emitted every AC_PROG_CC/AC_CHECK_LIB/...
+    // check. Re-emitting them here (and again in the legacy template-injection block) was the
+    // triple-emission bug: one AC_CHECK_LIB(...,[],AC_MSG_ERROR(...)) appeared 3x, two at top level,
+    // firing the error unconditionally. generate_feature_test_body is now used only by the template
+    // fallback path (when M4 output is NOT a valid configure).
 
     // === config.status: create the requested files inline, then emit the real config.status ===
     b.extend_from_slice(b"test \"x$prefix\" = xNONE && prefix=$ac_default_prefix\n");
