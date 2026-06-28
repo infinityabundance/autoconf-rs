@@ -1040,6 +1040,34 @@ impl M4Engine {
             b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { static int test_array[1 - 2 * !((long int) (sizeof ($1)) <= 0)]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"done\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [$(($ac_cv_sizeof_$1))])\nelse\n  printf '%s\\n' \"0 (type not found)\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [0])\nfi",
         );
 
+        // --- AC_CHECK_DECL / AC_CHECK_DECLS (real implementations) ---
+        // Previously UNDEFINED -> these and their AC_DEFINE/AC_MSG_ERROR/AC_SUBST bodies leaked into 20+
+        // generated configures (the top leaked-macro across the corpus). AC_CHECK_DECL compiles a program
+        // referencing the symbol guarded by `#ifndef SYMBOL`; if it compiles, the symbol is declared.
+        // ($4 = extra includes, $2 = if-declared, $3 = if-not.) No backticks in the source (the #1
+        // fixable-root corpus-wide is backtick-in-source — don't add to it).
+        self.engine.macro_table.define(
+            b"AC_CHECK_DECL",
+            b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_cv_have_decl_$1=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  ac_cv_have_decl_$1=no\n  :\n  $3\nfi",
+        );
+        // AC_CHECK_DECLS always defines HAVE_DECL_<sym> to 1 or 0 (single-symbol common case).
+        self.engine.macro_table.define(
+            b"AC_CHECK_DECLS",
+            b"AC_CHECK_DECL([$1], [AC_DEFINE([HAVE_DECL_$1], [1], [Define to 1 if you have the declaration of $1.])\n$2], [AC_DEFINE([HAVE_DECL_$1], [0], [Define to 1 if you have the declaration of $1.])\n$3], [$4])",
+        );
+        // The "once" header variants just delegate to the standard header check in our transpiler
+        // (de-dup is a build-time optimization, not semantics) — were undefined and leaking (10 repos).
+        self.engine
+            .macro_table
+            .define(b"AC_CHECK_HEADERS_ONCE", b"AC_CHECK_HEADERS([$1])");
+        self.engine
+            .macro_table
+            .define(b"AC_CHECK_HEADER_ONCE", b"AC_CHECK_HEADERS([$1])");
+        // AC_RUN_LOG: internal command runner (libtool/gettext lean on it) — run it, report status.
+        self.engine
+            .macro_table
+            .define(b"AC_RUN_LOG", b"{ eval \"$1\" 2>/dev/null; ac_status=$?; test $ac_status = 0; }");
+
         // --- AC_MSG_NOTICE / AC_MSG_FAILURE ---
         self.engine
             .macro_table
