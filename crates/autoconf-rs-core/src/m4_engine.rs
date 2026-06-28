@@ -172,7 +172,9 @@ impl M4Engine {
             // implemented natively in macro_overrides() (real pkg-config / C++-std probes). A
             // no-output entry here would shadow those overrides (empty expansion -> empty then/else
             // -> shell syntax errors).
-            "AX_PTHREAD", "AX_CHECK_COMPILE_FLAG",
+            // NB: AX_PTHREAD is NOT here — it has a native override in macro_overrides() (a clean
+            // pthread-flag probe). A no-output stub would shadow that override (like PKG_CHECK_MODULES).
+            "AX_CHECK_COMPILE_FLAG",
             "AX_REQUIRE_DEFINED", "AX_APPEND_FLAG", "AX_APPEND_COMPILE_FLAGS", "gl_INIT", "gl_EARLY", "AC_CHECK_INCLUDES_DEFAULT", "AC_USE_SYSTEM_EXTENSIONS", "AC_SYS_LARGEFILE",
         ] {
             self.engine.macro_table.define(m.as_bytes(), b"");

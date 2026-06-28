@@ -110,6 +110,41 @@ printf '%s\n' "s|@CXX@|$CXX|g" >> conf_subst.sed 2>/dev/null
 printf '%s\n' "s|@CXXFLAGS@|$CXXFLAGS|g" >> conf_subst.sed 2>/dev/null
 :
 ])dnl
+dnl AX_PTHREAD(ACT-IF-FOUND, ACT-IF-NOT): the vendored autoconf-archive macro's multi-flag link loop
+dnl dies in our generated configure (top failure root, 9 repos: "pthreads work with -mt... no"). Replace
+dnl with a clean probe: try -pthread / -pthreads / -lpthread (flag AFTER source so it works for both
+dnl compile-flags and link-libs), set PTHREAD_CC/CFLAGS/LIBS, AC_SUBST them, run the action.
+define([AX_PTHREAD], [dnl
+printf %s "checking for the pthreads flag... "
+ax_pthread_ok=no
+PTHREAD_CC="${CC:-cc}"
+PTHREAD_CFLAGS=
+PTHREAD_LIBS=
+printf '%s\n' "int main(void){return 0;}" > conftest.c
+for ax_pthread_flag in -pthread -pthreads -lpthread; do
+  if ${CC:-cc} conftest.c $ax_pthread_flag -o conftest.pthr >/dev/null 2>&1; then
+    case $ax_pthread_flag in
+      -l*) PTHREAD_LIBS="$ax_pthread_flag" ;;
+      *) PTHREAD_CFLAGS="$ax_pthread_flag"; PTHREAD_LIBS="$ax_pthread_flag" ;;
+    esac
+    ax_pthread_ok=yes
+    break
+  fi
+done
+rm -f conftest.c conftest.pthr
+printf '%s\n' "${PTHREAD_CFLAGS:-${PTHREAD_LIBS:-none}}"
+export PTHREAD_CC PTHREAD_CFLAGS PTHREAD_LIBS
+printf '%s\n' "s|@PTHREAD_CC@|$PTHREAD_CC|g" >> conf_subst.sed 2>/dev/null
+printf '%s\n' "s|@PTHREAD_CFLAGS@|$PTHREAD_CFLAGS|g" >> conf_subst.sed 2>/dev/null
+printf '%s\n' "s|@PTHREAD_LIBS@|$PTHREAD_LIBS|g" >> conf_subst.sed 2>/dev/null
+if test "x$ax_pthread_ok" = xyes; then
+  :
+  $1
+else
+  :
+  $2
+fi
+])dnl
 define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
 define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
 define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl

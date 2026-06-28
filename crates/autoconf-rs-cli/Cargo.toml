@@ -1,6 +1,6 @@
 [package]
 name = "autoconf-rs-cli"
-version = "0.1.13"
+version = "0.1.14"
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
@@ -40,4 +40,4 @@ name = "ifnames"
 path = "src/main_ifnames.rs"
 
 [dependencies]
-autoconf-rs-core = { version = "0.1.13", path = "../autoconf-rs-core" }
+autoconf-rs-core = { version = "0.1.14", path = "../autoconf-rs-core" }
