@@ -244,7 +244,7 @@ pub fn generate_dynamic_configure(
     s.push_str("  # Create output directory if needed\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
     s.push_str(STD_VAR_DEFAULTS);
-    s.push_str("  sed");
+    s.push_str("  _cs=; test -f conf_subst.sed && _cs=\"-f conf_subst.sed\"\n  sed");
     // Always substitute standard Autoconf variables
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
@@ -271,7 +271,8 @@ pub fn generate_dynamic_configure(
         };
         s.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
     }
-    s.push_str(" \"$1\" > \"$2\"\n");
+    s.push_str(" ${_cs} \"$1\" > \"$2\"\n");
+    s.push_str("  for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*_(CFLAGS|LIBS|DEPS|REQUIRES)@' \"$2\" 2>/dev/null | sort -u`; do _vn=`printf '%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%s' \"$_vv\" | sed 's/[&|]/\\\\&/g'`; sed \"s|$_ph|$_ve|g\" \"$2\" > \"$2._gt$$\" && mv -f \"$2._gt$$\" \"$2\"; done\n");
     s.push_str("}\n\n");
 
     // --- Feature test body (real AC_CHECK_* probes) --- MUST run BEFORE config headers are
@@ -349,7 +350,7 @@ pub fn generate_dynamic_configure(
     s.push_str("substitute() {\n");
     s.push_str("  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
     s.push_str(STD_VAR_DEFAULTS);
-    s.push_str("  sed");
+    s.push_str("  _cs=; test -f conf_subst.sed && _cs=\"-f conf_subst.sed\"\n  sed");
     // Always substitute standard Autoconf variables
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
@@ -376,7 +377,8 @@ pub fn generate_dynamic_configure(
         };
         s.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
     }
-    s.push_str(" \"$1\" > \"$2\"\n");
+    s.push_str(" ${_cs} \"$1\" > \"$2\"\n");
+    s.push_str("  for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*_(CFLAGS|LIBS|DEPS|REQUIRES)@' \"$2\" 2>/dev/null | sort -u`; do _vn=`printf '%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%s' \"$_vv\" | sed 's/[&|]/\\\\&/g'`; sed \"s|$_ph|$_ve|g\" \"$2\" > \"$2._gt$$\" && mv -f \"$2._gt$$\" \"$2\"; done\n");
     s.push_str("}\n");
     for file in &state.config_files {
         s.push_str(&format!(
@@ -412,7 +414,7 @@ pub fn generate_config_status_section(
     // top_builddir/top_srcdir are relative to the OUTPUT file's directory, not always `.`: a subdir
     // Makefile (lib/Makefile) needs top_builddir=.. so -I$(top_builddir) finds the top config.h.
     s.push_str("  ac_d=`dirname \"$2\"`; case $ac_d in .|\"\") top_builddir=. ;; *) top_builddir=`printf '%s' \"$ac_d\" | sed 's,[^/][^/]*,..,g'` ;; esac; top_srcdir=$top_builddir\n");
-    s.push_str("  sed");
+    s.push_str("  _cs=; test -f conf_subst.sed && _cs=\"-f conf_subst.sed\"\n  sed");
     s.push_str(&format!(" -e 's|@PACKAGE_NAME@|{}|g'", name));
     s.push_str(&format!(" -e 's|@PACKAGE_VERSION@|{}|g'", version));
     s.push_str(&format!(" -e 's|@PACKAGE_STRING@|{} {}|g'", name, version));
@@ -446,7 +448,8 @@ pub fn generate_config_status_section(
         };
         s.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
     }
-    s.push_str(" \"$1\" > \"$2\"\n");
+    s.push_str(" ${_cs} \"$1\" > \"$2\"\n");
+    s.push_str("  for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*_(CFLAGS|LIBS|DEPS|REQUIRES)@' \"$2\" 2>/dev/null | sort -u`; do _vn=`printf '%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%s' \"$_vv\" | sed 's/[&|]/\\\\&/g'`; sed \"s|$_ph|$_ve|g\" \"$2\" > \"$2._gt$$\" && mv -f \"$2._gt$$\" \"$2\"; done\n");
     s.push_str("}\n");
     for file in &state.config_files {
         s.push_str(&format!("substitute '{}.in' '{}'\n", file, file));

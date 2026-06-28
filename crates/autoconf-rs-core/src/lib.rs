@@ -59,22 +59,23 @@ pub use shell_gen::ShellGenerator;
 /// are created, mirroring confdefs.h -> config.h).
 pub fn macro_overrides() -> &'static str {
     r#"dnl --- autoconf-rs macro overrides ---
+dnl NB: do NOT use shell `eval` here — m4's own `eval` builtin would consume it (eval "x" -> 0).
+dnl We just set + export $1_CFLAGS/$1_LIBS; the generic @VAR@ pass in config-file creation substitutes
+dnl them (using the EXPORTED runtime values), so no m4-level value plumbing is needed.
 define([PKG_CHECK_MODULES], [dnl
 printf %s "checking for $2... "
 if pkg-config --exists "$2" 2>/dev/null; then
   printf '%s\n' "yes"
   $1_CFLAGS=`pkg-config --cflags "$2" 2>/dev/null`
   $1_LIBS=`pkg-config --libs "$2" 2>/dev/null`
-  printf '%s\n' "s|@$1_CFLAGS@|$$1_CFLAGS|g" >> conf_subst.sed 2>/dev/null
-  printf '%s\n' "s|@$1_LIBS@|$$1_LIBS|g" >> conf_subst.sed 2>/dev/null
+  export $1_CFLAGS $1_LIBS
   :
   $3
 else
   printf '%s\n' "no"
   $1_CFLAGS=
   $1_LIBS=
-  printf '%s\n' "s|@$1_CFLAGS@||g" >> conf_subst.sed 2>/dev/null
-  printf '%s\n' "s|@$1_LIBS@||g" >> conf_subst.sed 2>/dev/null
+  export $1_CFLAGS $1_LIBS
   :
   $4
 fi
