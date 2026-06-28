@@ -1066,6 +1066,26 @@ impl M4Engine {
         );
         // AS_VAR_SET: set a shell variable
         self.engine.macro_table.define(b"AS_VAR_SET", b"$1=\"$2\"");
+        // AS_VAR_IF(VAR, VALUE, IF-EQ, IF-NEQ): branch on the value of the shell var named by $1.
+        // `${$1}` substitutes the var NAME (the `$1` after `{` expands fine; cf. AC_CACHE_CHECK's
+        // `${$2+set}`). The `:` guards keep empty action clauses from being a shell syntax error.
+        // (Was a top leaked_macro: AS_VAR_IF(GXX,yes,...) leaked its whole body incl. a nested
+        // AC_MSG_ERROR -> configure syntax error.)
+        self.engine.macro_table.define(
+            b"AS_VAR_IF",
+            b"if test x\"${$1}\" = x\"$2\"; then\n  :\n  $3\nelse\n  :\n  $4\nfi",
+        );
+        // AC_TRY_LINK_FUNC(function, if-found, if-not-found): link-test a bare function symbol.
+        self.engine.macro_table.define(
+            b"AC_TRY_LINK_FUNC",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  :\n  $3\nfi",
+        );
+        // AC_COMPUTE_INT(VAR, EXPR, [INCLUDES], [IF-FAILS]): compute an int expression by running a
+        // tiny program; fall back to IF-FAILS (empty if unset) rather than leaking on failure.
+        self.engine.macro_table.define(
+            b"AC_COMPUTE_INT",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$3\n#include <stdio.h>\nint main() { printf(\"%ld\", (long)($2)); return 0; }\n_ACEOF\nif ac_fn_c_try_run >/dev/null 2>&1 && test -x ./conftest$ac_exeext; then\n  $1=`./conftest$ac_exeext 2>/dev/null`\nelse\n  $1=$4\nfi",
+        );
         // AS_VAR_GET: get a shell variable value
         self.engine
             .macro_table
