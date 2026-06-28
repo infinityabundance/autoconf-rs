@@ -1068,6 +1068,27 @@ impl M4Engine {
             .macro_table
             .define(b"AC_RUN_LOG", b"{ eval \"$1\" 2>/dev/null; ac_status=$?; test $ac_status = 0; }");
 
+        // --- More undefined-and-leaking macros from the atlas fixable backlog ---
+        // AC_ERROR: deprecated alias for AC_MSG_ERROR (4 repos leaked it raw -> command-not-found).
+        self.engine
+            .macro_table
+            .define(b"AC_ERROR", b"AC_MSG_ERROR([$1])");
+        // AC_LANG_CONFTEST(PROGRAM): write the test program to conftest.$ac_ext (5 repos). Same heredoc
+        // form AC_COMPILE_IFELSE uses, so the conftest body (its #include/#ifdef) is preserved.
+        self.engine.macro_table.define(
+            b"AC_LANG_CONFTEST",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF",
+        );
+        // AC_CONFIG_COMMANDS_PRE(CMDS): commands to run before config.status. We're linear, so run them
+        // inline (best-effort) rather than deferring (4 repos; libtool uses it).
+        self.engine
+            .macro_table
+            .define(b"AC_CONFIG_COMMANDS_PRE", b"$1");
+        // AC_CONFIG_LIBOBJ_DIR(DIR): where LIBOBJS sources live — record it (3 repos).
+        self.engine
+            .macro_table
+            .define(b"AC_CONFIG_LIBOBJ_DIR", b"ac_config_libobj_dir=$1");
+
         // --- AC_MSG_NOTICE / AC_MSG_FAILURE ---
         self.engine
             .macro_table
