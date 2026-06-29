@@ -711,7 +711,20 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
             b.extend_from_slice(format!(" -e 's|{pat}|{val}|g'").as_bytes());
         }
         // ATOMIC write (temp + mv) so a concurrent compile never reads a half-written config.h.
-        b.extend_from_slice(format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'; rm -f conf_defs$$.sed; fi\n").as_bytes());
+        b.extend_from_slice(format!(" '{h}.in' > '{h}.tmp$$' && mv -f '{h}.tmp$$' '{h}'; ").as_bytes());
+        // APPEND any confdefs.h #define that had NO matching `#undef` template in {h}.in (so it wasn't
+        // substituted) — e.g. AC_USE_SYSTEM_EXTENSIONS' _GNU_SOURCE, or any prelude/custom AC_DEFINE that
+        // autoheader didn't template. Without this they're silently dropped -> GNU symbols undeclared.
+        b.extend_from_slice(format!("grep '^#define ' confdefs.h 2>/dev/null | while IFS= read -r _l; do _v=${{_l#'#define '}}; _v=${{_v%% *}}; grep -q \"^#define $_v \" '{h}' || grep -q \"^#define $_v\\$\" '{h}' || printf '%s\\n' \"$_l\" >> '{h}'; done; ").as_bytes());
+        // Append compile-time AC_DEFINEs (state.defines) that had no `#undef` template in {h}.in and are
+        // not in confdefs.h either (e.g. AC_USE_SYSTEM_EXTENSIONS' _GNU_SOURCE captured at gen-time). The
+        // static -e seds above only fire when the template carries the matching `#undef`.
+        for (var, value) in &state.defines {
+            b.extend_from_slice(
+                format!("grep -q '^#define {var} ' '{h}' || printf '%s\\n' '#define {var} {value}' >> '{h}'; ").as_bytes(),
+            );
+        }
+        b.extend_from_slice(format!("rm -f conf_defs$$.sed; fi\n").as_bytes());
     }
 
     // Emit the standard config.status framework (writes a runnable config.status and invokes it),

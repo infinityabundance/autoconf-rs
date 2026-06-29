@@ -160,6 +160,17 @@ ac_cv_c_restrict=restrict])dnl
 dnl _AM_DEPENDENCIES (automake dep-tracking internals) leaks its language arg (OBJC/CXX) raw; the
 dnl dep-mode is handled by our generated Makefile machinery, so a no-op here is correct.
 define([_AM_DEPENDENCIES], [])dnl
+dnl AC_USE_SYSTEM_EXTENSIONS / AC_GNU_SOURCE: enable the platform "system extensions" by AC_DEFINE-ing
+dnl the feature-test macros into config.h (BEFORE any system header is included). Was a no-op stub, so
+dnl GNU-only symbols (CLONE_*, UIO_MAXIOV, __THROW, asprintf, …) were "undeclared" -> compile errors on a
+dnl big class of Linux projects. _GNU_SOURCE is the load-bearing one on glibc; the rest are harmless on Linux.
+define([AC_USE_SYSTEM_EXTENSIONS], [AC_DEFINE([_GNU_SOURCE], [1], [Enable GNU/system extensions])
+AC_DEFINE([__EXTENSIONS__], [1], [Enable general extensions on Solaris.])
+AC_DEFINE([_ALL_SOURCE], [1], [Enable extensions on AIX, Interix.])
+AC_DEFINE([_POSIX_PTHREAD_SEMANTICS], [1], [Enable POSIX pthread semantics on Solaris.])
+AC_DEFINE([_DARWIN_C_SOURCE], [1], [Enable extensions on macOS.])
+AC_DEFINE([_TANDEM_SOURCE], [1], [Enable extensions on HP NonStop.])])dnl
+define([AC_GNU_SOURCE], [AC_DEFINE([_GNU_SOURCE], [1], [Enable GNU extensions])])dnl
 define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
 define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
 define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl

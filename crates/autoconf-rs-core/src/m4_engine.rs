@@ -117,7 +117,7 @@ impl M4Engine {
             "LT_PREREQ", "AM_CONDITIONAL",
             // Common pure-setup Autoconf macros that otherwise leak literal (their vars/defines are
             // defaulted in config.status). NOT the feature-probe macros (those are handled elsewhere).
-            "AC_USE_SYSTEM_EXTENSIONS", "AC_GNU_SOURCE", "AC_SYS_LARGEFILE", "AC_SYS_LONG_FILE_NAMES",
+            "AC_SYS_LARGEFILE", "AC_SYS_LONG_FILE_NAMES",
             "AC_PROG_SED", "AC_PROG_GREP", "AC_PROG_EGREP", "AC_PROG_FGREP", "AC_PROG_AWK",
             "AC_PROG_LN_S", "AC_PROG_MKDIR_P", "AC_PROG_RANLIB", "AC_PROG_CPP", "AC_PROG_MAKE_SET",
             // Deprecated/obsolete macros (folded into AC_PROG_CC/CXX in autoconf >=2.70, or X11
@@ -150,7 +150,7 @@ impl M4Engine {
             "AC_TYPE_SSIZE_T", "AC_TYPE_INT8_T", "AC_TYPE_INT16_T", "AC_TYPE_INT32_T",
             "AC_TYPE_INT64_T", "AC_TYPE_UINT8_T", "AC_TYPE_UINT16_T", "AC_TYPE_UINT32_T",
             "AC_TYPE_UINT64_T", "AC_STRUCT_TM", "AC_PROG_GCC_TRADITIONAL", "AC_CANONICAL_HOST",
-            "AC_CANONICAL_BUILD", "AC_CANONICAL_TARGET", "AC_CANONICAL_SYSTEM", "AC_GNU_SOURCE",
+            "AC_CANONICAL_BUILD", "AC_CANONICAL_TARGET", "AC_CANONICAL_SYSTEM", 
             "AC_PROG_CC_C99",
             "AC_REQUIRE_AUX_FILE", "AC_SUBST_FILE", "AC_PRESERVE_HELP_ORDER",
             // Feature-test + option macros: consumed here (no literal leftover -> shell syntax
@@ -175,7 +175,7 @@ impl M4Engine {
             // NB: AX_PTHREAD is NOT here — it has a native override in macro_overrides() (a clean
             // pthread-flag probe). A no-output stub would shadow that override (like PKG_CHECK_MODULES).
             "AX_CHECK_COMPILE_FLAG",
-            "AX_REQUIRE_DEFINED", "AX_APPEND_FLAG", "AX_APPEND_COMPILE_FLAGS", "gl_INIT", "gl_EARLY", "AC_CHECK_INCLUDES_DEFAULT", "AC_USE_SYSTEM_EXTENSIONS", "AC_SYS_LARGEFILE",
+            "AX_REQUIRE_DEFINED", "AX_APPEND_FLAG", "AX_APPEND_COMPILE_FLAGS", "gl_INIT", "gl_EARLY", "AC_CHECK_INCLUDES_DEFAULT", "AC_SYS_LARGEFILE",
         ] {
             self.engine.macro_table.define(m.as_bytes(), b"");
         }
