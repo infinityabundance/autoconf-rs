@@ -614,9 +614,13 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
             .replace('|', "\\|")
             .replace('&', "\\&")
     };
-    b.extend_from_slice(
-        b"ac_subst_file () {\n  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n  sed",
-    );
+    // Set the standard autoconf/automake var defaults (SET_MAKE, builddir, abs_*, AR, install dirs,
+    // am__* …) so the STD_VAR_SED pass below has live values. WITHOUT this, ac_subst_file left every
+    // standard @VAR@ raw — @SET_MAKE@ as a bare line is `Makefile:16: *** missing separator` (the make
+    // layer's #1 root, 221 corpus repos).
+    b.extend_from_slice(b"ac_subst_file () {\n  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
+    b.extend_from_slice(crate::shell_gen::STD_VAR_DEFAULTS.as_bytes());
+    b.extend_from_slice(b"  _cs=; test -f conf_subst.sed && _cs=\"-f conf_subst.sed\"\n  sed");
     b.extend_from_slice(format!(" -e 's|@PACKAGE_NAME@|{}|g'", esc(name)).as_bytes());
     b.extend_from_slice(format!(" -e 's|@PACKAGE_TARNAME@|{}|g'", esc(name)).as_bytes());
     b.extend_from_slice(format!(" -e 's|@PACKAGE_VERSION@|{}|g'", esc(version)).as_bytes());
@@ -659,7 +663,10 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
             b.extend_from_slice(format!(" -e \"s|@{v}@|${{{v}}}|g\"").as_bytes());
         }
     }
-    b.extend_from_slice(b" \"$1\" > \"$2\"\n}\n\n");
+    // The comprehensive standard-var pass (SET_MAKE/builddir/abs_*/AR/RANLIB/install-dirs/am__*/host-
+    // triple/…) + the runtime conf_subst.sed sink (PKG_CHECK_MODULES, LIBTOOL, AX_* overrides).
+    b.extend_from_slice(crate::shell_gen::STD_VAR_SED.as_bytes());
+    b.extend_from_slice(b" $_cs \"$1\" > \"$2\"\n}\n\n");
 
     // AC_CONFIG_FILES — create each file from its .in template.
     for f in &state.config_files {

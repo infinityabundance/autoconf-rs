@@ -11,7 +11,7 @@
 /// Automake-generated Makefile.in's `@VAR@` references resolve. Without these, config.status left
 /// `@CC@`/`@AR@`/`@top_srcdir@`/`@SET_MAKE@`/... literal -> `make` aborted ("missing separator").
 /// Functional values (cc/ar/...) suffice for `make`; install-time vars use the conventional forms.
-const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
+pub const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
   : ${prefix=/usr/local}; : ${exec_prefix=$prefix}
   test -n "${top_srcdir:-}" || top_srcdir=$srcdir
   test -n "${top_builddir:-}" || top_builddir=.
