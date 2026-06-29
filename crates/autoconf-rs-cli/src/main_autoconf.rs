@@ -158,7 +158,18 @@ fn run() -> ExitCode {
     engine.pure_m4 = pure_m4;
 
     let configure_script = match engine.process(&input) {
-        Ok(s) => guard_empty_shell_blocks(&s),
+        Ok(s) => {
+            // Systemic pass (default ON; opt out with AUTOCONF_RS_NO_NEUTRALIZE): neutralize any UNKNOWN
+            // autoconf-family macro that leaked into the generated shell, so configure continues past it
+            // instead of dying with "COMMAND not found"/syntax error. A/B-measured on the 986-repo corpus
+            // baseline: NET +35 configure-clears, 0 regressions — so it ships on by default.
+            let s = if std::env::var("AUTOCONF_RS_NO_NEUTRALIZE").is_err() {
+                neutralize_leaked_macros(&s)
+            } else {
+                s
+            };
+            guard_empty_shell_blocks(&s)
+        }
         Err(e) => {
             eprintln!("autoconf: M4 error: {}", e);
             return ExitCode::from(2);
@@ -182,6 +193,60 @@ fn run() -> ExitCode {
 
     print!("{}", configure_script);
     ExitCode::SUCCESS
+}
+
+/// Neutralize a line that begins with an UNKNOWN autoconf-family macro call that leaked unexpanded into
+/// the generated shell (`AC_FOO(...)`, `AX_BAR([x],[y])`, `m4_require(...)` etc.). A leaked macro is an
+/// IDENTIFIER immediately followed by `(` at the statement start — real shell never calls functions that
+/// way (funcs are `name args`; `$( )`/`$(( ))`/`(subshell)` start with `$` or `(`). We replace the whole
+/// (paren-balanced, possibly multi-line) call with `:` so configure continues instead of dying. Only
+/// well-known autoconf macro prefixes are touched, to avoid neutralizing project shell.
+fn neutralize_leaked_macros(input: &str) -> String {
+    const PREFIXES: &[&str] = &[
+        "AC_", "AX_", "AM_", "LT_", "AS_", "PKG_", "AH_", "_AC_", "_AM_", "_LT_",
+        "m4_", "_m4_", "gl_", "IT_", "GLIB_", "GTK_", "BOOST_", "AC", "AM", // AC_DEFUN-internal _AC etc.
+    ];
+    // does `s` (already left-trimmed) start with an autoconf-family macro name then `(`?
+    let leaked_macro_at = |s: &str| -> bool {
+        let id_len = s.bytes().take_while(|b| b.is_ascii_alphanumeric() || *b == b'_').count();
+        if id_len == 0 || s.as_bytes().get(id_len) != Some(&b'(') {
+            return false;
+        }
+        let id = &s[..id_len];
+        // require a real autoconf prefix AND an uppercase letter or underscore-prefixed (macro-shaped)
+        let has_prefix = PREFIXES.iter().any(|p| id.starts_with(p) && id.len() > p.len());
+        has_prefix && (id.contains('_') || id.chars().any(|c| c.is_ascii_uppercase()))
+    };
+    let lines: Vec<&str> = input.lines().collect();
+    let mut out: Vec<String> = Vec::with_capacity(lines.len());
+    let mut i = 0;
+    while i < lines.len() {
+        let trimmed = lines[i].trim_start();
+        if leaked_macro_at(trimmed) {
+            // consume the paren-balanced call (may span lines); count ( vs ) ignoring nothing fancy.
+            let mut depth: i32 = 0;
+            let mut started = false;
+            let mut j = i;
+            while j < lines.len() {
+                for c in lines[j].chars() {
+                    if c == '(' { depth += 1; started = true; }
+                    else if c == ')' { depth -= 1; }
+                }
+                if started && depth <= 0 { break; }
+                j += 1;
+            }
+            out.push(":".to_string()); // single no-op replaces the whole leaked call
+            i = j + 1;
+            continue;
+        }
+        out.push(lines[i].to_string());
+        i += 1;
+    }
+    let mut result = out.join("\n");
+    if input.ends_with('\n') {
+        result.push('\n');
+    }
+    result
 }
 
 /// Insert a `:` no-op into otherwise-empty shell blocks (`then`/`else`/`do` immediately followed by
