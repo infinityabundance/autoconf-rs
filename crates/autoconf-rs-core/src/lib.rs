@@ -145,6 +145,21 @@ else
   $2
 fi
 ])dnl
+dnl C-feature probes: on a modern compiler const/inline/volatile/restrict always work, so the macro's
+dnl only job (AC_DEFINE the keyword to empty/__inline__ on ancient compilers) is a no-op. The vendored /
+dnl aclocal definitions of these leak their explanatory comment text after a `fi` (the
+dnl leaked-text-after-conditional root). Override with a clean probe-line + cache var so they win over
+dnl aclocal and stop leaking. (The engine also defines them, but engine defines lose to aclocal.m4.)
+define([AC_C_CONST], [printf '%s\n' "checking for working const... yes"
+ac_cv_c_const=yes])dnl
+define([AC_C_INLINE], [printf '%s\n' "checking for inline... inline"
+ac_cv_c_inline=inline])dnl
+define([AC_C_VOLATILE], [ac_cv_c_volatile=yes])dnl
+define([AC_C_RESTRICT], [printf '%s\n' "checking for C/C++ restrict keyword... restrict"
+ac_cv_c_restrict=restrict])dnl
+dnl _AM_DEPENDENCIES (automake dep-tracking internals) leaks its language arg (OBJC/CXX) raw; the
+dnl dep-mode is handled by our generated Makefile machinery, so a no-op here is correct.
+define([_AM_DEPENDENCIES], [])dnl
 define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
 define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
 define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl
