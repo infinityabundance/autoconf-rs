@@ -620,6 +620,11 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     // layer's #1 root, 221 corpus repos).
     b.extend_from_slice(b"ac_subst_file () {\n  mkdir -p \"$(dirname \"$2\")\" 2>/dev/null || :\n");
     b.extend_from_slice(crate::shell_gen::STD_VAR_DEFAULTS.as_bytes());
+    // Per-file relative top path: a subdir config file (e.g. src/Makefile) needs top_builddir/top_srcdir
+    // = `..` (one `..` per path segment), NOT `.`. Without this, `-I$(top_builddir)` in DEFAULT_INCLUDES
+    // points at the subdir itself, so a top-level `config.h` is never found ("config.h: No such file" —
+    // the make-layer root for every SUBDIRS project). `.` stays `.` for the top-level file.
+    b.extend_from_slice(b"  ac_fdir=`dirname \"$2\"`\n  if test \"x$ac_fdir\" != x.; then ac_rel=`printf '%s' \"$ac_fdir\" | sed 's,[^/][^/]*,..,g'`; top_builddir=$ac_rel; top_srcdir=$ac_rel; fi\n");
     b.extend_from_slice(b"  _cs=; test -f conf_subst.sed && _cs=\"-f conf_subst.sed\"\n  sed");
     b.extend_from_slice(format!(" -e 's|@PACKAGE_NAME@|{}|g'", esc(name)).as_bytes());
     b.extend_from_slice(format!(" -e 's|@PACKAGE_TARNAME@|{}|g'", esc(name)).as_bytes());
