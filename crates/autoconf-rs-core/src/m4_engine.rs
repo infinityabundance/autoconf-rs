@@ -183,10 +183,11 @@ impl M4Engine {
         // AC_SUBST — emit a RUNTIME conf_subst.sed entry for the var with its live shell value, so
         // PROJECT-defined AC_SUBST vars (e.g. @INTI_CFLAGS@/@INTI_LIBS@ from a custom check or
         // PKG_CHECK_MODULES) get substituted in generated files, not just the standard set. `$1` is the
-        // var NAME; `$$1` expands (m4: literal `$` + arg1) to `$<NAME>` = its runtime value. Runs at the
-        // call site (after the var is set), so the value is current. Generalizes the @YACC@-class fix to
-        // any project AC_SUBST. (config.h-style standard vars also still flow via STD_VAR_SED.)
-        self.engine.macro_table.define(b"AC_SUBST", b"printf '%s\\n' \"s|@$1@|$$1|g\" >> conf_subst.sed 2>/dev/null");
+        // var NAME. Use shell INDIRECTION to read the var's runtime value: `eval _acrs_sv=\${NAME}` then
+        // substitute. (m4-rs renders `$$1` as literal `$$`+`1` = a PID, and `[$]$1` unbalances m4 quotes
+        // -> Makefile not created; the eval avoids both.) `${$1}` -> `${NAME}` (m4 expands $1; `{}` aren't
+        // m4 quote chars). Runs at the call site after the var is set, so the value is current.
+        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null");
 
         // AC_DEFINE — no output
         self.engine.macro_table.define(b"AC_DEFINE", b"");

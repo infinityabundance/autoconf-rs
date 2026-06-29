@@ -657,6 +657,12 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     .map(|s| s.to_string())
     .collect();
     for var in state.substitutions.keys() {
+        // Skip macro-template artifacts: a var name with `$`/`{`/`@` is an unexpanded `$1`-class token
+        // captured from a prelude macro definition (e.g. AC_SUBST([$1_LIBS])). Emitting it yields a
+        // broken `s|@$1_LIBS@|${$1_LIBS}|g` -> bash "bad substitution" aborts AC_OUTPUT (no Makefile).
+        if var.contains('$') || var.contains('{') || var.contains('@') {
+            continue;
+        }
         if !names.contains(var) {
             names.push(var.clone());
         }

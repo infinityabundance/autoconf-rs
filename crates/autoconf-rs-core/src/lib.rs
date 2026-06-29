@@ -79,6 +79,12 @@ else
   :
   $4
 fi
+dnl Substitute @PFX_CFLAGS@/@PFX_LIBS@ in generated files (else they leak -> `ld: cannot find
+dnl @RELAY_LIBS@`). Inline (NOT AC_SUBST([$1_LIBS]) — the prescan would capture the literal `$1_LIBS`
+dnl from this definition into state.substitutions -> a broken `s|@$1_LIBS@|${$1_LIBS}|g`). Shell
+dnl indirection reads the runtime value; m4 expands $1->PFX at the call site.
+eval "_acrs_pc=\${$1_CFLAGS}"; printf '%s\n' "s|@$1_CFLAGS@|${_acrs_pc}|g" >> conf_subst.sed 2>/dev/null
+eval "_acrs_pl=\${$1_LIBS}"; printf '%s\n' "s|@$1_LIBS@|${_acrs_pl}|g" >> conf_subst.sed 2>/dev/null
 ])dnl
 define([PKG_CHECK_EXISTS], [dnl
 if pkg-config --exists "$1" 2>/dev/null; then
