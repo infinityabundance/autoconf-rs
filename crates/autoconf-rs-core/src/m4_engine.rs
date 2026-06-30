@@ -743,6 +743,23 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_tolower", b"translit([$1], [A-Z], [a-z])");
+        // m4sugar regex wrappers — forward to the m4 builtins (patsubst/regexp are implemented in
+        // m4-rs-core via the `regex` crate). Without these, automake's options.m4 (_AM_MANGLE_OPTION
+        // uses `m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])`) and many other m4sugar consumers leaked the
+        // bare `m4_bpatsubst(...)` call into the generated configure -> shell syntax error.
+        self.engine
+            .macro_table
+            .define(b"m4_bpatsubst", b"patsubst($@)");
+        self.engine
+            .macro_table
+            .define(b"m4_patsubst", b"patsubst($@)");
+        self.engine
+            .macro_table
+            .define(b"m4_bregexp", b"regexp($@)");
+        self.engine
+            .macro_table
+            .define(b"m4_regexp", b"regexp($@)");
+
         // List operations
         self.engine
             .macro_table
