@@ -1342,13 +1342,18 @@ impl M4Engine {
                 self.engine.macro_table.define(b"esyscmd", b"esyscmd([$1])");
             }
         } else {
-            self.engine.macro_table.define(
-                b"syscmd",
-                b"errprint([warning: syscmd blocked (use --allow-syscmd to enable)])",
-            );
-            self.engine.macro_table.define(
-                b"esyscmd",
-                b"errprint([warning: esyscmd blocked (use --allow-syscmd to enable)])",
+            // Blocked: a command-substitution that cannot run yields the EMPTY string (no stdout) —
+            // the faithful degradation. The previous body `errprint([...])` was wrong: in single-pass /
+            // arg-collection contexts (e.g. gettext's AC_LIB_* macros, loaded via aclocal.m4) the
+            // errprint call was NOT re-expanded and survived as literal `errprint([...])` text, whose
+            // unbalanced [ ] ( ) then poisoned downstream rescanning and drove unbounded expansion
+            // (autoconf exited nonzero -> autoreconf "bootstrap incomplete" on every gettext repo).
+            // Empty is clean and cannot cascade. Warn once, out-of-band.
+            self.engine.macro_table.define(b"syscmd", b"");
+            self.engine.macro_table.define(b"esyscmd", b"");
+            eprintln!(
+                "autoconf: syscmd/esyscmd disabled (use --allow-syscmd to enable); \
+                 command substitutions expand to empty"
             );
         }
 
@@ -1846,28 +1851,31 @@ impl M4Engine {
             self.state.has_cxx_compiler = true;
         }
 
-        // Extract AC_CHECK_FUNC names
+        // Extract AC_CHECK_FUNC names. ONLY the first argument is the function name — $2/$3 are the
+        // action-if-found / action-if-not-found blocks. Iterating ALL args captured those actions
+        // (e.g. `AC_CHECK_FUNC([f],[AC_DEFINE([HAVE_F],…)])` pushed `AC_DEFINE([HAVE_F` as a "function"),
+        // which then leaked `char AC_DEFINE([HAVE_F();` into the conftest C body and broke the compile.
         for args in extract_all_macro_args(input, "AC_CHECK_FUNC") {
-            for arg in &args {
+            if let Some(arg) = args.first() {
                 self.state.checked_funcs.push(arg.trim().to_string());
             }
         }
         for args in extract_all_macro_args(input, "AC_CHECK_FUNCS") {
-            for arg in &args {
+            if let Some(arg) = args.first() {
                 for func in arg.split_whitespace() {
                     self.state.checked_funcs.push(func.trim().to_string());
                 }
             }
         }
 
-        // Extract AC_CHECK_HEADER names
+        // Extract AC_CHECK_HEADER names (first arg only — same action-block corruption as FUNC).
         for args in extract_all_macro_args(input, "AC_CHECK_HEADER") {
-            for arg in &args {
+            if let Some(arg) = args.first() {
                 self.state.checked_headers.push(arg.trim().to_string());
             }
         }
         for args in extract_all_macro_args(input, "AC_CHECK_HEADERS") {
-            for arg in &args {
+            if let Some(arg) = args.first() {
                 for hdr in arg.split_whitespace() {
                     self.state.checked_headers.push(hdr.trim().to_string());
                 }
@@ -1896,24 +1904,23 @@ impl M4Engine {
             }
         }
 
-        // Extract AC_CHECK_TYPE names
+        // Extract AC_CHECK_TYPE name — first arg only (a type may contain a space, e.g. `struct stat`,
+        // so do NOT split it; $2+ are includes/actions and previously leaked into the conftest).
         for args in extract_all_macro_args(input, "AC_CHECK_TYPE") {
-            for arg in &args {
-                for typ in arg.split_whitespace() {
-                    let t = typ.trim().trim_matches(',');
-                    if !t.is_empty() {
-                        self.state.checked_types.push(t.trim().to_string());
-                    }
+            if let Some(arg) = args.first() {
+                let t = arg.trim().trim_matches(',');
+                if !t.is_empty() {
+                    self.state.checked_types.push(t.to_string());
                 }
             }
         }
-        // Handle AC_CHECK_TYPES (plural form)
+        // AC_CHECK_TYPES (plural): first arg is a comma-separated type list.
         for args in extract_all_macro_args(input, "AC_CHECK_TYPES") {
-            for arg in &args {
-                for typ in arg.split_whitespace() {
-                    let t = typ.trim().trim_matches(',');
+            if let Some(arg) = args.first() {
+                for typ in arg.split(',') {
+                    let t = typ.trim();
                     if !t.is_empty() {
-                        self.state.checked_types.push(t.trim().to_string());
+                        self.state.checked_types.push(t.to_string());
                     }
                 }
             }
@@ -1934,17 +1941,21 @@ impl M4Engine {
             }
         }
 
-        // --- AC_CHECK_MEMBER extraction ---
+        // --- AC_CHECK_MEMBER extraction --- first arg only (`aggregate.member`); $2+ are actions that
+        // previously leaked AC_DEFINE([...]) into the conftest.
         for args in extract_all_macro_args(input, "AC_CHECK_MEMBER") {
-            for arg in &args {
+            if let Some(arg) = args.first() {
                 self.state.checked_members.push(arg.trim().to_string());
             }
         }
-        // Handle AC_CHECK_MEMBERS (plural)
+        // AC_CHECK_MEMBERS (plural): first arg is a comma-separated member list.
         for args in extract_all_macro_args(input, "AC_CHECK_MEMBERS") {
-            for arg in &args {
-                for member in arg.split_whitespace() {
-                    self.state.checked_members.push(member.trim().to_string());
+            if let Some(arg) = args.first() {
+                for member in arg.split(',') {
+                    let m = member.trim();
+                    if !m.is_empty() {
+                        self.state.checked_members.push(m.to_string());
+                    }
                 }
             }
         }

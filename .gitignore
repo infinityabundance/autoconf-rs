@@ -15,3 +15,6 @@ config.h.in
 config.log
 config.status
 configure
+
+aclocal.m4
+bootstrap-receipt.json
