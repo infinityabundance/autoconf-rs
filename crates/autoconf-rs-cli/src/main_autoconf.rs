@@ -277,6 +277,14 @@ fn neutralize_leaked_macros(input: &str) -> String {
         "AC_", "AX_", "AM_", "LT_", "AS_", "PKG_", "AH_", "_AC_", "_AM_", "_LT_",
         "m4_", "_m4_", "gl_", "IT_", "GLIB_", "GTK_", "BOOST_", "AC", "AM", // AC_DEFUN-internal _AC etc.
     ];
+    // Bare m4 BUILTINS that can never be valid shell (a complex macro-body — e.g. gettext's
+    // lib-link.m4 AC_LIB_LINKFLAGS_BODY — can leak these when our engine fails to fully expand its
+    // pushdef/translit machinery). Neutralize so configure degrades instead of dying with a hard
+    // `syntax error near '[NAME],[translit'`.
+    const M4_BUILTINS: &[&str] = &[
+        "pushdef", "popdef", "translit", "ifelse", "ifdef", "undefine", "defn",
+        "changequote", "changecom", "m4_pattern_allow", "m4_pattern_forbid",
+    ];
     // does `s` (already left-trimmed) start with an autoconf-family macro name then `(`?
     let leaked_macro_at = |s: &str| -> bool {
         let id_len = s.bytes().take_while(|b| b.is_ascii_alphanumeric() || *b == b'_').count();
@@ -284,6 +292,9 @@ fn neutralize_leaked_macros(input: &str) -> String {
             return false;
         }
         let id = &s[..id_len];
+        if M4_BUILTINS.contains(&id) {
+            return true;
+        }
         // require a real autoconf prefix AND an uppercase letter or underscore-prefixed (macro-shaped)
         let has_prefix = PREFIXES.iter().any(|p| id.starts_with(p) && id.len() > p.len());
         has_prefix && (id.contains('_') || id.chars().any(|c| c.is_ascii_uppercase()))
