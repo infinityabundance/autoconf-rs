@@ -187,7 +187,13 @@ impl M4Engine {
         // substitute. (m4-rs renders `$$1` as literal `$$`+`1` = a PID, and `[$]$1` unbalances m4 quotes
         // -> Makefile not created; the eval avoids both.) `${$1}` -> `${NAME}` (m4 expands $1; `{}` aren't
         // m4 quote chars). Runs at the call site after the var is set, so the value is current.
-        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null");
+        // Trailing `;` TERMINATES the statement so it is robust to a lost newline concatenating it with
+        // the NEXT statement: automake emits `AC_SUBST([PACKAGE])`/`AC_SUBST([VERSION])` back-to-back and
+        // an eaten newline glued them into `...>> conf_subst.sed 2>/dev/null eval "_acrs_sv=\${VERSION}"`,
+        // where `eval ...` became extra ARGS to the PACKAGE `printf` -> literal `eval`/`_acrs_sv=...`
+        // lines written into conf_subst.sed -> sed aborts on the bad command -> EMPTY Makefile. The `;`
+        // makes `...2>/dev/null; eval ...` parse as two statements regardless of the missing newline.
+        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;");
 
         // AC_DEFINE — no output
         self.engine.macro_table.define(b"AC_DEFINE", b"");
@@ -687,15 +693,16 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_COPYRIGHT", b"# Copyright: $1");
-        self.engine
-            .macro_table
-            .define(b"AC_PREREQ", b"# Requires Autoconf >= $1");
-        self.engine
-            .macro_table
-            .define(b"AC_BEFORE", b"# $1 must come before $2");
-        self.engine
-            .macro_table
-            .define(b"AC_OBSOLETE", b"# $1 is obsolete: $2");
+        // AC_PREREQ / AC_BEFORE / AC_OBSOLETE are m4-TIME assertions (version check, macro-ordering
+        // check, obsolescence warning); real autoconf emits ZERO shell into configure for them. The old
+        // stubs expanded to a bare `#` comment WITH NO trailing newline, so an inline call followed by
+        // `dnl` (e.g. `AC_PREREQ([2.65])dnl`) produced `# Requires Autoconf >= 2.65` glued to the next
+        // source line -> that line got commented out (`# ...if test ...; then` -> orphan `fi`, syntax
+        // error). AC_BEFORE was the `# ... must come before ...` glue seen in the earlier ltdl runaway.
+        // Expand to nothing (faithful + no newline-join footgun).
+        self.engine.macro_table.define(b"AC_PREREQ", b"");
+        self.engine.macro_table.define(b"AC_BEFORE", b"");
+        self.engine.macro_table.define(b"AC_OBSOLETE", b"");
         // Use `define` (not `m4_define`) so a user macro defined via AC_DEFUN expands even when AC_DEFUN
         // appears before AC_INIT (a common layout). `define` is the always-available builtin.
         self.engine
@@ -2686,8 +2693,25 @@ impl M4Engine {
                 output.push_str(" -e 's|@prefix@|$prefix|g'");
                 output.push_str(" -e 's|@exec_prefix@|$exec_prefix|g'");
                 for (var, value) in &self.state.substitutions {
-                    let escaped_val = value.replace('&', "\\&").replace('/', "\\/");
-                    output.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
+                    // Emit `-e 's|@VAR@|VALUE|g'` SAFELY. This expr sits in a single-quoted shell word,
+                    // and VALUE is sed replacement text. A value with an unbalanced/embedded single
+                    // quote or the sed delimiter used to break the WHOLE sed invocation (shell parse
+                    // error / bad sed) -> sed wrote nothing -> an EMPTY Makefile. Escape both layers:
+                    //  1) strip a matched pair of surrounding shell single quotes automake adds for
+                    //     shell-assignment (`' -I$(srcdir)'` is meant to yield the literal ` -I$(srcdir)`
+                    //     so make expands $(srcdir); leaving the quotes in put literal quotes in the file).
+                    //  2) sed-escape the delimiter `|`, backref `&`, and backslash.
+                    //  3) shell-escape single quotes via the '\'' idiom so the single-quoted word holds.
+                    let mut v: &str = value;
+                    if v.len() >= 2 && v.starts_with('\'') && v.ends_with('\'') {
+                        v = &v[1..v.len() - 1];
+                    }
+                    let sed_escaped = v
+                        .replace('\\', "\\\\")
+                        .replace('&', "\\&")
+                        .replace('|', "\\|");
+                    let shell_escaped = sed_escaped.replace('\'', "'\\''");
+                    output.push_str(&format!(" -e 's|@{}@|{}|g'", var, shell_escaped));
                 }
                 // Runtime AC_SUBST substitutions (PKG_CHECK_MODULES PFX_CFLAGS/LIBS etc.).
                 output.push_str(" -f conf_subst.sed");
@@ -3129,6 +3153,32 @@ mod tests {
         let output = engine.process(input).unwrap();
         // Output is the generated configure script, not M4 expansion
         assert!(output.contains("#! /bin/sh"));
+    }
+
+    #[test]
+    fn test_ac_prereq_emits_no_shell() {
+        // AC_PREREQ is an m4-time version assertion: it must produce NO shell into configure. The old
+        // stub emitted a bare `# Requires Autoconf >= X` comment with no newline, which (when inlined
+        // before `if test ...; then`) commented out the following line -> orphan `fi` -> syntax error.
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_PREREQ([2.65])\nif test x = x; then\n  :\nfi\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(!output.contains("Requires Autoconf"), "AC_PREREQ must not emit a comment into configure");
+        assert!(!output.contains("2.65if"), "AC_PREREQ must not glue onto the following statement");
+    }
+
+    #[test]
+    fn test_ac_subst_statement_is_terminated() {
+        // The AC_SUBST runtime stub must end with `;` so a lost newline concatenating two AC_SUBSTs
+        // can't turn the second into args of the first's printf (which corrupted conf_subst.sed and
+        // produced an empty Makefile).
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_SUBST([FOO])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            output.contains("conf_subst.sed 2>/dev/null;"),
+            "AC_SUBST expansion must be `;`-terminated"
+        );
     }
 
     #[test]
