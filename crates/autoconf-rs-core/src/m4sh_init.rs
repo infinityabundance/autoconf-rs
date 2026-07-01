@@ -20,7 +20,10 @@ pub fn generate_m4sh_init(_pn: &str, _pv: &str) -> Vec<u8> {
     // Create confdefs.h as the VERY FIRST thing so every compile probe's `cat confdefs.h - <<EOF`
     // works — even AC_CHECK_LIB/AC_COMPILE_IFELSE emitted early (before the standard confdefs init).
     // `cat: confdefs.h: No such file` was the single most common corpus failure (36/138 repos).
-    i.extend_from_slice(b"test -f confdefs.h || printf '%s\\n' '/* confdefs.h */' > confdefs.h\n");
+    // TRUNCATE here (not `test -f ||`): confdefs.h now survives to config.h generation, so a re-run of
+    // configure must start it FRESH — otherwise leftover `#define HAVE_X 1` lines accumulate. Later
+    // creation points keep `test -f ||` so they don't wipe probe results mid-run.
+    i.extend_from_slice(b"printf '%s\\n' '/* confdefs.h */' > confdefs.h\n");
     i.extend_from_slice(b"if test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1\n");
     i.extend_from_slice(b"then :\n  emulate sh\n  NULLCMD=:\n");
     i.extend_from_slice(b"  # Pre-4.2 versions of Zsh do word splitting on ${1+\"$@\"}, which\n");

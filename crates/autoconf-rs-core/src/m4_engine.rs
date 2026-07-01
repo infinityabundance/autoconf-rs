@@ -263,16 +263,19 @@ impl M4Engine {
         crate::languages::register_erlang_macros(&mut self.engine.macro_table);
         crate::languages::register_go_macros(&mut self.engine.macro_table);
 
-        // AC_CHECK_FUNC — check for C library function
+        // AC_CHECK_FUNC — check for C library function. On success record `#define HAVE_<CPP> 1` into
+        // confdefs.h (so config.h gets HAVE_MALLOC etc.), same as AC_CHECK_HEADER.
         self.engine.macro_table.define(
             b"AC_CHECK_FUNC",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
-        // AC_CHECK_HEADER — check for C header
+        // AC_CHECK_HEADER — check for C header. On success record `#define HAVE_<CPP> 1` into confdefs.h
+        // (the RUNTIME probe accumulator config.h is built from). Without this the check PRINTED "yes"
+        // but config.h kept `#undef HAVE_STDIO_H` -> source `#ifdef HAVE_STDIO_H` never fired.
         self.engine.macro_table.define(
             b"AC_CHECK_HEADER",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_LIB(LIBRARY, FUNCTION, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): link-test FUNCTION
@@ -3151,6 +3154,27 @@ mod tests {
         let output = engine.process(input).unwrap();
         assert!(!output.contains("Requires Autoconf"), "AC_PREREQ must not emit a comment into configure");
         assert!(!output.contains("2.65if"), "AC_PREREQ must not glue onto the following statement");
+    }
+
+    #[test]
+    fn test_check_header_records_define_and_confdefs_kept() {
+        // AC_CHECK_HEADER must, on success, append `#define HAVE_<CPP> 1` to confdefs.h so config.h
+        // gets it; and the config.status section must NOT truncate confdefs.h afterward (that wiped the
+        // probe results -> config.h had only `#undef HAVE_*`).
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_CHECK_HEADERS([stdio.h])\nAC_CONFIG_HEADERS([config.h])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            output.contains("#define $ac_def 1") && output.contains(">> confdefs.h"),
+            "AC_CHECK_HEADER must append the HAVE_ define to confdefs.h"
+        );
+        // Every confdefs.h (re)creation after the prologue must be GUARDED (`test -f ... ||`) so it can't
+        // truncate the probe HAVE_ defines. There should be no bare `<newline>printf ... > confdefs.h`.
+        assert!(
+            !output.contains("\n printf '%s\\n' \"/* confdefs.h */\" > confdefs.h")
+                && !output.contains("\nprintf '%s\\n' \"/* confdefs.h */\" > confdefs.h"),
+            "config.status must not UNCONDITIONALLY truncate confdefs.h (wipes probe HAVE_ defines)"
+        );
     }
 
     #[test]

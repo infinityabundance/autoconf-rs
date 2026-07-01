@@ -226,10 +226,16 @@ for ac_signal in 1 2 13 15; do
 done
 ac_signal=0
 
-# confdefs.h avoids OS command line length limits that DEFS can exceed.
-rm -f -r conftest* confdefs.h
+# Keep confdefs.h: the config.h generation below reads it to bake each probe's
+# `#define HAVE_X 1` into config.h. (autoconf-rs builds config.h from the on-disk
+# confdefs.h, unlike GNU autoconf which embeds it in config.status; removing it
+# here left config.h with only `#undef HAVE_*`.) Only conftest debris is cleaned.
+rm -f -r conftest*
 
-printf '%s\n' "/* confdefs.h */" > confdefs.h
+# Do NOT truncate: confdefs.h already holds every probe's `#define HAVE_X 1` from the
+# AC_CHECK_HEADER/FUNC loops above. Truncating here wiped them, so config.h ended up with
+# only `#undef HAVE_*`. Create only if somehow missing; the PACKAGE_* lines below append.
+test -f confdefs.h || printf '%s\n' "/* confdefs.h */" > confdefs.h
 
 # Predefined preprocessor variables.
 
