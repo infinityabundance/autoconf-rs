@@ -509,6 +509,7 @@ pub fn generate_configure_prologue(
     package_name: &str,
     package_version: &str,
     bug: Option<&str>,
+    has_config_header: bool,
 ) -> Vec<u8> {
     let mut h = Vec::new();
     h.extend_from_slice(b"#! /bin/sh\n");
@@ -569,6 +570,23 @@ pub fn generate_configure_prologue(
         )
         .as_bytes(),
     );
+    // DEFS: the compile-line defines. autoconf sets DEFS here (identity section) in ALL config-generation
+    // paths, so @DEFS@ (STD_VAR_SED: s|@DEFS@|$DEFS|g) resolves correctly regardless of which body path
+    // generated the rest of configure. With a config header, DEFS is just -DHAVE_CONFIG_H (PACKAGE/VERSION
+    // live in config.h). WITHOUT one, automake passes PACKAGE/VERSION on the compile line — we neutralize
+    // AM_INIT_AUTOMAKE so nothing else emits them, and programs using `VERSION`/`PACKAGE` (no config.h to
+    // include) failed to compile ("'VERSION' undeclared", the top systemic make-stage root; e.g. oscsend).
+    // The `\"` survives sed->make->/bin/sh so gcc sees -DVERSION="v" (a C string).
+    if has_config_header {
+        h.extend_from_slice(b"DEFS=-DHAVE_CONFIG_H\n\n");
+    } else {
+        h.extend_from_slice(
+            b"DEFS=\"-DPACKAGE=\\\\\\\"$PACKAGE_TARNAME\\\\\\\" -DVERSION=\\\\\\\"$PACKAGE_VERSION\\\\\\\" \
+-DPACKAGE_NAME=\\\\\\\"$PACKAGE_NAME\\\\\\\" -DPACKAGE_TARNAME=\\\\\\\"$PACKAGE_TARNAME\\\\\\\" \
+-DPACKAGE_VERSION=\\\\\\\"$PACKAGE_VERSION\\\\\\\" -DPACKAGE_STRING=\\\\\\\"$PACKAGE_STRING\\\\\\\" \
+-DPACKAGE_BUGREPORT=\\\\\\\"$PACKAGE_BUGREPORT\\\\\\\"\"\n\n",
+        );
+    }
     // Open the message/log file descriptors used throughout configure: fd 5 -> config.log, fd 6 -> a copy
     // of stdout (so `>&5` / `>&6` redirections do not fail with "Bad file descriptor").
     h.extend_from_slice(b"exec 5>>config.log\nexec 6>&1\n\n");
@@ -632,7 +650,7 @@ mod tests {
 
     #[test]
     fn test_generate_prologue() {
-        let p = generate_configure_prologue("hello", "1.0", None);
+        let p = generate_configure_prologue("hello", "1.0", None, false);
         assert!(p.len() > 8000, "Prologue too short: {} bytes", p.len());
         let s = String::from_utf8_lossy(&p);
         assert!(s.contains("as_fn_unset"), "missing unset function");

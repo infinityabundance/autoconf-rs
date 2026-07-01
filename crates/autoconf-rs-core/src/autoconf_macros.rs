@@ -124,7 +124,7 @@ impl AutoconfBuiltins {
         let name = state.package_name.as_deref().unwrap_or("unknown");
         let version = state.package_version.as_deref().unwrap_or("0.0");
         let bug = state.bug_report.as_deref();
-        super::m4sh_init::generate_configure_prologue(name, version, bug)
+        super::m4sh_init::generate_configure_prologue(name, version, bug, !state.config_headers.is_empty())
     }
 
     /// AC_OUTPUT: finalize and generate output.

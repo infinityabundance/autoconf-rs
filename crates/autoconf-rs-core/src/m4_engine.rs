@@ -2406,7 +2406,7 @@ impl M4Engine {
                     .to_string();
                 let bug = self.state.bug_report.clone();
                 let prologue = String::from_utf8_lossy(
-                    &crate::m4sh_init::generate_configure_prologue(&name, &version, bug.as_deref()),
+                    &crate::m4sh_init::generate_configure_prologue(&name, &version, bug.as_deref(), !self.state.config_headers.is_empty()),
                 )
                 .into_owned();
                 let body = String::from_utf8_lossy(
