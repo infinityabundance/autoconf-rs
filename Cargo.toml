@@ -18,10 +18,10 @@ name = "autoconf-rs"
 path = "src/main.rs"
 
 [dependencies]
-autoconf-rs-core = { version = "0.1.28", path = "crates/autoconf-rs-core" }
+autoconf-rs-core = { version = "0.1.29", path = "crates/autoconf-rs-core" }
 autoconf-oracle-rs = { version = "0.1.0", path = "crates/autoconf-oracle-rs" }
 autoconf-casefile-rs = { version = "0.1.0", path = "crates/autoconf-casefile-rs" }
-autoconf-rs-cli = { version = "0.1.30", path = "crates/autoconf-rs-cli" }
+autoconf-rs-cli = { version = "0.1.31", path = "crates/autoconf-rs-cli" }
 
 [workspace]
 resolver = "2"

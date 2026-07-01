@@ -255,7 +255,7 @@ compile)
   ;;
 link)
   comp=$1; shift
-  out=; inobjs=; deplibs=; rest=
+  out=; inobjs=; deplibs=; rest=; rpaths=
   while test $# -gt 0; do
     case $1 in
       -o) shift; out=$1 ;;
@@ -264,7 +264,15 @@ link)
       -export-symbols-regex) shift ;;
       *.lo) o=`echo "$1" | sed 's/\.lo$/.o/'`; d=`dirname "$1"`; b=`basename "$o"`; inobjs="$inobjs $d/.libs/$b" ;;
       *.o) inobjs="$inobjs $1" ;;
-      *.la) la=$1; d=`dirname "$la"`; n=`basename "$la" .la`; deplibs="$deplibs -L$d/.libs -l${n#lib}" ;;
+      # A `-L<dir>/.libs` search path points at an uninstalled libtool library's build dir (e.g. a
+      # project links its own lib via `-L./.libs -lfoo` in *_LDFLAGS rather than the .la). Keep the
+      # -L and ALSO rpath its absolute path so the program finds libfoo.so at run time (make check).
+      -L*.libs|-L*.libs/) rest="$rest $1"; _ldir=${1#-L}; _lab=`cd "$_ldir" 2>/dev/null && pwd`; test -n "$_lab" && rpaths="$rpaths -Wl,-rpath,$_lab" ;;
+      # A .la dependency: link `-L<dir>/.libs -l<name>`, AND bake an absolute -rpath to that build
+      # `.libs` so the resulting program/library finds the uninstalled .so at RUN time (GNU libtool
+      # uses a wrapper script for this; we rpath the build dir instead). Without it, running from the
+      # build tree — e.g. `make check` — died: "libfoo.so: cannot open shared object file".
+      *.la) la=$1; d=`dirname "$la"`; n=`basename "$la" .la`; deplibs="$deplibs -L$d/.libs -l${n#lib}"; _labs=`cd "$d" 2>/dev/null && pwd`; test -n "$_labs" && rpaths="$rpaths -Wl,-rpath,$_labs/.libs" ;;
       *) rest="$rest $1" ;;
     esac
     shift
@@ -273,7 +281,7 @@ link)
   *.la)
     d=`dirname "$out"`; n=`basename "$out" .la`; mkdir -p "$d/.libs"
     ${AR:-ar} cru "$d/.libs/$n.a" $inobjs && ${RANLIB:-ranlib} "$d/.libs/$n.a" 2>/dev/null
-    $comp -shared -fPIC -o "$d/.libs/$n.so" $inobjs $deplibs $rest 2>/dev/null || :
+    $comp -shared -fPIC -o "$d/.libs/$n.so" $inobjs $deplibs $rpaths $rest 2>/dev/null || :
     { echo "# $out - libtool library (autoconf-rs)"
       echo "dlname='$n.so'"
       echo "library_names='$n.so'"
@@ -283,7 +291,7 @@ link)
     ;;
   *)
     mkdir -p .libs
-    $comp -o "$out" $inobjs $deplibs $rest || exit 1
+    $comp -o "$out" $inobjs $deplibs $rpaths $rest || exit 1
     ;;
   esac
   exit 0
