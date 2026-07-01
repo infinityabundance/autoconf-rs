@@ -144,7 +144,10 @@ fn main() -> ExitCode {
 
     // Step 3: Run autoheader if AC_CONFIG_HEADERS present
     let ac_content = std::fs::read_to_string(target_dir.join(input_file)).unwrap_or_default();
-    if ac_content.contains("AC_CONFIG_HEADERS") || force {
+    // `AC_CONFIG_HEADER` (no S) matches BOTH the modern plural and the legacy singular / `AM_CONFIG_HEADER`
+    // forms, so autoheader runs for old-style configure.ac too (else config.h.in is never made ->
+    // `make` dies with `config.h: No such file`, e.g. redir/rmark's `AC_CONFIG_HEADER([config.h])`).
+    if ac_content.contains("AC_CONFIG_HEADER") || force {
         if verbose {
             println!("autoreconf: running autoheader...");
         }
