@@ -459,12 +459,23 @@ impl M4Engine {
             b"AC_PROG_FC",
             b"# Check for Fortran compiler\nFC=${FC-gfortran}",
         );
-        self.engine
-            .macro_table
-            .define(b"AC_LIBOBJ", b"LIBOBJS=\"$LIBOBJS $1\"");
-        self.engine
-            .macro_table
-            .define(b"AC_REPLACE_FUNCS", b"# Replace functions: $1");
+        // AC_LIBOBJ(FUNC): add the replacement object `<libobjdir>/FUNC.$ac_objext` to LIBOBJS (was a
+        // bare `FUNC` -> the link couldn't find it). AC_CONFIG_LIBOBJ_DIR(compat) sets ac_config_libobj_dir.
+        // Trailing `;` TERMINATES the assignment: AC_LIBOBJ is often followed on the SAME line by
+        // another macro (`[AC_LIBOBJ(strtonum) AC_MSG_RESULT(no)]` -> `LIBOBJS=… printf …`), and
+        // `LIBOBJS=val printf` is a TEMPORARY env assignment for printf only -> $LIBOBJS reverts and the
+        // compat object is lost. The `;` makes `LIBOBJS=val; printf` a persistent assignment.
+        self.engine.macro_table.define(
+            b"AC_LIBOBJ",
+            b"LIBOBJS=\"$LIBOBJS ${ac_config_libobj_dir:+$ac_config_libobj_dir/}$1.$ac_objext\";",
+        );
+        // AC_REPLACE_FUNCS(funcs): for each function, if it links define HAVE_<CPP>, else AC_LIBOBJ it
+        // (add its compat object to LIBOBJS). Was a no-op comment -> compat funcs (strtonum, getprogname,
+        // …) never entered LIBOBJS -> link `undefined reference`. This is the portability-compat idiom.
+        self.engine.macro_table.define(
+            b"AC_REPLACE_FUNCS",
+            b"for ac_func in $1\ndo :\n  printf %s \"checking for $ac_func... \"\n  cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $ac_func ();\nint main() { return $ac_func(); }\n_ACEOF\n  if ac_fn_c_try_link; then\n    printf '%s\\n' \"yes\"\n    ac_def=`printf 'HAVE_%s' \"$ac_func\" | tr 'a-z./-' 'A-Z___'`\n    printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\n  else\n    printf '%s\\n' \"no\"\n    LIBOBJS=\"$LIBOBJS ${ac_config_libobj_dir:+$ac_config_libobj_dir/}$ac_func.$ac_objext\"\n  fi\ndone",
+        );
         self.engine
             .macro_table
             .define(b"AC_HEADER_STDC", b"printf '%s\\n' \"yes\"");
