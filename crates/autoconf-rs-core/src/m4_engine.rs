@@ -408,12 +408,12 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_PROG_FGREP", b"FGREP=${FGREP-grep -F}");
-        self.engine
-            .macro_table
-            .define(b"AC_LANG_PUSH", b"# Language: $1");
-        self.engine
-            .macro_table
-            .define(b"AC_LANG_POP", b"# Restore language");
+        // AC_LANG_PUSH/POP switch the m4 LANGUAGE state; real autoconf emits ZERO shell. The old stubs
+        // emitted a bare newline-less `# Language: C` / `# Restore language` comment which, called inline
+        // (`AC_LANG_PUSH([C])dnl`), glued onto the next statement -> corrupt shell (seen inside
+        // _AM_PROG_CC_C_O: `fi# Language: Cprintf %s "…"`). Expand to nothing.
+        self.engine.macro_table.define(b"AC_LANG_PUSH", b"");
+        self.engine.macro_table.define(b"AC_LANG_POP", b"");
         self.engine.macro_table.define(
             b"AC_PROG_FC",
             b"# Check for Fortran compiler\nFC=${FC-gfortran}",
@@ -1564,7 +1564,9 @@ impl M4Engine {
         );
         self.engine.macro_table.define(
             b"AC_REQUIRE_AUX_FILE",
-            b"# Require auxiliary file $1\nif test ! -f \"$ac_aux_dir/$1\"; then\n  AC_MSG_WARN([missing auxiliary file: $1])\nfi",
+            // Trailing newline: this stub ends in `fi`; without it, an inline call followed (after
+            // dnl-eaten newlines) by the next macro glued -> `fiprintf %s "…"` (seen in _AM_PROG_CC_C_O).
+            b"# Require auxiliary file $1\nif test ! -f \"$ac_aux_dir/$1\"; then\n  AC_MSG_WARN([missing auxiliary file: $1])\nfi\n",
         );
     }
 
