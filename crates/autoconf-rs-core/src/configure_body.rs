@@ -683,6 +683,15 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     b.extend_from_slice(crate::shell_gen::STD_VAR_SED.as_bytes());
     b.extend_from_slice(b" $_cs \"$1\" > \"$2\"\n}\n\n");
 
+    // No config header: fold the runtime AC_DEFINEs (now in confdefs.h) into DEFS as `-DX=V` so they
+    // reach the compiler — a no-header project (e.g. tmux: no AC_CONFIG_HEADERS, never #includes
+    // config.h) gets HAVE_* ONLY via -D flags. Without this, `-DHAVE_NCURSES_H` was absent →
+    // `tty-term.c: OK undeclared`. PACKAGE_* are already in DEFS (correctly quote-escaped), so skip
+    // them here. Runs at AC_OUTPUT, after all (possibly conditional) AC_DEFINEs populated confdefs.h.
+    if state.config_headers.is_empty() {
+        b.extend_from_slice(b"DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
+    }
+
     // AC_CONFIG_FILES — create each file from its .in template.
     for f in &state.config_files {
         b.extend_from_slice(

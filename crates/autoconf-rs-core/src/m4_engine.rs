@@ -205,8 +205,16 @@ impl M4Engine {
             b"if $2; then\n  $1_TRUE=\n  $1_FALSE='#'\nelse\n  $1_TRUE='#'\n  $1_FALSE=\nfi\neval \"_acrs_sv=\\${$1_TRUE}\"; printf '%s\\n' \"s|@$1_TRUE@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;\neval \"_acrs_sv=\\${$1_FALSE}\"; printf '%s\\n' \"s|@$1_FALSE@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;",
         );
 
-        // AC_DEFINE — no output
-        self.engine.macro_table.define(b"AC_DEFINE", b"");
+        // AC_DEFINE(NAME, [VALUE]) — append `#define NAME VALUE` (VALUE defaults to 1) to confdefs.h at
+        // RUNTIME, so config.status bakes it into config.h. Was a no-op (`b""`): in M4-expansion mode
+        // (which complex projects use) the static prescan doesn't feed config.h, so a compile-time
+        // `AC_DEFINE(HAVE_NCURSES_H)` produced NOTHING -> config.h lacked it -> `tty-term.c: OK
+        // undeclared`. Emitting the append at the call site is also correct for CONDITIONAL defines
+        // (`if found; then AC_DEFINE(X)`), which the unconditional prescan got wrong.
+        self.engine.macro_table.define(
+            b"AC_DEFINE",
+            b"printf '%s\\n' \"#define $1 ifelse([$2],[],1,[$2])\" >> confdefs.h 2>/dev/null",
+        );
 
         // AC_CONFIG_COMMANDS — no output
         self.engine.macro_table.define(b"AC_CONFIG_COMMANDS", b"");
@@ -2684,6 +2692,13 @@ impl M4Engine {
                         var_name, val_esc
                     ));
                 }
+                // No config header: the AC_DEFINEs must reach the compiler as -D flags in DEFS (that
+                // IS how a no-header project gets HAVE_* — e.g. tmux has no AC_CONFIG_HEADERS and never
+                // #includes config.h; without this `tty-term.c: OK undeclared` because -DHAVE_NCURSES_H
+                // was absent). Append every non-PACKAGE confdefs.h `#define X V` as `-DX=V` (values are
+                // typically 1; PACKAGE_* are already in DEFS, correctly quote-escaped). Runs at AC_OUTPUT
+                // after all (possibly conditional) AC_DEFINEs have populated confdefs.h.
+                output.push_str("DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
             }
             // Add substitution and config.status from dynamic configure
             // Process config files, subdirs, and headers in the configure body
