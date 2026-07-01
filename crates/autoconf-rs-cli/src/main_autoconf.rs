@@ -181,6 +181,7 @@ fn run() -> ExitCode {
             } else {
                 s
             };
+            let s = expand_lang_constants(&s);
             guard_empty_shell_blocks(&s)
         }
         Err(e) => {
@@ -234,6 +235,20 @@ fn emit_output(output_arg: &Option<String>, content: &str) -> ExitCode {
             ExitCode::SUCCESS
         }
     }
+}
+
+/// Expand the language-state m4 macros `_AC_LANG_ABBREV`→`c`, `_AC_LANG_PREFIX`→`C`, `_AC_LANG`→`C`
+/// that leaked LITERAL into the generated shell. These are constants in our world (AC_LANG is a no-op,
+/// always C), but m4sugar composes them inside a quoted `AS_VAR_PUSHDEF` value (`ax_cv_[]_AC_LANG_ABBREV
+/// []flags_...`) that our engine stores without re-expanding, so cache/flag var names came out as
+/// `ax_cv__AC_LANG_ABBREVflags` and `_AC_LANG_PREFIXFLAGS` instead of `ax_cv_cflags` and `CFLAGS` —
+/// breaking AX_CHECK_COMPILE_FLAG (autoconf-archive, very common). Longest names first so
+/// `_AC_LANG_ABBREV`/`_AC_LANG_PREFIX` are consumed before the `_AC_LANG` prefix inside them.
+fn expand_lang_constants(input: &str) -> String {
+    input
+        .replace("_AC_LANG_ABBREV", "c")
+        .replace("_AC_LANG_PREFIX", "C")
+        .replace("_AC_LANG", "C")
 }
 
 /// Drop full-line `#` comments that sit OUTSIDE any macro body (m4 quote/bracket depth 0) from a loaded
