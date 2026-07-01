@@ -115,6 +115,11 @@ fn main() -> ExitCode {
     }
     let mut ac_cmd = Command::new(&autoconf_bin);
     ac_cmd.arg(input_file);
+    // Capture autoconf's output into an executable `configure` file (GNU autoreconf always leaves a
+    // `configure` behind). Without `-o`, autoconf-rs prints the script to stdout, which autoreconf's
+    // inherited stdout dumped to the terminal -> no `configure` was ever written, so every git-checkout
+    // repo (no shipped tarball `configure`) failed at the "run ./configure" step.
+    ac_cmd.arg("-o").arg("configure");
     if force {
         ac_cmd.arg("--force");
     }

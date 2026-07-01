@@ -37,11 +37,24 @@ fn run() -> ExitCode {
     let mut i = 1;
     let mut allow_syscmd = false;
     let mut pure_m4 = false;
+    let mut output_arg: Option<String> = None;
     while i < args.len() {
         match args[i].as_str() {
             "-f" | "--force" => force = true,
             "--allow-syscmd" => allow_syscmd = true,
             "--pure-m4" => pure_m4 = true,
+            "-o" | "--output" => {
+                i += 1;
+                if i < args.len() {
+                    output_arg = Some(args[i].clone());
+                }
+            }
+            a if a.starts_with("--output=") => {
+                output_arg = Some(a["--output=".len()..].to_string());
+            }
+            a if a.starts_with("-o") && a.len() > 2 => {
+                output_arg = Some(a[2..].to_string());
+            }
             "-I" | "--include" => {
                 i += 1;
                 if i < args.len() {
@@ -72,6 +85,7 @@ fn run() -> ExitCode {
                 println!("Generate configure scripts from configure.ac");
                 println!("Usage: autoconf [OPTIONS] [configure.ac]");
                 println!("  -f, --force        Force regeneration");
+                println!("  -o, --output FILE  Write configure to FILE (chmod +x); '-' = stdout");
                 println!("  -I, --include DIR  Add include directory");
                 println!("  -W, --warnings CAT Enable warning category");
                 println!("  -h, --help         Show this help");
@@ -102,8 +116,7 @@ fn run() -> ExitCode {
 
     if !force {
         if let Some(cached_output) = cache.lookup(input_path, &include_dirs, "Autoconf") {
-            print!("{}", cached_output);
-            return ExitCode::SUCCESS;
+            return emit_output(&output_arg, &cached_output);
         }
     }
 
@@ -191,8 +204,36 @@ fn run() -> ExitCode {
         &trace_lines,
     );
 
-    print!("{}", configure_script);
-    ExitCode::SUCCESS
+    emit_output(&output_arg, &configure_script)
+}
+
+/// Write the generated configure script to `-o FILE` (chmod +x, since configure must be executable),
+/// or to stdout when no `-o` is given or `-o -` is requested. GNU autoconf's `-o FILE`; without it the
+/// real tool writes `configure` when reading configure.ac. autoreconf-rs passes `-o configure`, so the
+/// orchestrated path lands a real executable `configure` file instead of dumping the script to stdout.
+fn emit_output(output_arg: &Option<String>, content: &str) -> ExitCode {
+    match output_arg {
+        Some(o) if o != "-" => {
+            if let Err(e) = std::fs::write(o, content) {
+                eprintln!("autoconf: cannot write {}: {}", o, e);
+                return ExitCode::from(2);
+            }
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::PermissionsExt;
+                if let Ok(meta) = std::fs::metadata(o) {
+                    let mut perm = meta.permissions();
+                    perm.set_mode(0o755);
+                    let _ = std::fs::set_permissions(o, perm);
+                }
+            }
+            ExitCode::SUCCESS
+        }
+        _ => {
+            print!("{}", content);
+            ExitCode::SUCCESS
+        }
+    }
 }
 
 /// Neutralize a line that begins with an UNKNOWN autoconf-family macro call that leaked unexpanded into
