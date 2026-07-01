@@ -437,6 +437,10 @@ impl M4Engine {
         // they leaked as `_AC_LANG_ABBREV`/`_AC_LANG_PREFIX` into var names and broke the AS_VAR_IF logic.
         self.engine.macro_table.define(b"_AC_LANG_ABBREV", b"c");
         self.engine.macro_table.define(b"_AC_LANG_PREFIX", b"C");
+        // `_AC_LANG` (underscore) is the current language NAME used bare in messages ("whether _AC_LANG
+        // compiler accepts …"). NOT `AC_LANG` (no underscore) — that's the language SETTER `AC_LANG(C)`,
+        // which must stay a no-op (defining it to `C` would emit a stray `C` into configure).
+        self.engine.macro_table.define(b"_AC_LANG", b"C");
         self.engine.macro_table.define(
             b"AC_PROG_FC",
             b"# Check for Fortran compiler\nFC=${FC-gfortran}",
