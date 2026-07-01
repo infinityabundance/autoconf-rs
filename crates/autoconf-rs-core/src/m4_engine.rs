@@ -114,7 +114,7 @@ impl M4Engine {
             "AM_PROG_MKDIR_P", "AM_SANITY_CHECK", "AM_SET_DEPDIR", "AM_DEP_TRACK",
             "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_RUN_LOG", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
             "AM_GNU_GETTEXT_VERSION", "AM_ICONV", "LT_INIT", "AC_PROG_LIBTOOL", "LT_LANG",
-            "LT_PREREQ", "AM_CONDITIONAL",
+            "LT_PREREQ",
             // Common pure-setup Autoconf macros that otherwise leak literal (their vars/defines are
             // defaulted in config.status). NOT the feature-probe macros (those are handled elsewhere).
             "AC_SYS_LARGEFILE", "AC_SYS_LONG_FILE_NAMES",
@@ -195,6 +195,16 @@ impl M4Engine {
         // makes `...2>/dev/null; eval ...` parse as two statements regardless of the missing newline.
         self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;");
 
+        // AM_CONDITIONAL(NAME, CONDITION): run CONDITION; set NAME_TRUE='' / NAME_FALSE='#' when true
+        // (and swapped when false), then SUBST both. automake gates conditional Makefile lines with a
+        // leading `@NAME_TRUE@` / `@NAME_FALSE@` — substituted to '' (line active) or '#' (commented).
+        // Was a no-op, so `@USE_CDROM_TRUE@libcdrom_la_CFLAGS = …` stayed LITERAL -> make treated it as
+        // junk -> the per-target CFLAGS were empty -> `gio/gio.h: No such file` in conditional targets.
+        self.engine.macro_table.define(
+            b"AM_CONDITIONAL",
+            b"if $2; then\n  $1_TRUE=\n  $1_FALSE='#'\nelse\n  $1_TRUE='#'\n  $1_FALSE=\nfi\neval \"_acrs_sv=\\${$1_TRUE}\"; printf '%s\\n' \"s|@$1_TRUE@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;\neval \"_acrs_sv=\\${$1_FALSE}\"; printf '%s\\n' \"s|@$1_FALSE@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;",
+        );
+
         // AC_DEFINE — no output
         self.engine.macro_table.define(b"AC_DEFINE", b"");
 
@@ -267,7 +277,7 @@ impl M4Engine {
         // confdefs.h (so config.h gets HAVE_MALLOC etc.), same as AC_CHECK_HEADER.
         self.engine.macro_table.define(
             b"AC_CHECK_FUNC",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nchar $1();\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nifelse([$1],[main],[],[char $1 ();])\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
         // AC_CHECK_HEADER — check for C header. On success record `#define HAVE_<CPP> 1` into confdefs.h
@@ -282,16 +292,21 @@ impl M4Engine {
         // against -lLIBRARY. Only KEEP -lLIBRARY in LIBS on success (was kept unconditionally); run
         // IF-FOUND/IF-NOT (were ignored -> AC_CHECK_LIB([m],[pow],[],[AC_MSG_ERROR(...)]) never fired
         // the right branch). Default IF-FOUND prepends -lLIBRARY to LIBS.
+        // The `char $2 ();` builtin-prototype override MUST be omitted when the probed function is
+        // `main` (`AC_CHECK_LIB([m],[main])` is a common idiom to add -lm): `char main();` conflicts
+        // with `int main()` -> the conftest fails to compile -> the check returns "no" -> -lm never
+        // added -> link fails with `undefined reference to 'floor'`. Real autoconf's AC_LANG_CALL skips
+        // the declaration for `main`; mirror that with ifelse.
         self.engine.macro_table.define(
             b"AC_CHECK_LIB",
-            b"printf %s \"checking for $2 in -l$1... \"\n_acl_save_LIBS=$LIBS\nLIBS=\"-l$1 $5 $LIBS\"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $2();\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  LIBS=$_acl_save_LIBS\n  ifelse([$3], [], [LIBS=\"-l$1 $LIBS\"], [$3])\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acl_save_LIBS\n  :\n  $4\nfi",
+            b"printf %s \"checking for $2 in -l$1... \"\n_acl_save_LIBS=$LIBS\nLIBS=\"-l$1 $5 $LIBS\"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nifelse([$2],[main],[],[char $2 ();])\nint main() { return $2(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  LIBS=$_acl_save_LIBS\n  ifelse([$3], [], [LIBS=\"-l$1 $LIBS\"], [$3])\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acl_save_LIBS\n  :\n  $4\nfi",
         );
         // AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): was UNDEFINED, so
         // it leaked and the math/zlib/crypto lib searches never ran -> 'X library required' errors.
         // Try FUNCTION with no lib, then each of SEARCH-LIBS; keep the winning -llib in LIBS.
         self.engine.macro_table.define(
             b"AC_SEARCH_LIBS",
-            b"printf %s \"checking for library containing $1... \"\n_acs_save_LIBS=$LIBS\nac_res=\nfor ac_lib in '' $2; do\n  if test -z \"$ac_lib\"; then LIBS=\"$5 $_acs_save_LIBS\"; else LIBS=\"-l$ac_lib $5 $_acs_save_LIBS\"; fi\n  cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nchar $1 ();\nint main() { return $1 (); }\n_ACEOF\n  if ac_fn_c_try_link; then\n    if test -z \"$ac_lib\"; then ac_res=\"none required\"; else ac_res=\"-l$ac_lib\"; fi\n    break\n  fi\ndone\nif test -n \"$ac_res\"; then\n  printf '%s\\n' \"$ac_res\"\n  :\n  $3\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acs_save_LIBS\n  :\n  $4\nfi",
+            b"printf %s \"checking for library containing $1... \"\n_acs_save_LIBS=$LIBS\nac_res=\nfor ac_lib in '' $2; do\n  if test -z \"$ac_lib\"; then LIBS=\"$5 $_acs_save_LIBS\"; else LIBS=\"-l$ac_lib $5 $_acs_save_LIBS\"; fi\n  cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nifelse([$1],[main],[],[char $1 ();])\nint main() { return $1 (); }\n_ACEOF\n  if ac_fn_c_try_link; then\n    if test -z \"$ac_lib\"; then ac_res=\"none required\"; else ac_res=\"-l$ac_lib\"; fi\n    break\n  fi\ndone\nif test -n \"$ac_res\"; then\n  printf '%s\\n' \"$ac_res\"\n  :\n  $3\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acs_save_LIBS\n  :\n  $4\nfi",
         );
 
         // AC_CHECK_FUNCS — plural: check multiple functions
@@ -3175,6 +3190,28 @@ mod tests {
                 && !output.contains("\nprintf '%s\\n' \"/* confdefs.h */\" > confdefs.h"),
             "config.status must not UNCONDITIONALLY truncate confdefs.h (wipes probe HAVE_ defines)"
         );
+    }
+
+    #[test]
+    fn test_am_conditional_sets_and_substs_true_false() {
+        // AM_CONDITIONAL must set NAME_TRUE/NAME_FALSE and subst them, so `@NAME_TRUE@`-gated Makefile
+        // lines resolve. Was a no-op -> `@USE_CDROM_TRUE@foo_CFLAGS = …` stayed literal -> empty flags.
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAM_CONDITIONAL([USE_CDROM],[test x = x])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(output.contains("USE_CDROM_TRUE") && output.contains("USE_CDROM_FALSE"), "AM_CONDITIONAL must set the TRUE/FALSE vars");
+        assert!(output.contains("s|@USE_CDROM_TRUE@"), "AM_CONDITIONAL must subst @USE_CDROM_TRUE@");
+    }
+
+    #[test]
+    fn test_check_lib_skips_char_decl_for_main() {
+        // AC_CHECK_LIB([m],[main]) must NOT emit `char main ();` (conflicts with int main -> conftest
+        // fails to compile -> -lm never added -> `undefined reference to floor`).
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_CHECK_LIB([m],[main])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(!output.contains("char main ();"), "must not declare `char main ();`");
+        assert!(output.contains("checking for main in -l"), "the check must still run");
     }
 
     #[test]
