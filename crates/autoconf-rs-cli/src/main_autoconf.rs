@@ -161,7 +161,7 @@ fn run() -> ExitCode {
         None => format!("{}\n{}", overrides, configure_ac),
     };
     let input = match std::fs::read_to_string(&aclocal_path) {
-        Ok(acm4) => format!("{}\n{}", acm4, configure_ac),
+        Ok(acm4) => format!("{}\n{}", strip_toplevel_hash_comments(&acm4), configure_ac),
         Err(_) => configure_ac,
     };
 
@@ -234,6 +234,36 @@ fn emit_output(output_arg: &Option<String>, content: &str) -> ExitCode {
             ExitCode::SUCCESS
         }
     }
+}
+
+/// Drop full-line `#` comments that sit OUTSIDE any macro body (m4 quote/bracket depth 0) from a loaded
+/// aclocal.m4 before it is prepended to configure.ac. The autoconf engine disables `#` as an m4 comment
+/// (the generated configure OUTPUT is full of `#` shell comments), but aclocal.m4's macro DEFINITIONS
+/// carry `#` doc-comment blocks (`# _AM_PROG_CC_C_O`, `# like AC_PROG_CC_C_O, but changed...`). With
+/// `#`-comments off, the macro names inside those doc lines get expanded (to empty / garbage), which
+/// corrupts the following `AC_DEFUN([NAME],[body])` parse so NAME never registers and later leaks as
+/// `NAME: command not found` in configure. m4sugar reads .m4 defs with `#`-comments ON; we approximate
+/// that by stripping only the depth-0 comment lines, leaving `#` shell comments INSIDE macro bodies
+/// (bracket depth > 0) intact so a macro's emitted output is unchanged.
+fn strip_toplevel_hash_comments(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    let mut depth: i32 = 0;
+    for line in input.split_inclusive('\n') {
+        let at_top = depth == 0;
+        let is_comment = at_top && line.trim_start().starts_with('#');
+        if is_comment {
+            continue; // drop this line (and don't count its brackets — it's prose)
+        }
+        out.push_str(line);
+        for b in line.bytes() {
+            match b {
+                b'[' => depth += 1,
+                b']' => depth -= 1,
+                _ => {}
+            }
+        }
+    }
+    out
 }
 
 /// Neutralize a line that begins with an UNKNOWN autoconf-family macro call that leaked unexpanded into
@@ -334,4 +364,29 @@ fn guard_empty_shell_blocks(input: &str) -> String {
         result.push('\n');
     }
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_strip_toplevel_hash_comments_removes_docblocks() {
+        // Top-level `#` doc-comment lines (between/above definitions) are dropped so their macro
+        // names are not mis-expanded when `#`-comments are disabled for the configure body.
+        let input = "# _AM_PROG_CC_C_O\n# like AC_PROG_CC_C_O, but changed.\nAC_DEFUN([_AM_PROG_CC_C_O], [body])\n";
+        let out = strip_toplevel_hash_comments(input);
+        assert!(!out.contains("like AC_PROG_CC_C_O"), "top-level doc comment must be stripped");
+        assert!(out.contains("AC_DEFUN([_AM_PROG_CC_C_O], [body])"), "the definition must survive");
+    }
+
+    #[test]
+    fn test_strip_preserves_hash_inside_macro_body() {
+        // A `#`-led line INSIDE a macro body ([...] depth > 0) must be preserved: it may be heredoc'd
+        // C source (`#include`, `#define`) that the macro emits into conftest.
+        let input = "AC_DEFUN([X], [cat > c <<EOF\n#include <stdio.h>\n#define FOO 1\nEOF\n])\n";
+        let out = strip_toplevel_hash_comments(input);
+        assert!(out.contains("#include <stdio.h>"), "heredoc #include inside a body must survive");
+        assert!(out.contains("#define FOO 1"), "heredoc #define inside a body must survive");
+    }
 }
