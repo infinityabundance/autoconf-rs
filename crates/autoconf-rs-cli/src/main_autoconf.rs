@@ -128,6 +128,7 @@ fn run() -> ExitCode {
             return ExitCode::from(2);
         }
     };
+    let configure_ac = protect_hash_comments(&configure_ac);
 
     // Prepend aclocal.m4 (if present beside configure.ac). GNU autoconf always includes aclocal.m4
     // before the configure.ac body: it carries the AC_DEFUN definitions for AM_*, AX_*, gl_*, PKG_*,
@@ -235,6 +236,36 @@ fn emit_output(output_arg: &Option<String>, content: &str) -> ExitCode {
             ExitCode::SUCCESS
         }
     }
+}
+
+/// m4-quote the content of FULL-LINE `#` comments in configure.ac so their text passes through to the
+/// generated configure but the macro NAMES inside them are NOT expanded. Our engine disables `#` as an
+/// m4 comment (m4-rs discards comments, and `#` occurs in shell like `${v#pat}`), so `# AC_CHECK_HEADER
+/// doesn't give us …` had `AC_CHECK_HEADER` EXPANDED — injecting an `fi` and an unbalanced `'` (the
+/// apostrophe in "doesn't") that swallowed the rest of configure (tmux configure.ac). Wrapping the
+/// comment body in `[...]` (m4 quotes) makes m4 emit it literally, quotes stripped, macros untouched.
+/// Only when the body has no `[`/`]` of its own (would unbalance the quoting) — rare in comments.
+fn protect_hash_comments(input: &str) -> String {
+    let mut out = String::with_capacity(input.len() + 64);
+    for (i, line) in input.split('\n').enumerate() {
+        if i > 0 {
+            out.push('\n');
+        }
+        let trimmed = line.trim_start();
+        if let Some(rest) = trimmed.strip_prefix('#') {
+            let indent = &line[..line.len() - trimmed.len()];
+            if !rest.is_empty() && !rest.contains('[') && !rest.contains(']') {
+                out.push_str(indent);
+                out.push('#');
+                out.push('[');
+                out.push_str(rest);
+                out.push(']');
+                continue;
+            }
+        }
+        out.push_str(line);
+    }
+    out
 }
 
 /// Expand the language-state m4 macros `_AC_LANG_ABBREV`→`c`, `_AC_LANG_PREFIX`→`C`, `_AC_LANG`→`C`
