@@ -2693,25 +2693,9 @@ impl M4Engine {
                 output.push_str(" -e 's|@prefix@|$prefix|g'");
                 output.push_str(" -e 's|@exec_prefix@|$exec_prefix|g'");
                 for (var, value) in &self.state.substitutions {
-                    // Emit `-e 's|@VAR@|VALUE|g'` SAFELY. This expr sits in a single-quoted shell word,
-                    // and VALUE is sed replacement text. A value with an unbalanced/embedded single
-                    // quote or the sed delimiter used to break the WHOLE sed invocation (shell parse
-                    // error / bad sed) -> sed wrote nothing -> an EMPTY Makefile. Escape both layers:
-                    //  1) strip a matched pair of surrounding shell single quotes automake adds for
-                    //     shell-assignment (`' -I$(srcdir)'` is meant to yield the literal ` -I$(srcdir)`
-                    //     so make expands $(srcdir); leaving the quotes in put literal quotes in the file).
-                    //  2) sed-escape the delimiter `|`, backref `&`, and backslash.
-                    //  3) shell-escape single quotes via the '\'' idiom so the single-quoted word holds.
-                    let mut v: &str = value;
-                    if v.len() >= 2 && v.starts_with('\'') && v.ends_with('\'') {
-                        v = &v[1..v.len() - 1];
-                    }
-                    let sed_escaped = v
-                        .replace('\\', "\\\\")
-                        .replace('&', "\\&")
-                        .replace('|', "\\|");
-                    let shell_escaped = sed_escaped.replace('\'', "'\\''");
-                    output.push_str(&format!(" -e 's|@{}@|{}|g'", var, shell_escaped));
+                    // Safe `-e 's|@VAR@|VALUE|g'` (strips surrounding shell quotes, escapes sed+shell
+                    // specials) — shared with shell_gen's substitute() so both paths stay consistent.
+                    output.push_str(&crate::shell_gen::sed_subst_expr(var, value));
                 }
                 // Runtime AC_SUBST substitutions (PKG_CHECK_MODULES PFX_CFLAGS/LIBS etc.).
                 output.push_str(" -f conf_subst.sed");

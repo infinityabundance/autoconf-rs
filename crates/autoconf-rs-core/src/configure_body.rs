@@ -669,7 +669,11 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     }
     for v in &names {
         if let Some(val) = explicit.get(v.as_str()) {
-            b.extend_from_slice(format!(" -e 's|@{v}@|{}|g'", esc(val)).as_bytes());
+            // Safe emitter: strips a matched surrounding shell '' automake adds (so `'$(MKDIR_P)'` ->
+            // literal `$(MKDIR_P)` inside the single-quoted sed word, not command-substituted outside
+            // it), and shell-escapes embedded quotes. A bare esc() left `'s|@mkdir_p@|'$(MKDIR_P)'|g'`
+            // -> `$(MKDIR_P)` ran as a command -> the whole sed died -> EMPTY Makefile.
+            b.extend_from_slice(crate::shell_gen::sed_subst_expr(v, val).as_bytes());
         } else {
             b.extend_from_slice(format!(" -e \"s|@{v}@|${{{v}}}|g\"").as_bytes());
         }

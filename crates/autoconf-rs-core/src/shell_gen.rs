@@ -51,6 +51,24 @@ pub const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
 /// STD_VAR_DEFAULTS expand when config.status runs). Appended to config.status's `substitute()` sed.
 pub const STD_VAR_SED: &str = r#" -e "s|@top_srcdir@|$top_srcdir|g" -e "s|@top_builddir@|$top_builddir|g" -e "s|@builddir@|$builddir|g" -e "s|@abs_srcdir@|$abs_srcdir|g" -e "s|@abs_builddir@|$abs_builddir|g" -e "s|@abs_top_srcdir@|$abs_top_srcdir|g" -e "s|@abs_top_builddir@|$abs_top_builddir|g" -e "s|@CC@|$CC|g" -e "s|@CFLAGS@|$CFLAGS|g" -e "s|@CPPFLAGS@|$CPPFLAGS|g" -e "s|@LDFLAGS@|$LDFLAGS|g" -e "s|@LIBS@|$LIBS|g" -e "s|@CXX@|$CXX|g" -e "s|@CXXFLAGS@|$CXXFLAGS|g" -e "s|@CPP@|$CPP|g" -e "s|@AR@|$AR|g" -e "s|@ARFLAGS@|cr|g" -e "s|@RANLIB@|$RANLIB|g" -e "s|@STRIP@|$STRIP|g" -e "s|@AWK@|$AWK|g" -e "s|@LN_S@|$LN_S|g" -e "s|@OBJEXT@|$OBJEXT|g" -e "s|@EXEEXT@|$EXEEXT|g" -e "s|@SET_MAKE@|$SET_MAKE|g" -e "s|@YACC@|$YACC|g" -e "s|@YFLAGS@|$YFLAGS|g" -e "s|@LEX@|$LEX|g" -e "s|@LEXLIB@|$LEXLIB|g" -e "s|@LEX_OUTPUT_ROOT@|$LEX_OUTPUT_ROOT|g" -e "s|@GREP@|$GREP|g" -e "s|@EGREP@|$EGREP|g" -e "s|@FGREP@|$FGREP|g" -e "s|@SED@|$SED|g" -e "s|@SHELL@|$SHELL|g" -e "s|@MKDIR_P@|$MKDIR_P|g" -e "s|@DEPDIR@|$DEPDIR|g" -e "s|@INSTALL@|$INSTALL|g" -e "s|@INSTALL_PROGRAM@|$INSTALL_PROGRAM|g" -e "s|@INSTALL_DATA@|$INSTALL_DATA|g" -e "s|@INSTALL_SCRIPT@|$INSTALL_SCRIPT|g" -e "s|@am__leading_dot@|$am__leading_dot|g" -e "s|@DEFS@|$DEFS|g" -e "s|@ECHO_C@|$ECHO_C|g" -e "s|@ECHO_N@|$ECHO_N|g" -e "s|@ECHO_T@|$ECHO_T|g" -e "s|@LIBTOOL@|$LIBTOOL|g" -e "s|@LIBOBJS@|$LIBOBJS|g" -e "s|@LTLIBOBJS@|$LTLIBOBJS|g" -e "s|@ALLOCA@|$ALLOCA|g" -e "s|@build@|$build|g" -e "s|@host@|$host|g" -e "s|@target@|$target|g" -e "s|@build_alias@|$build_alias|g" -e "s|@host_alias@|$host_alias|g" -e "s|@target_alias@|$target_alias|g" -e "s|@build_cpu@|$build_cpu|g" -e "s|@build_vendor@|$build_vendor|g" -e "s|@build_os@|$build_os|g" -e "s|@host_cpu@|$host_cpu|g" -e "s|@host_vendor@|$host_vendor|g" -e "s|@host_os@|$host_os|g" -e "s|@configure_input@|$configure_input|g" -e "s|@bindir@|$bindir|g" -e "s|@sbindir@|$sbindir|g" -e "s|@libexecdir@|$libexecdir|g" -e "s|@datarootdir@|$datarootdir|g" -e "s|@datadir@|$datadir|g" -e "s|@sysconfdir@|$sysconfdir|g" -e "s|@sharedstatedir@|$sharedstatedir|g" -e "s|@localstatedir@|$localstatedir|g" -e "s|@runstatedir@|$runstatedir|g" -e "s|@includedir@|$includedir|g" -e "s|@oldincludedir@|$oldincludedir|g" -e "s|@libdir@|$libdir|g" -e "s|@infodir@|$infodir|g" -e "s|@localedir@|$localedir|g" -e "s|@mandir@|$mandir|g" -e "s|@docdir@|$docdir|g" -e "s|@htmldir@|$htmldir|g" -e "s|@dvidir@|$dvidir|g" -e "s|@pdfdir@|$pdfdir|g" -e "s|@psdir@|$psdir|g" -e "s|@lispdir@|$lispdir|g" -e "s|@AMDEP_TRUE@|$AMDEP_TRUE|g" -e "s|@AMDEP_FALSE@|$AMDEP_FALSE|g" -e "s|@am__include@|$am__include|g" -e "s|@am__quote@|$am__quote|g" -e "s|@am__isrc@|$am__isrc|g" -e "s|@am__nodep@|$am__nodep|g" -e "s|@am__fastdepCC_TRUE@|$am__fastdepCC_TRUE|g" -e "s|@am__fastdepCC_FALSE@|$am__fastdepCC_FALSE|g" -e "s|@am__fastdepCXX_TRUE@|$am__fastdepCXX_TRUE|g" -e "s|@am__fastdepCXX_FALSE@|$am__fastdepCXX_FALSE|g" -e "s|@ACLOCAL@|$ACLOCAL|g" -e "s|@AUTOCONF@|$AUTOCONF|g" -e "s|@AUTOMAKE@|$AUTOMAKE|g" -e "s|@AUTOHEADER@|$AUTOHEADER|g" -e "s|@MAKEINFO@|$MAKEINFO|g" -e "s|@install_sh@|$install_sh|g" -e "s|@AMTAR@|$AMTAR|g" -e "s|@am__tar@|$am__tar|g" -e "s|@am__untar@|$am__untar|g" -e "s|@CTAGS@|$CTAGS|g" -e "s|@ETAGS@|$ETAGS|g" -e "s|@CSCOPE@|$CSCOPE|g" -e "s|@ACLOCAL_AMFLAGS@|$ACLOCAL_AMFLAGS|g" -e "s|@MAINT@|$MAINT|g" -e "s|@MAINTAINER_MODE_TRUE@|$MAINTAINER_MODE_TRUE|g" -e "s|@MAINTAINER_MODE_FALSE@|$MAINTAINER_MODE_FALSE|g" -e "s|@pkgpyexecdir@|$pkgpyexecdir|g" -e "s|@pkgpythondir@|$pkgpythondir|g" -e "s|@pyexecdir@|$pyexecdir|g" -e "s|@pythondir@|$pythondir|g""#;
 
+/// Build a SAFE `-e 's|@VAR@|VALUE|g'` sed expr for embedding in a single-quoted shell word. VALUE is
+/// sed replacement text. Without care, an AC_SUBST value like `' -I$(srcdir)'` or `'$(MKDIR_P)'` (the
+/// surrounding single quotes are part of the captured value) produced `-e 's|@x@|'$(MKDIR_P)'|g'`, where
+/// `$(MKDIR_P)` fell OUTSIDE the shell quotes -> command-substituted (`MKDIR_P: command not found`) and
+/// the whole sed died -> EMPTY Makefile. We: (1) strip a matched pair of surrounding shell single quotes
+/// (automake adds them for shell-assignment; the intended sed value is the inside, e.g. ` -I$(srcdir)`,
+/// a literal make expands); (2) sed-escape `\ & |`; (3) shell-escape `'` via the `'\''` idiom so the
+/// single-quoted word always holds.
+pub fn sed_subst_expr(var: &str, value: &str) -> String {
+    let mut v: &str = value;
+    if v.len() >= 2 && v.starts_with('\'') && v.ends_with('\'') {
+        v = &v[1..v.len() - 1];
+    }
+    let sed_escaped = v.replace('\\', "\\\\").replace('&', "\\&").replace('|', "\\|");
+    let shell_escaped = sed_escaped.replace('\'', "'\\''");
+    format!(" -e 's|@{}@|{}|g'", var, shell_escaped)
+}
+
 /// Generates a configure shell script from parsed Autoconf input.
 pub struct ShellGenerator;
 
@@ -224,7 +242,9 @@ pub fn generate_dynamic_configure(
     // Explicit substitution variables from AC_SUBST
     for (var, value) in &state.substitutions {
         if !value.is_empty() {
-            s.push_str(&format!("{}='{}'\n", var, value));
+            // Shell-escape single quotes so a value containing `'` can't break the assignment.
+            let q = value.replace('\'', "'\\''");
+            s.push_str(&format!("{}='{}'\n", var, q));
         }
     }
 
@@ -262,16 +282,16 @@ pub fn generate_dynamic_configure(
     s.push_str(STD_VAR_SED);
     // Explicit substitutions (always include, even for empty values)
     for (var, value) in &state.substitutions {
-        let escaped_val = if value.is_empty() {
+        let value: &str = if value.is_empty() {
             match var.as_str() {
-                "PACKAGE_NAME" => name.replace('&', "\\&").replace('/', "\\/"),
-                "PACKAGE_VERSION" => version.replace('&', "\\&").replace('/', "\\/"),
-                _ => String::new(),
+                "PACKAGE_NAME" => name,
+                "PACKAGE_VERSION" => version,
+                _ => "",
             }
         } else {
-            value.replace('&', "\\&").replace('/', "\\/")
+            value
         };
-        s.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
+        s.push_str(&sed_subst_expr(var, value));
     }
     s.push_str(" ${_cs} \"$1\" > \"$2\"\n");
     s.push_str("  for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*_(CFLAGS|LIBS|DEPS|REQUIRES)@' \"$2\" 2>/dev/null | sort -u`; do _vn=`printf '%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%s' \"$_vv\" | sed 's/[&|]/\\\\&/g'`; sed \"s|$_ph|$_ve|g\" \"$2\" > \"$2._gt$$\" && mv -f \"$2._gt$$\" \"$2\"; done\n");
@@ -368,16 +388,16 @@ pub fn generate_dynamic_configure(
     s.push_str(STD_VAR_SED);
     // Explicit substitutions (always include, even for empty values)
     for (var, value) in &state.substitutions {
-        let escaped_val = if value.is_empty() {
+        let value: &str = if value.is_empty() {
             match var.as_str() {
-                "PACKAGE_NAME" => name.replace('&', "\\&").replace('/', "\\/"),
-                "PACKAGE_VERSION" => version.replace('&', "\\&").replace('/', "\\/"),
-                _ => String::new(),
+                "PACKAGE_NAME" => name,
+                "PACKAGE_VERSION" => version,
+                _ => "",
             }
         } else {
-            value.replace('&', "\\&").replace('/', "\\/")
+            value
         };
-        s.push_str(&format!(" -e 's|@{}@|{}|g'", var, escaped_val));
+        s.push_str(&sed_subst_expr(var, value));
     }
     s.push_str(" ${_cs} \"$1\" > \"$2\"\n");
     s.push_str("  for _ph in `grep -oE '@[A-Za-z_][A-Za-z0-9_]*_(CFLAGS|LIBS|DEPS|REQUIRES)@' \"$2\" 2>/dev/null | sort -u`; do _vn=`printf '%s' \"$_ph\" | tr -d @`; eval \"_vv=\\$$_vn\"; _ve=`printf '%s' \"$_vv\" | sed 's/[&|]/\\\\&/g'`; sed \"s|$_ph|$_ve|g\" \"$2\" > \"$2._gt$$\" && mv -f \"$2._gt$$\" \"$2\"; done\n");
@@ -466,6 +486,18 @@ pub fn generate_config_status_section(
 mod tests {
     use super::super::ConfigureAc;
     use super::*;
+
+    #[test]
+    fn test_sed_subst_expr_strips_quotes_and_is_safe() {
+        // Surrounding shell quotes stripped -> $(...) is a LITERAL inside the single-quoted sed word
+        // (make expands it), not command-substituted outside it.
+        assert_eq!(sed_subst_expr("mkdir_p", "'$(MKDIR_P)'"), " -e 's|@mkdir_p@|$(MKDIR_P)|g'");
+        assert_eq!(sed_subst_expr("am__isrc", "' -I$(srcdir)'"), " -e 's|@am__isrc@| -I$(srcdir)|g'");
+        // sed delimiter and backref are escaped.
+        assert_eq!(sed_subst_expr("X", "a|b&c"), " -e 's|@X@|a\\|b\\&c|g'");
+        // an embedded single quote is shell-escaped via '\'' so the single-quoted word holds.
+        assert!(sed_subst_expr("Y", "a'b").contains("'\\''"));
+    }
 
     #[test]
     fn test_generate_minimal() {
