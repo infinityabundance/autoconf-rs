@@ -432,6 +432,11 @@ impl M4Engine {
         // _AM_PROG_CC_C_O: `fi# Language: Cprintf %s "…"`). Expand to nothing.
         self.engine.macro_table.define(b"AC_LANG_PUSH", b"");
         self.engine.macro_table.define(b"AC_LANG_POP", b"");
+        // The current-language abbrev/prefix. AC_LANG is a no-op (always C here), so these are constants.
+        // Used to build var names like `ax_cv_check_cflags__-O3` in AX_CHECK_COMPILE_FLAG; unexpanded
+        // they leaked as `_AC_LANG_ABBREV`/`_AC_LANG_PREFIX` into var names and broke the AS_VAR_IF logic.
+        self.engine.macro_table.define(b"_AC_LANG_ABBREV", b"c");
+        self.engine.macro_table.define(b"_AC_LANG_PREFIX", b"C");
         self.engine.macro_table.define(
             b"AC_PROG_FC",
             b"# Check for Fortran compiler\nFC=${FC-gfortran}",
@@ -1536,8 +1541,12 @@ impl M4Engine {
 
         // --- AC_LANG_ASSERT/SOURCE/PROGRAM/CALL/FUNC_LINK_TRY ---
         self.engine.macro_table.define(
+            // AC_LANG_ASSERT is an m4-TIME assertion (the current m4 language stack must be LANG); real
+            // autoconf emits ZERO shell. The old runtime `test "$ac_curr_lang" = C || error` failed
+            // because AC_LANG_PUSH is a no-op so $ac_curr_lang is never set -> "language C required"
+            // aborted configure (libsodium configure.ac:35 `AC_LANG_ASSERT(C)`).
             b"AC_LANG_ASSERT",
-            b"test \"$ac_curr_lang\" = \"$1\" || AC_MSG_ERROR([language $1 required])",
+            b"",
         );
         self.engine.macro_table.define(b"AC_LANG_SOURCE", b"$1");
         self.engine
