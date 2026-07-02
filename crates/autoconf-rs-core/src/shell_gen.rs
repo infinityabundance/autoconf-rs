@@ -182,10 +182,12 @@ pub fn generate_dynamic_configure(
     s.push_str("}\n\n");
 
     s.push_str("ac_fn_c_try_run() {\n");
+    // ac_try must be DOUBLE-quoted so it holds $ac_link's value (`$CC -o ...`); single quotes left it
+    // as literal `$ac_link` and `eval` expanded only one level, running `$CC` literally (command not found).
     s.push_str(
-        "  if { ac_try='$ac_link'; (eval \"$ac_try\") >&5; } && test -s conftest$ac_exeext &&\n",
+        "  if { ac_try=\"$ac_link\"; (eval \"$ac_try\") >&5; } && test -s conftest$ac_exeext &&\n",
     );
-    s.push_str("     { ac_try='./conftest$ac_exeext'; { (eval \"$ac_try\") >&5; }; }; then\n");
+    s.push_str("     { ac_try=\"./conftest$ac_exeext\"; { (eval \"$ac_try\") >&5; }; }; then\n");
     s.push_str("    ac_retval=0\n");
     s.push_str("  else\n");
     s.push_str("    printf '%s\\n' \"configure: failed program was:\" >&5\n");

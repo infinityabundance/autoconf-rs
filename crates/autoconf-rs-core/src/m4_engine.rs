@@ -846,9 +846,15 @@ impl M4Engine {
         self.engine.macro_table.define(b"AC_OBSOLETE", b"");
         // Use `define` (not `m4_define`) so a user macro defined via AC_DEFUN expands even when AC_DEFUN
         // appears before AC_INIT (a common layout). `define` is the always-available builtin.
+        // The stored body is prefixed with a self-PROVIDE marker (`m4_define([_m4_provided_NAME],[1])`,
+        // emits nothing) so AC_REQUIRE can DEDUP: a macro that was already expanded — whether directly
+        // or via an earlier require — marks itself, and a later AC_REQUIRE([NAME]) becomes a no-op.
+        // Without this, a macro both called directly AND AC_REQUIRE'd expanded twice (postgres:
+        // PGAC_PATH_PYTHON called at configure.ac:1297 and AC_REQUIRE'd by _PGAC_CHECK_PYTHON_DIRS ->
+        // the whole python probe block emitted twice -> shell parse error).
         self.engine
             .macro_table
-            .define(b"AC_DEFUN", b"define([$1], [$2])");
+            .define(b"AC_DEFUN", b"define([$1], [m4_define([_m4_provided_$1], [1])$2])");
         self.engine
             .macro_table
             .define(b"AC_DEFUN_ONCE", b"m4_ifdef([_m4_defun_once_$1], [], [m4_define([$1], [$2])m4_define([_m4_defun_once_$1], [1])])");
@@ -860,20 +866,29 @@ impl M4Engine {
             b"AU_DEFUN",
             b"errprint([warning: $1 is obsolete, use $2\n])m4_define([$1], [$3])",
         );
-        // AC_REQUIRE([MACRO]) — expand MACRO inline (rescanned). Real autoconf HOISTS + dedups it to a
-        // prerequisite block; we approximate by expanding it where required. Was a no-op, so a macro
-        // reached ONLY via AC_REQUIRE never ran — e.g. curl's `_XC_CFG_PRE_POSTLUDE` (AC_REQUIRE'd) sets
-        // `xc_configure_preamble_result='yes'`; without it configure aborted "…not set (internal problem)".
-        self.engine.macro_table.define(b"AC_REQUIRE", b"$1");
+        // AC_REQUIRE([MACRO]) — expand MACRO inline (rescanned) ONCE. Real autoconf HOISTS + dedups it to
+        // a prerequisite block; we approximate: expand where required, but only if MACRO has not already
+        // PROVIDED itself (see AC_DEFUN's marker). This keeps the fix for a macro reached ONLY via
+        // AC_REQUIRE (curl's `_XC_CFG_PRE_POSTLUDE` sets `xc_configure_preamble_result='yes'`) while
+        // preventing double expansion when the same macro is also called directly (postgres python).
+        self.engine
+            .macro_table
+            .define(b"AC_REQUIRE", b"m4_ifdef([_m4_provided_$1], [], [$1])");
         self.engine
             .macro_table
             .define(b"AC_PROVIDE", b"m4_define([_m4_provided_$1], [1])");
         self.engine
             .macro_table
             .define(b"AC_SUBST_FILE", b"# Subst file: $1");
-        self.engine
-            .macro_table
-            .define(b"AC_DEFINE_UNQUOTED", b"# Define unquoted: $1");
+        // AC_DEFINE_UNQUOTED(NAME, [VALUE]) — like AC_DEFINE but VALUE is shell-expanded. The
+        // double-quoted `"#define $1 $2"` already lets runtime `$var`s in the value expand, so it is
+        // the same emitted shell as AC_DEFINE. The old comment-only stub emitted NO command, so an
+        // `if ...; then AC_DEFINE_UNQUOTED(...) fi` (postgres typeof / sizeof) became an empty then-block
+        // -> `syntax error near fi`.
+        self.engine.macro_table.define(
+            b"AC_DEFINE_UNQUOTED",
+            b"printf '%s\\n' \"#define $1 ifelse([$2],[],1,[$2])\" >> confdefs.h 2>/dev/null",
+        );
         self.engine
             .macro_table
             .define(b"AC_PRESERVE_HELP_ORDER", b"# Preserve help order");
@@ -1297,6 +1312,14 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AS_ECHO_N", b"printf '%s' \"$1\"");
+        // Internal m4sh spellings (leading underscore) that projects sometimes call directly
+        // (postgres configure.ac uses `_AS_ECHO_N([preparing build tree... ])`). Same emitted shell.
+        self.engine
+            .macro_table
+            .define(b"_AS_ECHO", b"printf '%s\\n' \"$1\"");
+        self.engine
+            .macro_table
+            .define(b"_AS_ECHO_N", b"printf '%s' \"$1\"");
         // AS_IF: portable if/then[/else]/fi. The `:` no-op guards each branch so an empty body
         // (e.g. a then-branch that is only AC_DEFINE, which expands to nothing) does not produce
         // `if c; then fi` -> shell "syntax error near fi". The else branch carries the 3-arg form
@@ -1316,15 +1339,19 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AS_MKDIR_P", b"test -d \"$1\" || mkdir -p \"$1\"");
-        // AS_TR_SH: translate to valid shell variable name
+        // AS_TR_SH: translate to a valid shell variable name. This is an m4-TIME transform (patsubst),
+        // NOT runtime shell: the result is used as an identifier inside `${...+set}` / as a cache-var
+        // name (`${AS_TR_SH([pgac_cv_prog_CC_cflags_$1])+set}`). The old `printf | sed` pipeline leaked
+        // shell INTO the `${...}`, producing `${printf '%s\n' "..." | sed ...+set}` -> syntax error and an
+        // unbalanced `if` (postgres PGAC_PROG_CC_VAR_OPT cflag cache). Non-[A-Za-z0-9_] chars -> `_`.
         self.engine.macro_table.define(
             b"AS_TR_SH",
-            b"printf '%s\\n' \"$1\" | sed 's/[^a-zA-Z0-9_]/_/g'",
+            b"patsubst([$1], [[^a-zA-Z0-9_]], [_])",
         );
-        // AS_TR_CPP: translate to valid C preprocessor macro name
+        // AS_TR_CPP: translate to a valid C preprocessor macro name — m4-time sanitize + uppercase.
         self.engine.macro_table.define(
             b"AS_TR_CPP",
-            b"printf '%s\\n' \"$1\" | tr 'a-z' 'A-Z' | sed 's/[^A-Z0-9_]/_/g'",
+            b"translit(patsubst([$1], [[^a-zA-Z0-9_]], [_]), [a-z], [A-Z])",
         );
         // AS_VAR_SET: set a shell variable
         self.engine.macro_table.define(b"AS_VAR_SET", b"$1=\"$2\"");
@@ -2750,9 +2777,13 @@ impl M4Engine {
             output.push_str("  return $ac_retval\n");
             output.push_str("}\n");
             output.push_str("ac_fn_c_try_run() {\n");
-            output.push_str("  if { ac_try='$ac_link'; { (eval \"$ac_try\") >&5; }; } && test -s conftest$ac_exeext &&\n");
+            // ac_try MUST be double-quoted: `ac_try='$ac_link'` (single) leaves ac_try as the literal
+            // `$ac_link`, so `eval "$ac_try"` expands only ONE level -> the inner `$CC` inside $ac_link is
+            // never expanded and runs as a literal command (`$CC: command not found`, postgres run test).
+            // Double quotes bake $ac_link's value into ac_try; eval then expands $CC.
+            output.push_str("  if { ac_try=\"$ac_link\"; { (eval \"$ac_try\") >&5; }; } && test -s conftest$ac_exeext &&\n");
             output.push_str(
-                "     { ac_try='./conftest$ac_exeext'; { { (eval \"$ac_try\") >&5; }; }; }; then\n",
+                "     { ac_try=\"./conftest$ac_exeext\"; { { (eval \"$ac_try\") >&5; }; }; }; then\n",
             );
             output.push_str("    ac_retval=0\n");
             output.push_str("  else\n");
@@ -3416,9 +3447,11 @@ mod tests {
         let input = "AC_INIT([test], [1.0])\nAC_PROG_CC\nAC_SEARCH_LIBS([sqrt], [m])\nAC_OUTPUT\n";
         let output = engine.process(input).unwrap();
         assert!(output.contains("sqrt"), "Output should contain 'sqrt'");
+        // AC_SEARCH_LIBS emits "checking for library containing sqrt..." (real autoconf); the older
+        // assertion expected AC_CHECK_LIB's "sqrt in -lm" phrasing, which this macro never produces.
         assert!(
-            output.contains("checking for sqrt in -lm"),
-            "Should check for sqrt in -lm"
+            output.contains("checking for library containing sqrt"),
+            "Should check for library containing sqrt"
         );
     }
 
@@ -3478,6 +3511,50 @@ mod tests {
         assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
         assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
         assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_ac_require_dedups_with_direct_call() {
+        // A macro called directly AND AC_REQUIRE'd must expand ONCE (postgres python double-block).
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_DEFUN([MYMAC],[echo MYMAC_BODY])\nAC_DEFUN([USER],[AC_REQUIRE([MYMAC])echo USER_BODY])\nMYMAC\nUSER\nAC_OUTPUT\n")
+            .unwrap();
+        let n = out.matches("echo MYMAC_BODY").count();
+        assert_eq!(n, 1, "MYMAC must expand exactly once (direct call + require), got {n}:\n{out}");
+    }
+
+    #[test]
+    fn test_as_tr_sh_is_m4_time_literal() {
+        // AS_TR_SH must sanitize at m4 time (patsubst), not emit a runtime printf|sed pipeline, so it
+        // can be used as a cache-var identifier inside ${...+set}.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nif test \"${AS_TR_SH([pgac_cv_x_-Wfoo])+set}\" = set; then :; fi\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("${pgac_cv_x__Wfoo+set}"), "AS_TR_SH must yield a literal name: {out}");
+        assert!(!out.contains("printf '%s\\n' \"pgac_cv_x"), "AS_TR_SH must not emit a shell pipeline: {out}");
+    }
+
+    #[test]
+    fn test_ac_define_unquoted_emits_command() {
+        // Must emit a real confdefs.h append, not a bare comment (else an `if…then AC_DEFINE_UNQUOTED fi`
+        // is an empty then-block -> `syntax error near fi`).
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_DEFINE_UNQUOTED([FOO], [$bar])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("#define FOO $bar") && out.contains(">> confdefs.h"),
+            "AC_DEFINE_UNQUOTED must append to confdefs.h: {out}");
+    }
+
+    #[test]
+    fn test_try_run_ac_try_double_quoted() {
+        // ac_fn_c_try_run's ac_try must be double-quoted so `eval` expands the inner $CC.
+        let mut engine = M4Engine::new();
+        let out = engine.process("AC_INIT([p],[1])\nAC_OUTPUT\n").unwrap();
+        assert!(out.contains("ac_try=\"$ac_link\""), "ac_try must be double-quoted: (try_run body)");
+        assert!(!out.contains("ac_try='$ac_link'"), "ac_try must NOT be single-quoted");
     }
 
     #[test]
