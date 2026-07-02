@@ -771,7 +771,11 @@ impl M4Engine {
             b"AU_DEFUN",
             b"errprint([warning: $1 is obsolete, use $2\n])m4_define([$1], [$3])",
         );
-        self.engine.macro_table.define(b"AC_REQUIRE", b"");
+        // AC_REQUIRE([MACRO]) — expand MACRO inline (rescanned). Real autoconf HOISTS + dedups it to a
+        // prerequisite block; we approximate by expanding it where required. Was a no-op, so a macro
+        // reached ONLY via AC_REQUIRE never ran — e.g. curl's `_XC_CFG_PRE_POSTLUDE` (AC_REQUIRE'd) sets
+        // `xc_configure_preamble_result='yes'`; without it configure aborted "…not set (internal problem)".
+        self.engine.macro_table.define(b"AC_REQUIRE", b"$1");
         self.engine
             .macro_table
             .define(b"AC_PROVIDE", b"m4_define([_m4_provided_$1], [1])");
