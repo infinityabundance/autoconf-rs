@@ -4,6 +4,39 @@
 
 use super::autoconf_macros::AutoconfState;
 
+/// Split an AC_CONFIG_FILES operand on its top-level `:` separators, treating a `:` inside a
+/// `${...}` shell parameter expansion as literal (so `${config_file}:${config_in}` splits into two,
+/// but `${var:-default}` is not split). Returns at least one element.
+fn split_top_level_colon(s: &str) -> Vec<String> {
+    let mut parts = Vec::new();
+    let mut cur = String::new();
+    let mut brace_depth: i32 = 0;
+    let bytes = s.as_bytes();
+    let mut i = 0;
+    while i < bytes.len() {
+        let c = bytes[i] as char;
+        match c {
+            '{' => {
+                brace_depth += 1;
+                cur.push(c);
+            }
+            '}' => {
+                if brace_depth > 0 {
+                    brace_depth -= 1;
+                }
+                cur.push(c);
+            }
+            ':' if brace_depth == 0 => {
+                parts.push(std::mem::take(&mut cur));
+            }
+            _ => cur.push(c),
+        }
+        i += 1;
+    }
+    parts.push(cur);
+    parts
+}
+
 /// Generate only the feature test body (compiler, function, header, lib, type,
 /// sizeof, C conformance checks + confdefs.h). Used by the dynamic configure path.
 /// Does NOT include confcache or config.status (handled by callers).
@@ -692,11 +725,39 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         b.extend_from_slice(b"DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
     }
 
-    // AC_CONFIG_FILES — create each file from its .in template.
+    // AC_CONFIG_FILES — create each file from its template.
+    // The operand is `DEST` or `DEST:TEMPLATE[:TEMPLATE...]` (autoconf's colon syntax) and may carry
+    // shell variables + literal double-quotes straight from the m4 argument
+    // (git: `AC_CONFIG_FILES(["${config_file}":"${config_in}"])`). Strip the quotes, split on the
+    // top-level `:` (colons inside `${...}` don't count), and emit the paths DOUBLE-quoted so any
+    // runtime `${config_file}`/`${config_in}` expands in config.status's shell. With no explicit
+    // template, the source is `DEST.in`. Multiple templates are concatenated (autoconf behavior).
     for f in &state.config_files {
-        b.extend_from_slice(
-            format!("if test -f '{f}.in'; then printf '%s\\n' \"configure: creating {f}\"; ac_subst_file '{f}.in' '{f}'; fi\n").as_bytes(),
-        );
+        let cleaned = f.replace('"', "");
+        let parts = split_top_level_colon(&cleaned);
+        let dest = parts[0].trim();
+        if dest.is_empty() {
+            continue;
+        }
+        if parts.len() > 1 {
+            let srcs: Vec<&str> = parts[1..].iter().map(|s| s.trim()).filter(|s| !s.is_empty()).collect();
+            if srcs.len() == 1 {
+                let src = srcs[0];
+                b.extend_from_slice(
+                    format!("if test -f \"{src}\"; then printf '%s\\n' \"configure: creating {dest}\"; ac_subst_file \"{src}\" \"{dest}\"; fi\n").as_bytes(),
+                );
+            } else {
+                // Multiple templates: cat them into one temp, substitute that.
+                let joined = srcs.iter().map(|s| format!("\"{s}\"")).collect::<Vec<_>>().join(" ");
+                b.extend_from_slice(
+                    format!("if cat {joined} > \"{dest}.acrs_tmpl$$\" 2>/dev/null; then printf '%s\\n' \"configure: creating {dest}\"; ac_subst_file \"{dest}.acrs_tmpl$$\" \"{dest}\"; rm -f \"{dest}.acrs_tmpl$$\"; fi\n").as_bytes(),
+                );
+            }
+        } else {
+            b.extend_from_slice(
+                format!("if test -f \"{dest}.in\"; then printf '%s\\n' \"configure: creating {dest}\"; ac_subst_file \"{dest}.in\" \"{dest}\"; fi\n").as_bytes(),
+            );
+        }
     }
     // AC_CONFIG_HEADERS — create each header from its .in template (#undef -> #define).
     for h in &state.config_headers {
@@ -771,6 +832,40 @@ mod tests {
         let body = generate_feature_test_body(&state);
         // Empty state should produce minimal body
         assert!(body.is_empty() || !body.is_empty());
+    }
+
+    #[test]
+    fn test_split_top_level_colon() {
+        // No colon.
+        assert_eq!(split_top_level_colon("Makefile"), vec!["Makefile"]);
+        // dest:source.
+        assert_eq!(
+            split_top_level_colon("config.h:config.h.in"),
+            vec!["config.h", "config.h.in"]
+        );
+        // Shell vars split on the top-level colon (git's case).
+        assert_eq!(
+            split_top_level_colon("${config_file}:${config_in}"),
+            vec!["${config_file}", "${config_in}"]
+        );
+        // A colon INSIDE ${...} is not a separator.
+        assert_eq!(
+            split_top_level_colon("${var:-default}"),
+            vec!["${var:-default}"]
+        );
+    }
+
+    #[test]
+    fn test_config_files_dynamic_dest_source_emitted() {
+        // git: AC_CONFIG_FILES(["${config_file}":"${config_in}"]) must emit a
+        // DOUBLE-quoted dest/source split on the colon so runtime shell vars expand.
+        let mut state = AutoconfState::new();
+        state.config_files.push("\"${config_file}\":\"${config_in}\"".to_string());
+        let body = String::from_utf8(generate_configure_body(&state)).unwrap();
+        assert!(
+            body.contains("ac_subst_file \"${config_in}\" \"${config_file}\""),
+            "expected split+double-quoted config-file creation, got:\n{body}"
+        );
     }
 
     #[test]

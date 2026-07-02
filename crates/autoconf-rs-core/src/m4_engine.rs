@@ -2845,10 +2845,11 @@ impl M4Engine {
             // is absent) must NOT abort an otherwise-successful configure.
             output.push_str("  $ac_cs_success || printf '%s\\n' \"$as_me: config.status reported a problem\" >&2\n");
             output.push_str("fi\n");
-        } else {
-            // Simple file: clean up template placeholder artifacts
-            output = output.replace("## Output", "");
         }
+        // NB: an old blunt `output.replace("## Output", "")` lived here to scrub a template
+        // placeholder that no code path actually emits anymore. It silently corrupted any real
+        // `## Output files`-style shell comment in configure.ac (seen in git: the section header
+        // `## Output files` came out as a bare ` files` -> `files: command not found`). Removed.
 
         Ok(Self::ensure_shebang_first(output))
     }
