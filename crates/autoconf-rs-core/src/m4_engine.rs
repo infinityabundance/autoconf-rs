@@ -17,6 +17,79 @@ use crate::diagnostics::DiagnosticManager;
 use crate::diversion::DiversionManager;
 use crate::trace::{AutoconfEvent, Span, TraceLog};
 
+/// Strip `#` comments that sit at m4 bracket depth 0 from `.m4` source bytes (an `include`d macro
+/// file). m4's default comment discipline makes `#`→newline a comment in source; Autoconf disables
+/// that globally so generated shell `#` survives, so we re-apply it just for included source. A `#`
+/// INSIDE a macro body (bracket depth > 0) is a real shell comment in that macro's emitted output and
+/// is kept; `$#` (m4 arg count) is not a comment. A line that is nothing but a depth-0 comment is
+/// dropped entirely. Mirrors the CLI's `strip_toplevel_hash_comments` at the byte level.
+/// (Bite: postgres `config/general.m4`'s `AC_DEFUN([PGAC_ARG],[...])# PGAC_ARG` trailing comment.)
+pub fn strip_m4_source_hash_comments(input: &[u8]) -> Vec<u8> {
+    let mut out = Vec::with_capacity(input.len());
+    let mut depth: i32 = 0;
+    let mut i = 0;
+    while i < input.len() {
+        // Slice this physical line (including its trailing '\n' if present).
+        let start = i;
+        while i < input.len() && input[i] != b'\n' {
+            i += 1;
+        }
+        let had_nl = i < input.len();
+        let line = &input[start..i];
+        if had_nl {
+            i += 1; // consume '\n'
+        }
+        // Find the first depth-0 `#` (comment) in the line, tracking bracket depth from `depth`.
+        let mut d = depth;
+        let mut prev = 0u8;
+        let mut cut = line.len();
+        for (j, &b) in line.iter().enumerate() {
+            match b {
+                b'[' => d += 1,
+                b']' => {
+                    if d > 0 {
+                        d -= 1;
+                    }
+                }
+                b'#' if d == 0 && prev != b'$' => {
+                    cut = j;
+                    break;
+                }
+                _ => {}
+            }
+            prev = b;
+        }
+        let code = &line[..cut];
+        // Advance the running depth using only the non-comment code.
+        for &b in code {
+            match b {
+                b'[' => depth += 1,
+                b']' => depth -= 1,
+                _ => {}
+            }
+        }
+        if cut < line.len() {
+            // A depth-0 comment was cut. Drop pure-comment lines entirely; otherwise keep the code
+            // with trailing whitespace trimmed off (the removed comment left it dangling).
+            let trimmed_len = code
+                .iter()
+                .rposition(|&b| b != b' ' && b != b'\t')
+                .map(|p| p + 1)
+                .unwrap_or(0);
+            if trimmed_len == 0 {
+                continue; // whole line was (indented) comment -> drop, no blank line kept
+            }
+            out.extend_from_slice(&code[..trimmed_len]);
+        } else {
+            out.extend_from_slice(line);
+        }
+        if had_nl {
+            out.push(b'\n');
+        }
+    }
+    out
+}
+
 /// M4 expansion engine — wraps m4-rs-core for Autoconf use.
 pub struct M4Engine {
     engine: m4_rs::m4_rs_core::expansion::ExpansionEngine,
@@ -61,6 +134,14 @@ impl M4Engine {
         // builtin handlers sync the relexer correctly.
         engine.quote_config.change_quote(Some("["), Some("]"));
         engine.quote_config.change_comment(Some("\0"), Some("\n"));
+
+        // We disable `#`-as-comment globally so the generated shell's `#` comments pass through.
+        // The cost: `#` doc comments in INCLUDED `.m4` macro files (postgres config/*.m4, many
+        // aclocal-style libs) would then be scanned for macros — e.g. `AC_DEFUN([PGAC_ARG],[...])#
+        // PGAC_ARG` re-invokes the just-defined macro with empty args -> m4_fatal. Strip depth-0
+        // `#` comments from every included file (matching m4's default comment discipline for
+        // source), on the include path so nested includes are covered too.
+        engine.source_preprocessor = Some(strip_m4_source_hash_comments);
 
         Self {
             engine,
@@ -351,15 +432,23 @@ impl M4Engine {
             b"# AC_CONFIG_SRCDIR: record the source tree and sanity-check the unique file (non-fatal).\ntest \"x$srcdir\" = x && srcdir=.\nif test ! -f \"$srcdir/$1\"; then\n  printf '%s\\n' \"configure: WARNING: cannot find sources ($1) in $srcdir\" >&2\nfi",
         );
 
-        // AC_ARG_WITH — package option
-        self.engine
-            .macro_table
-            .define(b"AC_ARG_WITH", b"# Check --with-$1 option\n");
+        // AC_ARG_WITH(PACKAGE, HELP, [ACTION-IF-GIVEN], [ACTION-IF-NOT-GIVEN])
+        // The prologue's option parser stores `--with-foo=bar` into `$with_foo` (dashes→`_`). Emit the
+        // standard set/unset dispatch so ACTION-IF-GIVEN ($3, with $withval bound) or ACTION-IF-NOT-GIVEN
+        // ($4) actually runs — many projects put REQUIRED defaults in the not-given branch (postgres:
+        // `default_port=5432`), so the old comment-only stub left those vars empty. `then :`/`else :`
+        // guard the empty-action case from producing an empty compound-list (shell syntax error).
+        self.engine.macro_table.define(
+            b"AC_ARG_WITH",
+            b"# Check whether --with-$1 was given.\nif test \"${patsubst([with_$1], [[^a-zA-Z0-9_]], [_])+set}\" = set; then :\n  withval=$patsubst([with_$1], [[^a-zA-Z0-9_]], [_])\n  $3\nelse :\n  $4\nfi\n",
+        );
 
-        // AC_ARG_ENABLE — feature option
-        self.engine
-            .macro_table
-            .define(b"AC_ARG_ENABLE", b"# Check --enable-$1 option\n");
+        // AC_ARG_ENABLE(FEATURE, HELP, [ACTION-IF-GIVEN], [ACTION-IF-NOT-GIVEN]) — as AC_ARG_WITH but the
+        // parser stores `--enable-foo`/`--disable-foo` into `$enable_foo` and binds `$enableval`.
+        self.engine.macro_table.define(
+            b"AC_ARG_ENABLE",
+            b"# Check whether --enable-$1 was given.\nif test \"${patsubst([enable_$1], [[^a-zA-Z0-9_]], [_])+set}\" = set; then :\n  enableval=$patsubst([enable_$1], [[^a-zA-Z0-9_]], [_])\n  $3\nelse :\n  $4\nfi\n",
+        );
 
         // AC_ARG_VAR — precious variable
         self.engine
@@ -3376,5 +3465,29 @@ mod tests {
         assert!(
             M4Engine::ensure_shebang_first("no shebang here".into()).starts_with("#! /bin/sh\n")
         );
+    }
+
+    #[test]
+    fn test_ac_arg_with_runs_not_given_action() {
+        // AC_ARG_WITH must emit the set/unset dispatch so ACTION-IF-NOT-GIVEN actually runs
+        // (postgres puts required defaults there, e.g. `default_port=5432`).
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_ARG_WITH([pgport], [help], [got=$withval], [default_port=5432])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
+        assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
+        assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_strip_m4_source_hash_comments_trailing() {
+        // A trailing `# NAME` comment on a macro's close line (postgres general.m4) must be stripped,
+        // but a `#` shell comment inside a macro body (bracket depth > 0) must be preserved.
+        let got = strip_m4_source_hash_comments(b"AC_DEFUN([X],[body])# X doc\nkeep [a # not-a-comment ] end\n");
+        let s = String::from_utf8(got).unwrap();
+        assert!(!s.contains("# X doc"), "trailing depth-0 comment must be stripped: {s:?}");
+        assert!(s.contains("AC_DEFUN([X],[body])"), "code must survive: {s:?}");
+        assert!(s.contains("# not-a-comment"), "in-body (depth>0) # must be kept: {s:?}");
     }
 }

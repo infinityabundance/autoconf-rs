@@ -295,18 +295,58 @@ fn strip_toplevel_hash_comments(input: &str) -> String {
     let mut out = String::with_capacity(input.len());
     let mut depth: i32 = 0;
     for line in input.split_inclusive('\n') {
-        let at_top = depth == 0;
-        let is_comment = at_top && line.trim_start().starts_with('#');
-        if is_comment {
-            continue; // drop this line (and don't count its brackets — it's prose)
+        let had_nl = line.ends_with('\n');
+        let content = line.strip_suffix('\n').unwrap_or(line);
+        // Scan the line for the FIRST `#` that sits at m4 bracket depth 0 — an m4 comment
+        // in the .m4 source (m4's default changecom is `#`→newline). We must strip it because
+        // the engine disables `#`-as-comment globally (so generated shell `#` passes through),
+        // which otherwise EXPANDS any macro name in a trailing doc comment. The classic bite is
+        // postgres general.m4's `AC_DEFUN([PGAC_ARG],[...])# PGAC_ARG`: after the macro registers,
+        // the trailing `# PGAC_ARG` re-invokes it with empty args → m4_fatal. A `#` INSIDE a macro
+        // body (depth > 0) is a real shell comment in that macro's output and is preserved; `$#`
+        // (m4 arg count) is not a comment.
+        let bytes = content.as_bytes();
+        let mut d = depth;
+        let mut cut = content.len();
+        let mut prev = 0u8;
+        for (i, &b) in bytes.iter().enumerate() {
+            match b {
+                b'[' => d += 1,
+                b']' => {
+                    if d > 0 {
+                        d -= 1;
+                    }
+                }
+                b'#' if d == 0 && prev != b'$' => {
+                    cut = i;
+                    break;
+                }
+                _ => {}
+            }
+            prev = b;
         }
-        out.push_str(line);
-        for b in line.bytes() {
+        let code = &content[..cut];
+        // Advance the running depth using ONLY the code portion (the comment carries no brackets
+        // that should count toward macro-body nesting).
+        for b in code.bytes() {
             match b {
                 b'[' => depth += 1,
                 b']' => depth -= 1,
                 _ => {}
             }
+        }
+        if cut < content.len() {
+            // A depth-0 comment was found. If the line is nothing but that comment, drop it
+            // entirely (prior behavior for full-line prose); otherwise keep the code, sans comment.
+            if code.trim().is_empty() {
+                continue;
+            }
+            out.push_str(code.trim_end());
+        } else {
+            out.push_str(content);
+        }
+        if had_nl {
+            out.push('\n');
         }
     }
     out
