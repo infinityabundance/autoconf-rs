@@ -714,7 +714,13 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     // The comprehensive standard-var pass (SET_MAKE/builddir/abs_*/AR/RANLIB/install-dirs/am__*/host-
     // triple/…) + the runtime conf_subst.sed sink (PKG_CHECK_MODULES, LIBTOOL, AX_* overrides).
     b.extend_from_slice(crate::shell_gen::STD_VAR_SED.as_bytes());
-    b.extend_from_slice(b" $_cs \"$1\" > \"$2\"\n}\n\n");
+    // Final catch-all: empty any `@VAR@` placeholder still present after all real substitutions. In
+    // autoconf EVERY AC_SUBST'd var is in config.status's list (unset -> empty); a var AC_SUBST'd only
+    // inside a not-taken conditional (postgres `PKG_CHECK_MODULES(LIBNUMA, numa)` under an off-by-default
+    // --with) otherwise leaks `@LIBNUMA_CFLAGS@` into a Makefile -> `cc: @LIBNUMA_CFLAGS@: file not found`.
+    // Runs LAST, so it only touches leftovers; real subs already fired. (`@word@` — both `@` present —
+    // is an autoconf placeholder, not Makefile `@silent`/`foo@host` syntax.)
+    b.extend_from_slice(b" $_cs -e 's|@[A-Za-z_][A-Za-z0-9_]*@||g' \"$1\" > \"$2\"\n}\n\n");
 
     // No config header: fold the runtime AC_DEFINEs (now in confdefs.h) into DEFS as `-DX=V` so they
     // reach the compiler — a no-header project (e.g. tmux: no AC_CONFIG_HEADERS, never #includes

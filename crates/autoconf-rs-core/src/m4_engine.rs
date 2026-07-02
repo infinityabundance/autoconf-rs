@@ -1243,7 +1243,16 @@ impl M4Engine {
         // program (host build); a cross-compile would need the compile-time binary search (future).
         self.engine.macro_table.define(
             b"AC_CHECK_SIZEOF",
-            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <stdio.h>\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { printf(\"%d\", (int)sizeof($1)); return 0; }\n_ACEOF\nac_acrs_size=0\nif { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then\n  ac_acrs_size=`./conftest$ac_exeext 2>/dev/null`\n  test -n \"$ac_acrs_size\" || ac_acrs_size=0\nfi\nrm -f conftest$ac_exeext conftest.$ac_ext\nprintf '%s\\n' \"$ac_acrs_size\"\nAC_DEFINE_UNQUOTED(AS_TR_CPP([SIZEOF_$1]), [$ac_acrs_size])",
+            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <stdio.h>\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { printf(\"%d\", (int)sizeof($1)); return 0; }\n_ACEOF\nac_acrs_size=0\nif { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then\n  ac_acrs_size=`./conftest$ac_exeext 2>/dev/null`\n  test -n \"$ac_acrs_size\" || ac_acrs_size=0\nfi\nrm -f conftest$ac_exeext conftest.$ac_ext\nprintf '%s\\n' \"$ac_acrs_size\"\nac_cv_sizeof_[]AS_TR_SH([$1])=$ac_acrs_size\nAC_DEFINE_UNQUOTED(AS_TR_CPP([SIZEOF_$1]), [$ac_acrs_size])",
+        );
+
+        // --- AC_CHECK_ALIGNOF: compute the alignment of TYPE and define AS_TR_CPP(ALIGNOF_TYPE). Was
+        // UNDEFINED -> ALIGNOF_* / MAXIMUM_ALIGNOF empty in config.h -> postgres c.h `ALIGNOF_PG_INT128_TYPE
+        // <= MAXIMUM_ALIGNOF` ("operator '<=' has no right operand") + `alignas(MAXIMUM_ALIGNOF)` empty.
+        // Alignment = offset of a TYPE field placed right after a char (offsetof), computed at runtime.
+        self.engine.macro_table.define(
+            b"AC_CHECK_ALIGNOF",
+            b"# Check alignof($1)\nprintf %s \"checking alignment of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <stdio.h>\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\ntypedef struct { char acrs_c; $1 acrs_x; } acrs_align_t;\nint main() { printf(\"%d\", (int)offsetof(acrs_align_t, acrs_x)); return 0; }\n_ACEOF\nac_acrs_align=0\nif { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then\n  ac_acrs_align=`./conftest$ac_exeext 2>/dev/null`\n  test -n \"$ac_acrs_align\" || ac_acrs_align=0\nfi\nrm -f conftest$ac_exeext conftest.$ac_ext\nprintf '%s\\n' \"$ac_acrs_align\"\nac_cv_alignof_[]AS_TR_SH([$1])=$ac_acrs_align\nAC_DEFINE_UNQUOTED(AS_TR_CPP([ALIGNOF_$1]), [$ac_acrs_align])",
         );
 
         // --- AC_CHECK_DECL / AC_CHECK_DECLS (real implementations) ---
@@ -1256,10 +1265,15 @@ impl M4Engine {
             b"AC_CHECK_DECL",
             b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_cv_have_decl_$1=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  ac_cv_have_decl_$1=no\n  :\n  $3\nfi",
         );
-        // AC_CHECK_DECLS always defines HAVE_DECL_<sym> to 1 or 0 (single-symbol common case).
+        // AC_CHECK_DECLS(symbols, ...): defines HAVE_DECL_<sym> to 1/0. Single-symbol common case (used
+        // by 20+ corpus repos). NOTE: a COMMA-separated multi-symbol list (postgres
+        // `AC_CHECK_DECLS([strlcat, strlcpy, strsep, timingsafe_bcmp])`) still lands as one name here ->
+        // a harmless malformed `#define HAVE_DECL_strlcat,... 0` (a C99-whitespace warning; the uppercase
+        // HAVE_DECL_STRLCAT stays undefined so projects use their fallback). A proper m4_foreach split was
+        // tried but m4_foreach doesn't compose with AC_CHECK_DECL's if/else/fi (unbalanced `if`) — TODO.
         self.engine.macro_table.define(
             b"AC_CHECK_DECLS",
-            b"AC_CHECK_DECL([$1], [AC_DEFINE([HAVE_DECL_$1], [1], [Define to 1 if you have the declaration of $1.])\n$2], [AC_DEFINE([HAVE_DECL_$1], [0], [Define to 1 if you have the declaration of $1.])\n$3], [$4])",
+            b"AC_CHECK_DECL([$1], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [1], [Define to 1 if you have the declaration of $1.])\n$2], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [0], [Define to 1 if you have the declaration of $1.])\n$3], [$4])",
         );
         // The "once" header variants just delegate to the standard header check in our transpiler
         // (de-dup is a build-time optimization, not semantics) — were undefined and leaking (10 repos).
@@ -3545,6 +3559,33 @@ mod tests {
         assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
         assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
         assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_ac_check_alignof_computes_and_caches() {
+        // AC_CHECK_ALIGNOF must probe (checking alignment), define AS_TR_CPP(ALIGNOF_TYPE), and set the
+        // ac_cv_alignof_TYPE cache var that projects read to compute MAXIMUM_ALIGNOF.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_PROG_CC\nAC_CHECK_ALIGNOF([long])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("checking alignment of long"), "must probe alignment: {out}");
+        assert!(out.contains("ALIGNOF_LONG"), "must define ALIGNOF_LONG (uppercased): {out}");
+        assert!(out.contains("ac_cv_alignof_long="), "must set the cache var: {out}");
+    }
+
+    #[test]
+    fn test_config_file_var_catchall_present() {
+        // ac_subst_file must end with a catch-all that empties any remaining @VAR@ (leaked conditional
+        // AC_SUBST vars, e.g. postgres @LIBNUMA_CFLAGS@), AFTER conf_subst.sed.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_CONFIG_FILES([Makefile])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(
+            out.contains("s|@[A-Za-z_][A-Za-z0-9_]*@||g"),
+            "ac_subst_file must have the @VAR@ catch-all: (subst body)"
+        );
     }
 
     #[test]
