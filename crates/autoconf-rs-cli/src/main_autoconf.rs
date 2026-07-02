@@ -245,6 +245,35 @@ fn emit_output(output_arg: &Option<String>, content: &str) -> ExitCode {
 /// apostrophe in "doesn't") that swallowed the rest of configure (tmux configure.ac). Wrapping the
 /// comment body in `[...]` (m4 quotes) makes m4 emit it literally, quotes stripped, macros untouched.
 /// Only when the body has no `[`/`]` of its own (would unbalance the quoting) — rare in comments.
+/// True if `s` contains an autoconf/m4 macro CALL: an identifier immediately followed by `(` whose name
+/// looks macro-shaped (a known prefix, or ALL-CAPS-with-underscore). Used to spot commented-out macro
+/// calls that would otherwise expand. C preprocessor directives (`#if (`, `#error`) don't match: `if` is
+/// lowercase and not immediately before `(`, and there's no macro-prefixed identifier glued to a `(`.
+fn line_has_macro_call(s: &str) -> bool {
+    const PREFIXES: &[&str] = &[
+        "AC_", "AS_", "AM_", "AX_", "LT_", "PKG_", "AH_", "m4_", "_AC_", "_AS_", "_AM_", "_LT_", "gl_",
+    ];
+    let b = s.as_bytes();
+    for (i, &c) in b.iter().enumerate() {
+        if c != b'(' || i == 0 {
+            continue;
+        }
+        // walk back over the identifier ending at this `(`
+        let mut j = i;
+        while j > 0 && (b[j - 1].is_ascii_alphanumeric() || b[j - 1] == b'_') {
+            j -= 1;
+        }
+        if j == i {
+            continue; // no identifier immediately before `(`
+        }
+        let id = &s[j..i];
+        if PREFIXES.iter().any(|p| id.starts_with(p) && id.len() > p.len()) {
+            return true;
+        }
+    }
+    false
+}
+
 fn protect_hash_comments(input: &str) -> String {
     let mut out = String::with_capacity(input.len() + 64);
     for (i, line) in input.split('\n').enumerate() {
@@ -254,7 +283,27 @@ fn protect_hash_comments(input: &str) -> String {
         let trimmed = line.trim_start();
         if let Some(rest) = trimmed.strip_prefix('#') {
             let indent = &line[..line.len() - trimmed.len()];
-            if !rest.is_empty() && !rest.contains('[') && !rest.contains(']') {
+            if rest.is_empty() {
+                out.push_str(line);
+                continue;
+            }
+            // A `#`-comment line that references an autoconf MACRO CALL (a prefixed identifier immediately
+            // followed by `(`, e.g. commented-out `#   AS_IF([cond],[act])`) is dangerous: we disable
+            // `#`-as-m4-comment globally, so the macro expands and its multi-line output leaks past the
+            // `#` -> orphan `else`/`fi` (wolfssl). Such a line often has UNBALANCED brackets (multi-line
+            // call) so it can't be quote-wrapped either. Drop it to a bare `#`; in the generated script a
+            // `#` line is a shell comment anyway. We must NOT do this to conftest CPP lines like
+            // `#if`/`#error`/`#endif` inside `AC_LANG_SOURCE([[…]])` (postgres) — those carry no macro call.
+            if line_has_macro_call(rest) {
+                out.push_str(indent);
+                out.push('#');
+                continue;
+            }
+            // No macro call: wrap the body in a quote (inert) when its brackets are balanced; otherwise
+            // leave it verbatim (a bare-bracket conftest tail must pass through unchanged).
+            let opens = rest.matches('[').count();
+            let closes = rest.matches(']').count();
+            if opens == closes {
                 out.push_str(indent);
                 out.push('#');
                 out.push('[');
@@ -466,6 +515,19 @@ fn guard_empty_shell_blocks(input: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_protect_hash_comments_neutralizes_commented_macro() {
+        // A commented-out multi-line macro call must be neutralized (not expand past the `#`), while a
+        // conftest CPP line (`#error`) and a plain comment are preserved/quoted.
+        assert!(line_has_macro_call("        AS_IF([cond],[act])"));
+        assert!(!line_has_macro_call("error \"not C11\""));
+        let got = protect_hash_comments("#        AS_IF([cond &&\n#   (test x)],\n#   [act])\n# plain note\n");
+        // The AS_IF line is reduced to a bare `#` (no AS_IF left to expand).
+        assert!(!got.contains("AS_IF(["), "commented AS_IF must be neutralized: {got:?}");
+        // A plain comment is still wrapped/kept.
+        assert!(got.contains("plain note"), "plain comment kept: {got:?}");
+    }
 
     #[test]
     fn test_strip_toplevel_hash_comments_removes_docblocks() {

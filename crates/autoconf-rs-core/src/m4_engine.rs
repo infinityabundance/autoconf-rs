@@ -1263,17 +1263,17 @@ impl M4Engine {
         // fixable-root corpus-wide is backtick-in-source — don't add to it).
         self.engine.macro_table.define(
             b"AC_CHECK_DECL",
-            b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_cv_have_decl_$1=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  ac_cv_have_decl_$1=no\n  :\n  $3\nfi",
+            b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_cv_have_decl_$1=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  ac_cv_have_decl_$1=no\n  :\n  $3\nfi\n",
         );
-        // AC_CHECK_DECLS(symbols, ...): defines HAVE_DECL_<sym> to 1/0. Single-symbol common case (used
-        // by 20+ corpus repos). NOTE: a COMMA-separated multi-symbol list (postgres
-        // `AC_CHECK_DECLS([strlcat, strlcpy, strsep, timingsafe_bcmp])`) still lands as one name here ->
-        // a harmless malformed `#define HAVE_DECL_strlcat,... 0` (a C99-whitespace warning; the uppercase
-        // HAVE_DECL_STRLCAT stays undefined so projects use their fallback). A proper m4_foreach split was
-        // tried but m4_foreach doesn't compose with AC_CHECK_DECL's if/else/fi (unbalanced `if`) — TODO.
+        // AC_CHECK_DECLS(symbols, ...): the first arg is a COMMA-separated list; iterate it with m4_foreach
+        // and, per symbol, define AS_TR_CPP(HAVE_DECL_sym) to 1/0. Both postgres and wolfssl pass multi-symbol
+        // lists (`[strlcat, strlcpy, ...]`, `[gethostbyname, gethostbyaddr]`); the old single-symbol form
+        // fed the whole list as one name -> `ac_cv_have_decl_gethostbyname,` -> `command not found`.
+        // (m4_foreach composes cleanly now that AC_CHECK_DECL's body ends in a newline; without it, one
+        // iteration's `fi` glued to the next `printf` -> `fiprintf` -> unbalanced `if`.)
         self.engine.macro_table.define(
             b"AC_CHECK_DECLS",
-            b"AC_CHECK_DECL([$1], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [1], [Define to 1 if you have the declaration of $1.])\n$2], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [0], [Define to 1 if you have the declaration of $1.])\n$3], [$4])",
+            b"m4_foreach([_acrs_decl], [$1], [AC_CHECK_DECL(_acrs_decl, [AC_DEFINE(AS_TR_CPP([HAVE_DECL_]_acrs_decl), [1])\n$2], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_]_acrs_decl), [0])\n$3], [$4])])",
         );
         // AC_EGREP_CPP(PATTERN, PROGRAM, [IF-FOUND], [IF-NOT]): preprocess PROGRAM and egrep the output
         // for PATTERN. Was UNDEFINED -> its args (incl. a `changequote(<<,>>)`-wrapped regex containing
@@ -3572,6 +3572,20 @@ mod tests {
         assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
         assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
         assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_ac_check_decls_multi_symbol_splits() {
+        // A comma-separated AC_CHECK_DECLS list must produce one uppercased HAVE_DECL_<SYM> per symbol
+        // and stay syntactically valid (each AC_CHECK_DECL if/else/fi separated). postgres + wolfssl.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_PROG_CC\nAC_CHECK_DECLS([strlcat, strlcpy, strsep])\nAC_CONFIG_HEADERS([config.h])\nAC_OUTPUT\n")
+            .unwrap();
+        for sym in ["HAVE_DECL_STRLCAT", "HAVE_DECL_STRLCPY", "HAVE_DECL_STRSEP"] {
+            assert!(out.contains(sym), "missing {sym}: {out}");
+        }
+        assert!(!out.contains("fiprintf"), "AC_CHECK_DECL blocks must not glue (fiprintf): {out}");
     }
 
     #[test]
