@@ -1460,12 +1460,15 @@ impl M4Engine {
             .macro_table
             .define(b"AS_VAR_ARITH", b"$1=$(( $2 ))");
         // AS_VAR_PUSHDEF/POPDEF are M4-LEVEL (not shell): they push an m4 macro $1 whose expansion
-        // is the shell variable name $2, so subsequent uses of $1 reference that var. The previous
-        // shell-emitting version produced garbage multi-line assignments (AX_SAVE_FLAGS broke with a
-        // newline-laden value). Map to m4 pushdef/popdef -> no shell output, correct aliasing.
+        // is the shell variable name $2, so subsequent uses of $1 reference that var. The name $2 is run
+        // through AS_TR_SH so it is a VALID shell identifier: autoconf-archive's AX_CHECK_*_FLAG builds
+        // `ax_cv_check_ldflags_$4_$1` from the flag (`-Werror`, `-z relro -z now`), which contains `-`,
+        // spaces, and even a `$var` — without sanitizing, the cache var was `ax_cv_check_ldflags__-Werror`
+        // -> `command not found` / `${...+set}` bad substitution (wolfssl). AS_TR_SH maps each non-word
+        // char to `_`, matching autoconf's literal-name path.
         self.engine
             .macro_table
-            .define(b"AS_VAR_PUSHDEF", b"m4_pushdef([$1], [$2])");
+            .define(b"AS_VAR_PUSHDEF", b"m4_pushdef([$1], [AS_TR_SH([$2])])");
         self.engine
             .macro_table
             .define(b"AS_VAR_POPDEF", b"m4_popdef([$1])");

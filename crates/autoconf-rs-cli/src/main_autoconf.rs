@@ -183,6 +183,7 @@ fn run() -> ExitCode {
                 s
             };
             let s = expand_lang_constants(&s);
+            let s = convert_quadrigraphs(&s);
             guard_empty_shell_blocks(&s)
         }
         Err(e) => {
@@ -324,6 +325,24 @@ fn protect_hash_comments(input: &str) -> String {
 /// `ax_cv__AC_LANG_ABBREVflags` and `_AC_LANG_PREFIXFLAGS` instead of `ax_cv_cflags` and `CFLAGS` —
 /// breaking AX_CHECK_COMPILE_FLAG (autoconf-archive, very common). Longest names first so
 /// `_AC_LANG_ABBREV`/`_AC_LANG_PREFIX` are consumed before the `_AC_LANG` prefix inside them.
+/// Convert m4 quadrigraphs to their literal characters in the final output. Autoconf uses these to embed
+/// characters that are otherwise m4-significant (so they survive quoting): `@<:@`->`[`, `@:>@`->`]`,
+/// `@%:@`->`#`, `@{:@`->`(`, `@:}@`->`)`, `@&t@`->`` (a nothing, used to break tokens). autoconf-archive
+/// AX_* macros emit these heavily (e.g. wolfssl's `$EGREP -e '^@<:@0-9@:>@+,'` -> `^[0-9]+,`). Converted
+/// last so nothing downstream re-interprets the produced brackets.
+fn convert_quadrigraphs(input: &str) -> String {
+    if !input.contains('@') {
+        return input.to_string();
+    }
+    input
+        .replace("@<:@", "[")
+        .replace("@:>@", "]")
+        .replace("@%:@", "#")
+        .replace("@{:@", "(")
+        .replace("@:}@", ")")
+        .replace("@&t@", "")
+}
+
 fn expand_lang_constants(input: &str) -> String {
     input
         .replace("_AC_LANG_ABBREV", "c")
@@ -515,6 +534,13 @@ fn guard_empty_shell_blocks(input: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_convert_quadrigraphs() {
+        assert_eq!(convert_quadrigraphs("@<:@0-9@:>@+"), "[0-9]+");
+        assert_eq!(convert_quadrigraphs("a@%:@b@{:@c@:}@d@&t@e"), "a#b(c)de");
+        assert_eq!(convert_quadrigraphs("no quads here"), "no quads here");
+    }
 
     #[test]
     fn test_protect_hash_comments_neutralizes_commented_macro() {

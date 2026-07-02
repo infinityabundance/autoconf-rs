@@ -186,6 +186,10 @@ define([LT_OUTPUT], [_acrs_write_libtool])dnl
 define([AC_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([AM_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([LT_LANG], [])dnl
+dnl LT_LIB_M: find the math library (-lm) into $LIBM and AC_SUBST it. Was undefined -> leaked
+dnl `LT_LIB_M: command not found` (wolfssl). Link-probe cos(); AC_SUBST via the runtime sed sink.
+define([LT_LIB_M], [AC_CHECK_LIB([m], [cos], [LIBM=-lm], [LIBM=])
+eval "_acrs_sv=${LIBM}"; printf '%s\n' "s|@LIBM@|${_acrs_sv}|g" >> conf_subst.sed 2>/dev/null])dnl
 define([LTOPTIONS_VERSION], [])dnl
 dnl No-result macros that aclocal.m4's m4sugar/automake definitions otherwise leak as command-not-found
 dnl (the engine no-output defaults lose to aclocal.m4; these overrides win, spliced after it).
