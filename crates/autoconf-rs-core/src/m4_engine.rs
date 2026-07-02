@@ -1275,6 +1275,19 @@ impl M4Engine {
             b"AC_CHECK_DECLS",
             b"AC_CHECK_DECL([$1], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [1], [Define to 1 if you have the declaration of $1.])\n$2], [AC_DEFINE(AS_TR_CPP([HAVE_DECL_$1]), [0], [Define to 1 if you have the declaration of $1.])\n$3], [$4])",
         );
+        // AC_EGREP_CPP(PATTERN, PROGRAM, [IF-FOUND], [IF-NOT]): preprocess PROGRAM and egrep the output
+        // for PATTERN. Was UNDEFINED -> its args (incl. a `changequote(<<,>>)`-wrapped regex containing
+        // `(`, `|`, `[...]`) leaked as shell -> `syntax error near '('` (vim's rlim_t/stack_t type checks).
+        // PATTERN in double quotes (its `[`/`(`/`|` are literal to the shell; grep -E gives ERE alternation).
+        self.engine.macro_table.define(
+            b"AC_EGREP_CPP",
+            b"cat > conftest.$ac_ext <<_ACEOF\n$2\n_ACEOF\nif (eval \"$ac_cpp conftest.$ac_ext\") 2>&5 | grep -E \"$1\" >/dev/null 2>&1; then\n  :\n  $3\nelse\n  :\n  $4\nfi\nrm -f conftest.$ac_ext",
+        );
+        // AC_EGREP_HEADER(PATTERN, HEADER, [IF-FOUND], [IF-NOT]): same, over `#include <HEADER>`.
+        self.engine.macro_table.define(
+            b"AC_EGREP_HEADER",
+            b"cat > conftest.$ac_ext <<_ACEOF\n#include <$2>\n_ACEOF\nif (eval \"$ac_cpp conftest.$ac_ext\") 2>&5 | grep -E \"$1\" >/dev/null 2>&1; then\n  :\n  $3\nelse\n  :\n  $4\nfi\nrm -f conftest.$ac_ext",
+        );
         // The "once" header variants just delegate to the standard header check in our transpiler
         // (de-dup is a build-time optimization, not semantics) — were undefined and leaking (10 repos).
         self.engine
@@ -3559,6 +3572,18 @@ mod tests {
         assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
         assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
         assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_ac_egrep_cpp_defined() {
+        // AC_EGREP_CPP must emit a real cpp|grep -E probe (was undefined -> args leaked as shell).
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_EGREP_CPP([rlim_t], [#include <sys/types.h>], [echo Y], [echo N])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("$ac_cpp conftest") && out.contains("grep -E \"rlim_t\""),
+            "AC_EGREP_CPP must emit a cpp|grep probe: {out}");
+        assert!(out.contains("echo Y") && out.contains("echo N"), "must place both actions: {out}");
     }
 
     #[test]
