@@ -17,6 +17,39 @@ use crate::diagnostics::DiagnosticManager;
 use crate::diversion::DiversionManager;
 use crate::trace::{AutoconfEvent, Span, TraceLog};
 
+/// Native handler for Autoconf's `AS_CASE(WORD, [PAT1],[ACT1], …, [DEFAULT])` -> `case WORD in … esac`.
+/// Registered natively because a pure-m4 form can't work here (recursive m4_shift blows the arg-collection
+/// call-depth guard on large cases; unrolling needs $10+, which m4 lacks). Args arrive expanded (arg 0 =
+/// WORD; pairs follow; a lone trailing arg is the default).
+pub fn as_case_native(args: &[Vec<u8>]) -> Vec<u8> {
+    let mut out = Vec::new();
+    if args.is_empty() {
+        return out;
+    }
+    out.extend_from_slice(b"case ");
+    out.extend_from_slice(&args[0]);
+    out.extend_from_slice(b" in\n");
+    let rest = &args[1..];
+    let mut i = 0;
+    while i < rest.len() {
+        if i + 1 < rest.len() {
+            out.extend_from_slice(b"  ");
+            out.extend_from_slice(&rest[i]);
+            out.extend_from_slice(b") ");
+            out.extend_from_slice(&rest[i + 1]);
+            out.extend_from_slice(b" ;;\n");
+            i += 2;
+        } else {
+            out.extend_from_slice(b"  *) ");
+            out.extend_from_slice(&rest[i]);
+            out.extend_from_slice(b" ;;\n");
+            i += 1;
+        }
+    }
+    out.extend_from_slice(b"esac\n");
+    out
+}
+
 /// Strip `#` comments that sit at m4 bracket depth 0 from `.m4` source bytes (an `include`d macro
 /// file). m4's default comment discipline makes `#`→newline a comment in source; Autoconf disables
 /// that globally so generated shell `#` survives, so we re-apply it just for included source. A `#`
@@ -1372,6 +1405,10 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AS_CASE", b"case $1 in\n  $2 ) $3 ;;\nesac");
+        // AS_CASE is variadic -> handled by a native Rust macro (pure-m4 can't: call-depth / no $10+).
+        self.engine
+            .native_macros
+            .insert(b"AS_CASE".to_vec(), as_case_native);
         // AS_FOR: portable for loop
         self.engine
             .macro_table
@@ -3589,6 +3626,26 @@ mod tests {
             assert!(out.contains(sym), "missing {sym}: {out}");
         }
         assert!(!out.contains("fiprintf"), "AC_CHECK_DECL blocks must not glue (fiprintf): {out}");
+    }
+
+    #[test]
+    fn test_as_case_native_multi_arm() {
+        // Native AS_CASE must emit ALL pattern/action pairs + the lone-trailing default, brackets stripped
+        // (the old single-pair m4 body emitted only the first arm). autoconf-archive AX_COUNT_CPUS etc.
+        let out = as_case_native(&[
+            b"$h".to_vec(),
+            b"*linux*".to_vec(),
+            b"echo L".to_vec(),
+            b"*bsd*".to_vec(),
+            b"echo B".to_vec(),
+            b"echo DEF".to_vec(),
+        ]);
+        let s = String::from_utf8(out).unwrap();
+        assert!(s.contains("case $h in"), "{s}");
+        assert!(s.contains("*linux*) echo L ;;"), "{s}");
+        assert!(s.contains("*bsd*) echo B ;;"), "{s}");
+        assert!(s.contains("*) echo DEF ;;"), "default arm: {s}");
+        assert!(s.trim_end().ends_with("esac"), "{s}");
     }
 
     #[test]
