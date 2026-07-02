@@ -200,12 +200,20 @@ impl AutoconfBuiltins {
         }
     }
 
-    /// AC_CONFIG_LINKS: specify symbolic links to create.
+    /// AC_CONFIG_LINKS: specify symbolic links to create. The single argument is a whitespace-separated
+    /// (often multi-line) list of `DEST:SOURCE` pairs, and SOURCE/DEST may carry runtime shell variables
+    /// (postgres: `src/Makefile.port:src/makefiles/Makefile.${template}`), so the vars are kept verbatim
+    /// here and expanded when the link-creation shell runs at AC_OUTPUT.
     pub fn ac_config_links(args: &[Vec<u8>], state: &mut AutoconfState) {
-        if args.len() >= 2 {
-            let dest = String::from_utf8_lossy(&args[0]).to_string();
-            let src = String::from_utf8_lossy(&args[1]).to_string();
-            state.config_links.push((dest, src));
+        if let Some(first) = args.first() {
+            let list = String::from_utf8_lossy(first);
+            for pair in list.split_whitespace() {
+                if let Some((dest, src)) = pair.split_once(':') {
+                    if !dest.is_empty() && !src.is_empty() {
+                        state.config_links.push((dest.to_string(), src.to_string()));
+                    }
+                }
+            }
         }
     }
 

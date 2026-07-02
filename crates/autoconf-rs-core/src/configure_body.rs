@@ -725,6 +725,21 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         b.extend_from_slice(b"DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
     }
 
+    // AC_CONFIG_LINKS — create each DEST from SOURCE (postgres: src/Makefile.port ->
+    // src/makefiles/Makefile.${template}, plus the platform pg_config_os.h / pg_sema.c / pg_shmem.c).
+    // DEST/SOURCE are DOUBLE-quoted so runtime shell vars (${template}, ${SEMA_IMPLEMENTATION}) expand.
+    // Prefer a real copy (SOURCE is relative to the build root where configure runs, so it resolves
+    // directly — unlike a naive `ln -s SOURCE DEST` whose target would be read relative to DEST's dir);
+    // fall back to a symlink. Empty/absent SOURCE (an unset var) degrades quietly.
+    for (dest, src) in &state.config_links {
+        b.extend_from_slice(
+            format!(
+                "printf '%s\\n' \"configure: linking {dest} to {src}\"\nrm -f \"{dest}\" 2>/dev/null; cp -pf \"{src}\" \"{dest}\" 2>/dev/null || ln -sf \"{src}\" \"{dest}\" 2>/dev/null || :\n"
+            )
+            .as_bytes(),
+        );
+    }
+
     // AC_CONFIG_FILES — create each file from its template.
     // The operand is `DEST` or `DEST:TEMPLATE[:TEMPLATE...]` (autoconf's colon syntax) and may carry
     // shell variables + literal double-quotes straight from the m4 argument
@@ -768,11 +783,15 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         b.extend_from_slice(
             format!("if test -f '{h}.in'; then printf '%s\\n' \"configure: creating {h}\"; ").as_bytes(),
         );
-        b.extend_from_slice(b"sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null; ");
+        // The `$` anchor after the macro name is CRITICAL: without it `#undef SIZEOF_LONG` also matches
+        // the prefix of `#undef SIZEOF_LONG_LONG` -> `#define SIZEOF_LONG 8_LONG` (a broken define). Every
+        // HAVE_X / HAVE_X_H, SIZEOF_LONG / SIZEOF_LONG_LONG pair hits this. config.h.in carries each
+        // `#undef NAME` alone on its line, so end-of-line anchoring is exactly right.
+        b.extend_from_slice(b"sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1$\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null; ");
         b.extend_from_slice(b"sed -f conf_defs$$.sed");
         for (var, value) in &state.defines {
             b.extend_from_slice(
-                format!(" -e 's|#undef {var}|#define {var} {}|g'", esc(value)).as_bytes(),
+                format!(" -e 's|#undef {var}$|#define {var} {}|g'", esc(value)).as_bytes(),
             );
         }
         // Standard AC_INIT-derived defines (config.h.in carries `#undef PACKAGE_NAME` etc. via
@@ -818,6 +837,33 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         .replace("{BUGREPORT}", state.bug_report.as_deref().unwrap_or(""));
     b.extend_from_slice(config_status.as_bytes());
     b.extend_from_slice(b"\n");
+
+    // config.status is written LAST, so it is newer than the files/links we created inline above. Many
+    // Makefiles carry a `FILE: FILE.in config.status` rule that would then re-run `./config.status FILE`
+    // to "regenerate" FILE — but our config.status is a no-op recreation hook and errors on a FILE arg
+    // (postgres: `config.status: error: invalid argument: 'src/Makefile.global'`). Bump every generated
+    // target's mtime past config.status so those rules see them as up-to-date on a fresh build. Paths are
+    // double-quoted so runtime shell vars (${config_file}, ${template}) expand; `-c` never creates.
+    let mut touch_targets: Vec<String> = Vec::new();
+    for f in &state.config_files {
+        let cleaned = f.replace('"', "");
+        let dest = split_top_level_colon(&cleaned)[0].trim().to_string();
+        if !dest.is_empty() {
+            touch_targets.push(dest);
+        }
+    }
+    for h in &state.config_headers {
+        touch_targets.push(h.clone());
+    }
+    for (dest, _) in &state.config_links {
+        touch_targets.push(dest.clone());
+    }
+    if !touch_targets.is_empty() {
+        let quoted: Vec<String> = touch_targets.iter().map(|t| format!("\"{t}\"")).collect();
+        b.extend_from_slice(
+            format!("touch -c {} 2>/dev/null || :\n", quoted.join(" ")).as_bytes(),
+        );
+    }
 
     b
 }

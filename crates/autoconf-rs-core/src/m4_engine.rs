@@ -546,7 +546,12 @@ impl M4Engine {
         self.engine.macro_table.define(b"_AC_LANG", b"C");
         self.engine.macro_table.define(
             b"AC_PROG_FC",
-            b"# Check for Fortran compiler\nFC=${FC-gfortran}",
+            b"printf %s \"checking for Fortran compiler... \"\nFC=${FC-gfortran}\nprintf '%s\\n' \"$FC\"",
+        );
+        // AC_FC_MODULE_FLAG: the flag the Fortran compiler uses to add a module search dir (gfortran: -I).
+        self.engine.macro_table.define(
+            b"AC_FC_MODULE_FLAG",
+            b"printf %s \"checking for Fortran module include flag... \"\nFC_MODINC=${FC_MODINC--I}\nprintf '%s\\n' \"$FC_MODINC\"",
         );
         // AC_LIBOBJ(FUNC): add the replacement object `<libobjdir>/FUNC.$ac_objext` to LIBOBJS (was a
         // bare `FUNC` -> the link couldn't find it). AC_CONFIG_LIBOBJ_DIR(compat) sets ac_config_libobj_dir.
@@ -810,7 +815,11 @@ impl M4Engine {
         self.engine.macro_table.define(b"AC_CHECK_PROGS", b"# Check for programs in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_TOOL", b"# Check for tool $2 (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in \"${ac_tool_prefix}$2\" \"$2\"; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
         self.engine.macro_table.define(b"AC_PATH_PROG", b"# Find path to program $2\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
-        self.engine.macro_table.define(b"AC_PATH_PROGS", b"# Find paths to programs\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
+        // AC_PATH_PROGS(VAR, progs): find a program AND AC_SUBST(VAR) — real autoconf substitutes the
+        // output var, so `@VAR@` in a Makefile resolves. Without the subst-append, a project that relies
+        // on the implicit AC_SUBST (postgres `PGAC_PATH_PROGS(PERL, perl)` -> no explicit AC_SUBST(PERL))
+        // shipped a literal `PERL = '@PERL@'` -> `@PERL@: No such file or directory` at make time.
+        self.engine.macro_table.define(b"AC_PATH_PROGS", b"# Find paths to programs\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done\neval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null");
         self.engine.macro_table.define(b"AC_PATH_TOOL", b"# Find path to tool $2\nfor ac_tool in $2; do ac_path=`command -v \"$ac_tool\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_TOOLS", b"# Check for tools (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in $2; do if command -v \"${ac_tool_prefix}$ac_tool\" >/dev/null 2>&1; then $1=${ac_tool_prefix}$ac_tool; break; elif command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
 
@@ -1226,10 +1235,15 @@ impl M4Engine {
             b"AC_CHECK_MEMBER([struct tm.tm_zone])",
         );
 
-        // --- AC_CHECK_SIZEOF (real implementation) ---
+        // --- AC_CHECK_SIZEOF: compile+run a program that prints sizeof(TYPE), and define
+        // AS_TR_CPP(SIZEOF_TYPE) to the actual size. The old stub only compile-tested that the type
+        // exists and then defined `SIZEOF_$1` (WRONG case, e.g. `SIZEOF_long`/`SIZEOF_VOID__`) to
+        // `$(($ac_cv_sizeof_$1))` which is 0 (the cache var was never set) -> pg_config.h kept
+        // `#undef SIZEOF_LONG` and postgres c.h hit `#error "cannot find integer type…"`. Runs the
+        // program (host build); a cross-compile would need the compile-time binary search (future).
         self.engine.macro_table.define(
             b"AC_CHECK_SIZEOF",
-            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { static int test_array[1 - 2 * !((long int) (sizeof ($1)) <= 0)]; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"done\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [$(($ac_cv_sizeof_$1))])\nelse\n  printf '%s\\n' \"0 (type not found)\"\n  AC_DEFINE_UNQUOTED([SIZEOF_$1], [0])\nfi",
+            b"# Check sizeof($1)\nprintf %s \"checking size of $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <stdio.h>\n#include <sys/types.h>\n#include <stdint.h>\n#include <stddef.h>\nint main() { printf(\"%d\", (int)sizeof($1)); return 0; }\n_ACEOF\nac_acrs_size=0\nif { (eval \"$ac_link\") 2>&5; } && test -s conftest$ac_exeext; then\n  ac_acrs_size=`./conftest$ac_exeext 2>/dev/null`\n  test -n \"$ac_acrs_size\" || ac_acrs_size=0\nfi\nrm -f conftest$ac_exeext conftest.$ac_ext\nprintf '%s\\n' \"$ac_acrs_size\"\nAC_DEFINE_UNQUOTED(AS_TR_CPP([SIZEOF_$1]), [$ac_acrs_size])",
         );
 
         // --- AC_CHECK_DECL / AC_CHECK_DECLS (real implementations) ---
@@ -1348,10 +1362,13 @@ impl M4Engine {
             b"AS_TR_SH",
             b"patsubst([$1], [[^a-zA-Z0-9_]], [_])",
         );
-        // AS_TR_CPP: translate to a valid C preprocessor macro name — m4-time sanitize + uppercase.
+        // AS_TR_CPP: translate to a valid C preprocessor macro name — m4-time. Order matters and mirrors
+        // autoconf's `y%*a-z%PA-Z%; s%[^_alnum]%_%g`: FIRST translit `*`->P and a-z->A-Z, THEN sanitize
+        // any remaining non-[A-Z0-9_] to `_`. So `void *` -> `VOID P` -> `VOID_P` (NOT `VOID__`), which is
+        // what AC_CHECK_SIZEOF([void *]) needs (`SIZEOF_VOID_P`). Sanitizing first would map `*`->`_`.
         self.engine.macro_table.define(
             b"AS_TR_CPP",
-            b"translit(patsubst([$1], [[^a-zA-Z0-9_]], [_]), [a-z], [A-Z])",
+            b"patsubst(translit([$1], [*a-z], [PA-Z]), [[^A-Z0-9_]], [_])",
         );
         // AS_VAR_SET: set a shell variable
         self.engine.macro_table.define(b"AS_VAR_SET", b"$1=\"$2\"");
@@ -1853,6 +1870,23 @@ impl M4Engine {
                         && !self.state.config_files.contains(&file.to_string())
                     {
                         self.state.config_files.push(file.to_string());
+                    }
+                }
+            }
+        }
+
+        // Extract AC_CONFIG_LINKS — a whitespace/newline-separated list of DEST:SOURCE pairs (each may
+        // carry runtime shell vars, kept verbatim for AC_OUTPUT-time link creation). postgres uses it for
+        // src/Makefile.port and the platform pg_config_os.h / pg_sema.c / pg_shmem.c links.
+        for args in extract_all_macro_args(input, "AC_CONFIG_LINKS") {
+            if let Some(first) = args.first() {
+                for pair in first.split_whitespace() {
+                    if let Some((dest, src)) = pair.split_once(':') {
+                        if !dest.is_empty() && !src.is_empty() {
+                            self.state
+                                .config_links
+                                .push((dest.to_string(), src.to_string()));
+                        }
                     }
                 }
             }
@@ -3511,6 +3545,53 @@ mod tests {
         assert!(out.contains("with_pgport"), "must test $with_pgport: {out}");
         assert!(out.contains("default_port=5432"), "must emit not-given action: {out}");
         assert!(out.contains("withval=$with_pgport"), "must bind withval on given: {out}");
+    }
+
+    #[test]
+    fn test_as_tr_cpp_star_becomes_p() {
+        // AS_TR_CPP must translit `*`->P and uppercase BEFORE sanitizing, so `void *` -> `VOID_P`
+        // (AC_CHECK_SIZEOF([void *]) needs SIZEOF_VOID_P), not `VOID__`.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\necho AS_TR_CPP([SIZEOF_void *])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("SIZEOF_VOID_P"), "AS_TR_CPP([void *]) must yield VOID_P: {out}");
+        assert!(!out.contains("VOID__"), "must not sanitize `*` to `_`: {out}");
+    }
+
+    #[test]
+    fn test_ac_config_links_emits_creation() {
+        // AC_CONFIG_LINKS parses DEST:SOURCE pairs (runtime vars kept) and emits link creation.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_CONFIG_LINKS([src/Makefile.port:src/makefiles/Makefile.${template}])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(
+            out.contains("\"src/makefiles/Makefile.${template}\"") && out.contains("src/Makefile.port"),
+            "AC_CONFIG_LINKS must emit link creation with the runtime source: {out}"
+        );
+    }
+
+    #[test]
+    fn test_config_header_undef_sub_is_anchored() {
+        // The confdefs->config.h `#undef NAME` substitution must be end-anchored so SIZEOF_LONG's rule
+        // doesn't corrupt the SIZEOF_LONG_LONG line.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_CONFIG_HEADERS([config.h])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("#undef \\1$"), "confdefs->header sed must anchor `#undef NAME$`: (sed body)");
+    }
+
+    #[test]
+    fn test_ac_path_progs_substitutes_var() {
+        // AC_PATH_PROGS must AC_SUBST the found var (append to conf_subst.sed) so @VAR@ resolves.
+        let mut engine = M4Engine::new();
+        let out = engine
+            .process("AC_INIT([p],[1])\nAC_PATH_PROGS([PERL], [perl])\nAC_OUTPUT\n")
+            .unwrap();
+        assert!(out.contains("s|@PERL@|") && out.contains("conf_subst.sed"),
+            "AC_PATH_PROGS must AC_SUBST the var: {out}");
     }
 
     #[test]
