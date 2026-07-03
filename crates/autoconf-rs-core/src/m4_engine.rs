@@ -887,7 +887,10 @@ impl M4Engine {
         // output var, so `@VAR@` in a Makefile resolves. Without the subst-append, a project that relies
         // on the implicit AC_SUBST (postgres `PGAC_PATH_PROGS(PERL, perl)` -> no explicit AC_SUBST(PERL))
         // shipped a literal `PERL = '@PERL@'` -> `@PERL@: No such file or directory` at make time.
-        self.engine.macro_table.define(b"AC_PATH_PROGS", b"# Find paths to programs\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done\neval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null");
+        // Trailing newline is REQUIRED: the AC_SUBST sink `… >> conf_subst.sed 2>/dev/null` is the last
+        // thing emitted, and without it the caller's next statement glues on (imagemagick: `… 2>/dev/null
+        //         if test "$ac_cv_path_PERL"; then` -> `syntax error near 'then'`).
+        self.engine.macro_table.define(b"AC_PATH_PROGS", b"# Find paths to programs\nfor ac_prog in $2; do ac_path=`command -v \"$ac_prog\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done\neval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null\n");
         self.engine.macro_table.define(b"AC_PATH_TOOL", b"# Find path to tool $2\nfor ac_tool in $2; do ac_path=`command -v \"$ac_tool\" 2>/dev/null`; if test -n \"$ac_path\"; then $1=$ac_path; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_TOOLS", b"# Check for tools (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in $2; do if command -v \"${ac_tool_prefix}$ac_tool\" >/dev/null 2>&1; then $1=${ac_tool_prefix}$ac_tool; break; elif command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
 
@@ -1793,9 +1796,14 @@ impl M4Engine {
             .define(b"AS_LINENO_PREPARE", b"# Line number tracking\nas_lineno=1");
 
         // --- AS_LITERAL_IF ---
+        // Two traps fixed: (1) the shell glob char-class `[!a-zA-Z0-9_./-]` — its `[`/`]` are m4 quote
+        // chars, stripped on expansion to a BROKEN glob `*!a-zA-Z0-9_./-*` (imagemagick AC_CHECK_FRAMEWORK
+        // -> `case Ghostscript in *!a-zA-Z0-9_./-*)`). DOUBLE-bracket so one quote level survives ->
+        // `[!a-zA-Z0-9_./-]`. (2) `esac` needs a trailing newline or it glues onto the next macro's
+        // statement (`esacprintf %s …` -> syntax error near `%s`).
         self.engine.macro_table.define(
             b"AS_LITERAL_IF",
-            b"case $1 in\n  *[!a-zA-Z0-9_./-]*) $3 ;;\n  *) $2 ;;\nesac",
+            b"case $1 in\n  *[[!a-zA-Z0-9_./-]]*) $3 ;;\n  *) $2 ;;\nesac\n",
         );
 
         // --- AS_TMPDIR ---
