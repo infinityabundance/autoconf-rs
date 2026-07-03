@@ -1126,9 +1126,17 @@ impl M4Engine {
             b"m4_ifnblank",
             b"ifelse(m4_normalize([$1]), [], [$3], [$2])",
         );
-        self.engine
-            .macro_table
-            .define(b"m4_bmatch", b"ifelse([$1], [$2], [$3], [$4], [$5])");
+        // m4_bmatch(STRING, RE1, VAL1, RE2, VAL2, …, [DEFAULT]): expand VALn for the first REn that
+        // REGEXP-matches STRING; a lone trailing arg is the default. The old def was `ifelse([$1],[$2],
+        // [$3],[$4],[$5])` — plain EQUALITY with fixed arity, so a real multi-pattern regex call
+        // (imagemagick AX_COMPARE_VERSION `m4_bmatch(count, [0],[…], [[0-9]+],[…], [.+],[…], [])`)
+        // fell through to garbage (`[[[[[<<<<<…` -> `syntax error near '<<<'`). Correct recursive form:
+        // 2 args left -> the default; else regexp-test the head pair (regexp returns -1 on no match) and
+        // recurse over the rest via m4_shift3 (drops STRING+RE+VAL, then STRING is re-supplied).
+        self.engine.macro_table.define(
+            b"m4_bmatch",
+            b"ifelse([$#], [0], [], [$#], [1], [], [$#], [2], [$2], [ifelse(regexp([$1], [$2]), [-1], [m4_bmatch([$1], m4_shift3($@))], [$3])])",
+        );
         // Iteration: m4_foreach / m4_map
         // m4_foreach (standard m4sugar shape): pass the list UNQUOTED into _m4_foreach so a
         // macro-call list ([_AX_SAVE_FLAGS_LIST()]) expands+rescans into separate args, then iterate
