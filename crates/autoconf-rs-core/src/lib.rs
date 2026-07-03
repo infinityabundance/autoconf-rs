@@ -181,6 +181,27 @@ define([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11])])dnl
 define([AX_CXX_COMPILE_STDCXX_14], [AX_CXX_COMPILE_STDCXX([14])])dnl
 define([AX_CXX_COMPILE_STDCXX_17], [AX_CXX_COMPILE_STDCXX([17])])dnl
 define([AX_CXX_COMPILE_STDCXX_20], [AX_CXX_COMPILE_STDCXX([20])])dnl
+dnl AX_APPEND_FLAG(FLAG, [FLAGS-VAR=CFLAGS]): append FLAG to the shell var named by FLAGS-VAR iff
+dnl not already present. The vendored autoconf-archive macro uses AS_VAR_PUSHDEF([FLAGS],
+dnl [m4_default([$2],[CFLAGS])]) — our engine stores that pushdef value UNEXPANDED and doesn't
+dnl re-expand it on use, so `$FLAGS` leaked as the literal `m4_default([$2],[CFLAGS])` sanitized to
+dnl `m4_default__C_FLAGS__` (wolfssl -> `-Wunused-variable: command not found`). Override with a clean
+dnl form: m4_default resolves the var name at m4-time (works standalone), no AS_VAR_PUSHDEF needed.
+define([AX_APPEND_FLAG], [dnl
+case " ${m4_default([$2],[CFLAGS])} " in
+  *" $1 "*) ;;
+  *) m4_default([$2],[CFLAGS])="${m4_default([$2],[CFLAGS]):+${m4_default([$2],[CFLAGS])} }$1" ;;
+esac])dnl
+dnl AX_APPEND_COMPILE_FLAGS(FLAGS, [VAR=CFLAGS], [EXTRA-FLAGS], [INPUT]): for each FLAG, compile-check
+dnl it (with EXTRA-FLAGS) and AX_APPEND_FLAG it to VAR on success. m4_foreach_w iterates the flags at
+dnl m4-time so AX_CHECK_COMPILE_FLAG gets a literal flag (proper cache var) and our clean AX_APPEND_FLAG
+dnl does the append. Sidesteps the same AS_VAR_PUSHDEF wall the vendored version hits.
+define([AX_APPEND_COMPILE_FLAGS], [dnl
+m4_foreach_w([_acrs_cf], [$1], [AX_CHECK_COMPILE_FLAG(_acrs_cf, [AX_APPEND_FLAG([_acrs_cf], [$2])], [], [$3], [$4])
+])])dnl
+define([AX_APPEND_LINK_FLAGS], [dnl
+m4_foreach_w([_acrs_lf], [$1], [AX_CHECK_LINK_FLAG(_acrs_lf, [AX_APPEND_FLAG([_acrs_lf], [m4_default([$2],[LDFLAGS])])], [], [$3], [$4])
+])])dnl
 define([LT_INIT], [_acrs_write_libtool])dnl
 define([LT_OUTPUT], [_acrs_write_libtool])dnl
 define([AC_PROG_LIBTOOL], [_acrs_write_libtool])dnl
