@@ -1249,6 +1249,22 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_TRY_RUN", b"# Try run (obsolete)");
+        // AC_TRY_COMMAND(COMMAND): run COMMAND, capture its exit status, succeed iff 0. The low-level
+        // runner behind the old AC_TRY_* family; many hand-rolled cache checks call it directly (zfs
+        // config/kernel/as-cfi: `if AC_TRY_COMMAND($CC -c $CFLAGS conftest.S -o conftest.o) >/dev/null …`).
+        // Undefined, it leaked as literal `AC_TRY_COMMAND($CC …)` -> `syntax error near '$CC'`. We run
+        // the command in a subshell and test $? (the caller adds its own output redirection); we skip
+        // real autoconf's config.log fd-5 logging (functional, not log-faithful — fd 5 may be unopened).
+        self.engine.macro_table.define(
+            b"AC_TRY_COMMAND",
+            b"{ (eval $1) 2>/dev/null; ac_status=$?; test $ac_status = 0; }",
+        );
+        // AC_TRY_EVAL(VARIABLE): eval the command stored in the shell variable named VARIABLE ($$1 ->
+        // `$`+value-of-$1 -> `$VAR`). Same functional core as AC_TRY_COMMAND.
+        self.engine.macro_table.define(
+            b"AC_TRY_EVAL",
+            b"{ (eval $$1) 2>/dev/null; ac_status=$?; test $ac_status = 0; }",
+        );
 
         // --- Additional AC_STRUCT_* ---
         self.engine.macro_table.define(
