@@ -207,6 +207,20 @@ define([LT_OUTPUT], [_acrs_write_libtool])dnl
 define([AC_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([AM_PROG_LIBTOOL], [_acrs_write_libtool])dnl
 define([LT_LANG], [])dnl
+dnl Tool-probe macros that leaked as `command not found` across the corpus (CONFIGURE_RUN_FAIL):
+dnl AM_PROG_CC_STDC (obsolete ANSI-C check — modern cc is always stdc), AC_PROG_LD / LT_PATH_LD (find
+dnl the linker), AM_PROG_AR (find ar). Set the tool var (honoring a user override) and AC_SUBST it so
+dnl @LD@/@AR@ resolve in generated Makefiles; no fragile probe needed on a modern toolchain. GAP-FILL
+dnl ONLY (ifdef-guarded): if the project's own aclocal.m4 already defines the macro (e.g. real libtool
+dnl LT_PATH_LD that sets lt_cv_path_LD), keep it — we only fill the undefined case so we never clobber
+dnl a working definition.
+ifdef([AM_PROG_CC_STDC], [], [define([AM_PROG_CC_STDC], [CC=${CC-cc}])])dnl
+ifdef([AC_PROG_LD], [], [define([AC_PROG_LD], [LD=${LD-ld}
+AC_SUBST([LD])])])dnl
+ifdef([LT_PATH_LD], [], [define([LT_PATH_LD], [LD=${LD-ld}
+AC_SUBST([LD])])])dnl
+ifdef([AM_PROG_AR], [], [define([AM_PROG_AR], [AR=${AR-ar}
+AC_SUBST([AR])])])dnl
 dnl LT_LIB_M: find the math library (-lm) into $LIBM and AC_SUBST it. Was undefined -> leaked
 dnl `LT_LIB_M: command not found` (wolfssl). Link-probe cos(); AC_SUBST via the runtime sed sink.
 define([LT_LIB_M], [AC_CHECK_LIB([m], [cos], [LIBM=-lm], [LIBM=])
