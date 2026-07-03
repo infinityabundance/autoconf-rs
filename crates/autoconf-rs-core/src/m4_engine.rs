@@ -413,6 +413,12 @@ impl M4Engine {
             b"AC_PROG_CPP",
             b"# Check for C preprocessor\nCPP=${CPP-cc -E}",
         );
+        // AC_PROG_CPP_WERROR — CPP detection with preprocessor warnings treated as errors. Was UNDEFINED
+        // -> leaked `AC_PROG_CPP_WERROR: command not found` (jq). Functionally we just need $CPP set.
+        self.engine.macro_table.define(
+            b"AC_PROG_CPP_WERROR",
+            b"# Check for C preprocessor (warnings as errors)\nCPP=${CPP-cc -E}",
+        );
 
         // AC_PROG_INSTALL
         self.engine.macro_table.define(
@@ -1365,7 +1371,7 @@ impl M4Engine {
         // fixable-root corpus-wide is backtick-in-source — don't add to it).
         self.engine.macro_table.define(
             b"AC_CHECK_DECL",
-            b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_cv_have_decl_$1=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  ac_cv_have_decl_$1=no\n  :\n  $3\nfi\n",
+            b"printf %s \"checking whether $1 is declared... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$4\nint main (void)\n{\n#ifndef $1\n  (void) $1;\n#endif\n  ;\n  return 0;\n}\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  AS_TR_SH([ac_cv_have_decl_$1])=yes\n  :\n  $2\nelse\n  printf '%s\\n' \"no\"\n  AS_TR_SH([ac_cv_have_decl_$1])=no\n  :\n  $3\nfi\n",
         );
         // AC_CHECK_DECLS(symbols, ...): the first arg is a COMMA-separated list; iterate it with m4_foreach
         // and, per symbol, define AS_TR_CPP(HAVE_DECL_sym) to 1/0. Both postgres and wolfssl pass multi-symbol
