@@ -312,10 +312,41 @@ fn protect_hash_comments(input: &str) -> String {
                 out.push(']');
                 continue;
             }
+            // Unbalanced brackets, no macro call. This is almost always a CONTINUATION line of a
+            // commented-out multi-line m4 construct, e.g. wolfssl's
+            //   `#        AS_IF([test … &&`      (first line -> bare `#` via line_has_macro_call)
+            //   `#               (test …)],`     (LANDS HERE: a `]` with no matching `[`)
+            //   `#            [ENABLED_X="yes"])`
+            // Leaving it verbatim leaks live `]`/`,`/`)` tokens into the engine (`#` is not an m4
+            // comment for us), which closes an enclosing quote early / splits an argument — in
+            // wolfssl it broke an AS_CASE arm boundary, leaking `]) v6 ;;` -> configure syntax error.
+            // Drop the body to a bare `#`, UNLESS it's a real C-preprocessor directive (conftest
+            // `#if`/`#error`/`#endif` must pass through unchanged; those are ~always bracket-balanced
+            // and so never reach here anyway).
+            if !is_cpp_directive(rest) {
+                out.push_str(indent);
+                out.push('#');
+                continue;
+            }
         }
         out.push_str(line);
     }
     out
+}
+
+/// True if a `#`-comment body (text after the `#`) is a C-preprocessor directive — `#if`, `#ifdef`,
+/// `#error`, `#include`, etc. Such lines occur in conftest source inside AC_LANG_SOURCE and must pass
+/// through verbatim, so they are exempted from the drop-unbalanced-comment neutralization.
+fn is_cpp_directive(rest: &str) -> bool {
+    let w = rest.trim_start();
+    const DIRECTIVES: &[&str] = &[
+        "ifdef", "ifndef", "if", "elif", "else", "endif", "define", "undef", "include_next",
+        "include", "import", "error", "warning", "pragma", "line",
+    ];
+    DIRECTIVES.iter().any(|d| {
+        w.strip_prefix(d)
+            .is_some_and(|after| after.is_empty() || after.starts_with(|c: char| !c.is_ascii_alphanumeric() && c != '_'))
+    })
 }
 
 /// Expand the language-state m4 macros `_AC_LANG_ABBREV`→`c`, `_AC_LANG_PREFIX`→`C`, `_AC_LANG`→`C`
