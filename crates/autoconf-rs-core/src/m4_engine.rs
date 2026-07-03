@@ -57,6 +57,26 @@ pub fn as_case_native(args: &[Vec<u8>]) -> Vec<u8> {
 /// is kept; `$#` (m4 arg count) is not a comment. A line that is nothing but a depth-0 comment is
 /// dropped entirely. Mirrors the CLI's `strip_toplevel_hash_comments` at the byte level.
 /// (Bite: postgres `config/general.m4`'s `AC_DEFUN([PGAC_ARG],[...])# PGAC_ARG` trailing comment.)
+/// True if a `#`-comment body (bytes AFTER the `#`) is a C-preprocessor directive — `#if`, `#include`,
+/// `#error`, etc. Conftest source inside AC_LANG_* uses these and must survive; prose comments must not.
+fn is_cpp_directive_bytes(rest: &[u8]) -> bool {
+    let w = rest
+        .iter()
+        .position(|&b| b != b' ' && b != b'\t')
+        .map(|p| &rest[p..])
+        .unwrap_or(&[]);
+    const DIRECTIVES: &[&[u8]] = &[
+        b"ifdef", b"ifndef", b"if", b"elif", b"else", b"endif", b"define", b"undef",
+        b"include_next", b"include", b"import", b"error", b"warning", b"pragma", b"line",
+    ];
+    DIRECTIVES.iter().any(|d| {
+        w.starts_with(d)
+            && w.get(d.len())
+                .map(|&c| !c.is_ascii_alphanumeric() && c != b'_')
+                .unwrap_or(true)
+    })
+}
+
 pub fn strip_m4_source_hash_comments(input: &[u8]) -> Vec<u8> {
     let mut out = Vec::with_capacity(input.len());
     let mut depth: i32 = 0;
@@ -71,6 +91,21 @@ pub fn strip_m4_source_hash_comments(input: &[u8]) -> Vec<u8> {
         let line = &input[start..i];
         if had_nl {
             i += 1; // consume '\n'
+        }
+        // A full-line prose comment NESTED in a macro body (depth>0): `#` is not a comment for our
+        // engine, so any macro NAME on the line expands and shreds the comment. john's
+        // ax_prog_cc_mpi.m4 `# We do not use AC_SEARCH_LIBS here, as it caches …` -> bare
+        // AC_SEARCH_LIBS expands -> the trailing prose lands as live shell -> `syntax error near
+        // 'here,'`. Drop such lines, but KEEP genuine conftest CPP source (`#include`/`#define`/`#if`…
+        // inside AC_LANG_* [[…]]). The depth-0 scan below already drops top-level prose comments; this
+        // covers the nested case. Do not advance `depth` from a dropped comment — its brackets are
+        // comment text (matching real m4, where `#` starts a comment and its `[`/`]` don't count).
+        if depth > 0 {
+            if let Some(fns) = line.iter().position(|&b| b != b' ' && b != b'\t') {
+                if line[fns] == b'#' && !is_cpp_directive_bytes(&line[fns + 1..]) {
+                    continue;
+                }
+            }
         }
         // Find the first depth-0 `#` (comment) in the line, tracking bracket depth from `depth`.
         let mut d = depth;
