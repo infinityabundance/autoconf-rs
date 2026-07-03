@@ -875,7 +875,7 @@ impl M4Engine {
             .define(b"AC_REVISION", b"# Revision: $1");
         self.engine
             .macro_table
-            .define(b"AC_COPYRIGHT", b"# Copyright: $1");
+            .define(b"AC_COPYRIGHT", b"");
         // AC_PREREQ / AC_BEFORE / AC_OBSOLETE are m4-TIME assertions (version check, macro-ordering
         // check, obsolescence warning); real autoconf emits ZERO shell into configure for them. The old
         // stubs expanded to a bare `#` comment WITH NO trailing newline, so an inline call followed by
