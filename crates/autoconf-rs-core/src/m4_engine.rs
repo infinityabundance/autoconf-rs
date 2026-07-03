@@ -1067,6 +1067,13 @@ impl M4Engine {
         // literal -> shell syntax error.
         self.engine.macro_table.define(b"m4_pushdef", b"pushdef([$1], [$2])");
         self.engine.macro_table.define(b"m4_popdef", b"popdef([$1])");
+        // m4_defn(MACRO): return MACRO's definition (quoted, re-usable) — the m4sugar spelling of the
+        // `defn` builtin. Was UNDEFINED, so it leaked as literal `m4_defn(NAME)`. automake's core
+        // wrapper `m4_define([AC_PROG_CC], m4_defn([AC_PROG_CC])[_AM_PROG_CC_C_O])` depends on it: with
+        // m4_defn leaking, AC_PROG_CC's redefinition captured the literal text + a bare `_AM_PROG_CC_C_O`
+        // -> `_AM_PROG_CC_C_O: command not found` (john, and the whole AM_INIT_AUTOMAKE cohort). Alias to
+        // the builtin defn (single-arg form covers the redefinition idiom).
+        self.engine.macro_table.define(b"m4_defn", b"defn([$1])");
         self.engine
             .macro_table
             .define(b"m4_default_nblank", b"ifelse(m4_normalize([$1]), [], [$2], [$1])");
