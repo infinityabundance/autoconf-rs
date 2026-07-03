@@ -186,7 +186,28 @@ fn main() -> ExitCode {
         ));
     }
 
-    if m4_files.is_empty() {
+    // aclocal ALWAYS includes the project's local ./acinclude.m4 (a standard convention: local macros
+    // that live outside the m4/ macro dir). curl and many older projects define their whole CURL_*/
+    // project macro set there; without it those AC_DEFUNs never register -> `CURL_CHECK_AIX_ALL_SOURCE:
+    // command not found` / leaked `CURL_CHECK_DEF(...)` -> configure syntax error. Read it relative to
+    // configure.ac's directory and append AFTER the m4/ macros so local defs win.
+    let acinclude_path = Path::new(&input_path)
+        .parent()
+        .filter(|p| !p.as_os_str().is_empty())
+        .unwrap_or_else(|| Path::new("."))
+        .join("acinclude.m4");
+    let mut have_acinclude = false;
+    if let Ok(content) = fs::read_to_string(&acinclude_path) {
+        have_acinclude = true;
+        output.push_str("dnl acinclude.m4 (project-local macros)\n");
+        output.push_str(&content);
+        output.push_str("\n\n");
+        if verbose {
+            eprintln!("aclocal: included {}", acinclude_path.display());
+        }
+    }
+
+    if m4_files.is_empty() && !have_acinclude {
         output.push_str("dnl No third-party macros found.\n");
         output.push_str("dnl Consider adding macros to the m4/ directory.\n");
     }
