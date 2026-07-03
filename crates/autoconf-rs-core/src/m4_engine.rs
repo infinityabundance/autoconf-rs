@@ -1376,7 +1376,17 @@ impl M4Engine {
             .define(b"AC_FATAL", b"errprint([fatal: $1\n])m4exit(1)");
 
         // --- AS_HELP_STRING (common in configure.ac) ---
-        self.engine.macro_table.define(b"AS_HELP_STRING", b"$2");
+        // Expand to the description QUOTED, not bare `$2`. AC_ARG_WITH/ENABLE collect AS_HELP_STRING(...)
+        // as their HELP arg ($2) and ignore it — but the description is often multi-line with commas
+        // (curl: "Where to look for OpenSSL, PATH points … when possible, set …"). Bare `$2` returns
+        // those commas UNPROTECTED, so rescan-into-args splits the description across AC_ARG_WITH's
+        // $3/$4 -> the help text leaks into the shell action (`syntax error near `('`). DOUBLE-quote it:
+        // AS_HELP_STRING is expanded WHILE collecting AC_ARG_WITH's args, and that expansion rescans its
+        // own body (stripping one quote level) before the result re-enters argument collection. One
+        // `[...]` is gone by then; `[[$2]]` survives as a still-quoted `[desc]`, so the whole description
+        // lands as ONE argument. AC_ARG_WITH never emits $2 anyway, so no brackets reach the output.
+        self.engine.macro_table.define(b"AS_HELP_STRING", b"[[$2]]");
+        self.engine.macro_table.define(b"AC_HELP_STRING", b"[[$2]]");
 
         // --- AS_* m4sh shell-generation macros (real M4 implementations) ---
         // AS_ECHO: portable echo via printf
