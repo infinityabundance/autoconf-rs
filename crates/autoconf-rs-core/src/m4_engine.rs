@@ -2658,6 +2658,22 @@ impl M4Engine {
     /// which wrap/override AC_INIT (via m4_define/m4_rename) are correctly reflected.
     /// This is the architectural pivot from "transpiler" toward "evaluator" —
     /// we trust what the M4 engine actually produced, not what the static text says.
+    /// Expand a small m4 fragment (an AC_INIT computed argument) in isolation, without disturbing the
+    /// already-collected configure output. Saves/restores the engine output sink so this side-expansion
+    /// (which may run esyscmd) does not bleed into the real stream.
+    fn expand_fragment(&mut self, s: &str) -> String {
+        let saved = std::mem::take(&mut self.engine.output);
+        let tokens = {
+            let mut lexer = m4_rs::m4_rs_core::Lexer::new();
+            lexer.quote_config = self.engine.quote_config.clone();
+            lexer.tokenize(s.as_bytes())
+        };
+        self.engine.expand_tokens(&tokens);
+        let out = std::mem::take(&mut self.engine.output);
+        self.engine.output = saved;
+        String::from_utf8_lossy(&out).trim().to_string()
+    }
+
     fn postscan_m4_output(&mut self, m4_output: &str) {
         // Re-extract package name/version from M4 output markers.
         // Uses simple string matching (avoids regex dependency).
@@ -2763,6 +2779,21 @@ impl M4Engine {
         // Substitute the verbatim prologue/body for their inert sentinels. AC_INIT/AC_OUTPUT were registered
         // as sentinels so M4 never mangles the final shell text (eval, $@, $1, `[...]` globs); we splice the
         // real text in now, after expansion. Regenerated from the (prescan-populated) state.
+        // A COMPUTED AC_INIT version/name — e.g. `m4_esyscmd([git describe --always])` — is captured as
+        // raw text by the prescan (extract_macro_args reads configure.ac verbatim). Expand it now that
+        // the m4sugar macros (m4_esyscmd/esyscmd) are registered, so the REAL value lands in the prologue
+        // instead of `m4_esyscmd(...)` leaking into PACKAGE_VERSION as shell (unbalanced paren -> syntax
+        // error; the top `(` root across the corpus). Empty (command failed / syscmd off) is still clean.
+        if let Some(ver) = self.state.package_version.clone() {
+            if ver.contains("esyscmd") || ver.contains("m4_") {
+                self.state.package_version = Some(self.expand_fragment(&ver));
+            }
+        }
+        if let Some(nm) = self.state.package_name.clone() {
+            if nm.contains("esyscmd") || nm.contains("m4_") {
+                self.state.package_name = Some(self.expand_fragment(&nm));
+            }
+        }
         let m4_output =
             if m4_output.contains(Self::AC_INIT_MARK) || m4_output.contains(Self::AC_OUTPUT_MARK) {
                 let name = self
@@ -3418,47 +3449,66 @@ fn extract_shell_var<'a>(haystack: &'a str, var_name: &str) -> Option<&'a str> {
 fn split_args(s: &str) -> Vec<String> {
     let mut args = Vec::new();
     let mut current = String::new();
-    let mut depth: usize = 0;
-    let mut in_quote = false;
+    let mut paren_depth: usize = 0;
+    let mut bracket_depth: usize = 0; // m4 [] quoting — nesting-aware
+    let mut in_quote = false; // shell ' / " strings (outside brackets only)
     let mut quote_char = ' ';
 
     for c in s.chars() {
         if in_quote {
+            // shell quote: strip the delimiter (legacy behavior) but keep the content
             if c == quote_char {
                 in_quote = false;
             } else {
                 current.push(c);
             }
-        } else {
+            continue;
+        }
+        if bracket_depth > 0 {
+            // Inside m4 [] quoting: preserve EVERYTHING verbatim (brackets included) so a computed
+            // arg like m4_esyscmd([awk '...printf "%s",$1...']) survives intact — the comma and inner
+            // quotes must NOT split the arg, and the brackets must NOT be dropped (a bare `m4_esyscmd(...)`
+            // is unbalanced shell and cannot be re-expanded). Track nesting so `[a[b]c]` closes correctly.
             match c {
-                '[' | '"' | '\'' => {
-                    in_quote = true;
-                    quote_char = if c == '[' { ']' } else { c };
-                }
-                '(' => {
-                    depth += 1;
+                '[' => bracket_depth += 1,
+                ']' => bracket_depth -= 1,
+                _ => {}
+            }
+            current.push(c);
+            continue;
+        }
+        match c {
+            '[' => {
+                bracket_depth += 1;
+                current.push(c);
+            }
+            '"' | '\'' => {
+                in_quote = true;
+                quote_char = c;
+            }
+            '(' => {
+                paren_depth += 1;
+                current.push(c);
+            }
+            ')' => {
+                if paren_depth > 0 {
+                    paren_depth -= 1;
                     current.push(c);
                 }
-                ')' => {
-                    if depth > 0 {
-                        depth -= 1;
-                        current.push(c);
-                    }
-                }
-                ',' => {
-                    if depth == 0 {
-                        args.push(strip_brackets(current.trim()));
-                        current = String::new();
-                    } else {
-                        current.push(c);
-                    }
-                }
-                _ => current.push(c),
             }
+            ',' => {
+                if paren_depth == 0 {
+                    args.push(strip_brackets(current.trim()));
+                    current = String::new();
+                } else {
+                    current.push(c);
+                }
+            }
+            _ => current.push(c),
         }
     }
     if !current.trim().is_empty() {
-        args.push(current.trim().to_string());
+        args.push(strip_brackets(current.trim()));
     }
     args
 }
