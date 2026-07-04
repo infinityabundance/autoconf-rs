@@ -1089,6 +1089,14 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"m4_ifset", b"ifelse([$1], [], [$3], [$2])");
+        // m4sugar arithmetic/list wrappers over the native m4 builtins. Undefined, they leak literally
+        // into configure (`FOO=m4_eval(100 * ...)` -> shell syntax error near `(` — the corpus's top
+        // residual after the esyscmd fix: babl/eos-shard/cti version math, fakechroot m4_count).
+        self.engine.macro_table.define(b"m4_eval", b"eval($@)");
+        self.engine.macro_table.define(b"m4_count", b"$#");
+        self.engine.macro_table.define(b"m4_incr", b"incr([$1])");
+        self.engine.macro_table.define(b"m4_decr", b"decr([$1])");
+        self.engine.macro_table.define(b"m4_ifelse", b"ifelse($@)");
         // m4_esyscmd / m4_esyscmd_s — m4sugar wrappers over the esyscmd builtin. These MUST be
         // defined unconditionally so they never leak literally into configure (a literal
         // `m4_esyscmd_s([git describe])` -> shell "syntax error"). They delegate to `esyscmd`,
@@ -2784,13 +2792,18 @@ impl M4Engine {
         // the m4sugar macros (m4_esyscmd/esyscmd) are registered, so the REAL value lands in the prologue
         // instead of `m4_esyscmd(...)` leaking into PACKAGE_VERSION as shell (unbalanced paren -> syntax
         // error; the top `(` root across the corpus). Empty (command failed / syscmd off) is still clean.
+        // Trigger on `_` (a macro reference like babl_major_version) or `(` (a call like m4_esyscmd(...)/
+        // m4_eval(...)). Plain numeric versions ("1.2.3") and plain names have neither -> skipped. A
+        // fragment with no defined macro re-tokenizes back to itself, so a false positive is a harmless
+        // no-op.
+        let looks_computed = |s: &str| s.contains('_') || s.contains('(');
         if let Some(ver) = self.state.package_version.clone() {
-            if ver.contains("esyscmd") || ver.contains("m4_") {
+            if looks_computed(&ver) {
                 self.state.package_version = Some(self.expand_fragment(&ver));
             }
         }
         if let Some(nm) = self.state.package_name.clone() {
-            if nm.contains("esyscmd") || nm.contains("m4_") {
+            if looks_computed(&nm) {
                 self.state.package_name = Some(self.expand_fragment(&nm));
             }
         }
