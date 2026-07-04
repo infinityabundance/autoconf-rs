@@ -1697,15 +1697,12 @@ impl M4Engine {
         // When allow_syscmd + empty whitelist: all commands allowed (legacy mode).
         // When !allow_syscmd: all commands blocked (safe default).
         if self.allow_syscmd {
-            if self.syscmd_whitelist.is_empty() {
-                // Full allow — no whitelist restriction
-                self.engine.macro_table.define(b"syscmd", b"esyscmd([$1])");
-                self.engine.macro_table.define(b"esyscmd", b"esyscmd([$1])");
-            } else {
-                // Whitelisted: only allow commands in the set
-                self.engine.macro_table.define(b"syscmd", b"esyscmd([$1])");
-                self.engine.macro_table.define(b"esyscmd", b"esyscmd([$1])");
-            }
+            // Leave the NATIVE m4-rs syscmd/esyscmd builtins in place — they run `/bin/sh -c` and
+            // expand the output, exactly like GNU m4 (which runs esyscmd by default: it is how nearly
+            // every project computes PACKAGE_VERSION from `git describe`/`date`/`uname`).
+            // Do NOT redefine them here: `define(esyscmd, [esyscmd([$1])])` shadows the builtin with a
+            // user macro whose own body re-invokes `esyscmd` -> unbounded recursion -> autoconf exit 2
+            // and NO configure emitted (32-repo `(` syntax-error / configure-gen wall in the corpus).
         } else {
             // Blocked: a command-substitution that cannot run yields the EMPTY string (no stdout) —
             // the faithful degradation. The previous body `errprint([...])` was wrong: in single-pass /

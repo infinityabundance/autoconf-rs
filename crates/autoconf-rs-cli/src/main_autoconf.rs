@@ -35,13 +35,16 @@ fn run() -> ExitCode {
     let mut warnings: Vec<String> = Vec::new();
 
     let mut i = 1;
-    let mut allow_syscmd = false;
+    // GNU autoconf runs esyscmd by default — it is how nearly every project computes PACKAGE_VERSION
+    // from `git describe`/`date`/`uname`. Default ON to match the oracle; `--no-syscmd` opts out.
+    let mut allow_syscmd = true;
     let mut pure_m4 = false;
     let mut output_arg: Option<String> = None;
     while i < args.len() {
         match args[i].as_str() {
             "-f" | "--force" => force = true,
             "--allow-syscmd" => allow_syscmd = true,
+            "--no-syscmd" => allow_syscmd = false,
             "--pure-m4" => pure_m4 = true,
             "-o" | "--output" => {
                 i += 1;
