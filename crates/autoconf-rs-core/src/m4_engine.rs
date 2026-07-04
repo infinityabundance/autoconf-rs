@@ -360,14 +360,14 @@ impl M4Engine {
         // `AC_DEFINE(HAVE_NCURSES_H)` produced NOTHING -> config.h lacked it -> `tty-term.c: OK
         // undeclared`. Emitting the append at the call site is also correct for CONDITIONAL defines
         // (`if found; then AC_DEFINE(X)`), which the unconditional prescan got wrong.
-        // Append via a HEREDOC, not `printf "#define $1 $2"`: a C-string value (`"(c) 2020, Foo"`, model
-        // names, copyright) contains `"`/`(`/`,` that break a double-quoted printf arg (the corpus's
-        // nested-quote `#define` wall). In a heredoc those are all literal. Quoted delimiter `'_ACEOF'`
-        // => no shell expansion (AC_DEFINE is literal); AC_DEFINE_UNQUOTED uses a bare delimiter below so
-        // `$var` still expands. $1/$2 are substituted by m4 before the shell ever sees the heredoc.
+        // AC_DEFINE value is LITERAL: wrap the whole `#define` line in SINGLE quotes so a C-string value
+        // (`"(c) 2020, Foo"`, model names, copyright) with `"`/`(`/`,` stays literal instead of closing a
+        // double-quoted printf arg and spilling its `(` as bare shell (the nested-quote `#define` wall).
+        // One line => safe inside compound commands (`for … do AC_DEFINE … done`), unlike a heredoc whose
+        // multi-line body/delimiter broke inline loops (libofx). $1/$2 are substituted by m4 first.
         self.engine.macro_table.define(
             b"AC_DEFINE",
-            b"cat >>confdefs.h 2>/dev/null <<'_ACRSDEF_EOF'\n#define $1 ifelse([$2],[],1,[$2])\n_ACRSDEF_EOF",
+            b"printf '%s\\n' '#define $1 ifelse([$2],[],1,[$2])' >> confdefs.h 2>/dev/null",
         );
 
         // AC_CONFIG_COMMANDS — no output
@@ -977,8 +977,16 @@ impl M4Engine {
         // `if ...; then AC_DEFINE_UNQUOTED(...) fi` (postgres typeof / sizeof) became an empty then-block
         // -> `syntax error near fi`.
         self.engine.macro_table.define(
+            b"_acrs_unq_esc",
+            b"patsubst(patsubst([$1], [\"], [\\\"]), [`], [\\`])",
+        );
+        // AC_DEFINE_UNQUOTED needs the value in DOUBLE quotes (so $var still expands), but a C-string
+        // value with a literal `\"` (minidlna ROOTDEV_* model/manufacturer strings, with embedded `(`)
+        // closes the printf arg early -> bare `(` shell syntax error. Escape `"` and backtick to `\"`/
+        // `` \` `` (leaving `$` intact); one line, so still inline-safe inside loops (libofx protocol loop).
+        self.engine.macro_table.define(
             b"AC_DEFINE_UNQUOTED",
-            b"cat >>confdefs.h 2>/dev/null <<_ACRSDEF_EOF\n#define $1 ifelse([$2],[],1,[$2])\n_ACRSDEF_EOF",
+            b"printf '%s\\n' \"#define $1 ifelse([$2],[],1,[_acrs_unq_esc([$2])])\" >> confdefs.h 2>/dev/null",
         );
         self.engine
             .macro_table
