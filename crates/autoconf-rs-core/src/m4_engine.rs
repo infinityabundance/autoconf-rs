@@ -360,9 +360,14 @@ impl M4Engine {
         // `AC_DEFINE(HAVE_NCURSES_H)` produced NOTHING -> config.h lacked it -> `tty-term.c: OK
         // undeclared`. Emitting the append at the call site is also correct for CONDITIONAL defines
         // (`if found; then AC_DEFINE(X)`), which the unconditional prescan got wrong.
+        // Append via a HEREDOC, not `printf "#define $1 $2"`: a C-string value (`"(c) 2020, Foo"`, model
+        // names, copyright) contains `"`/`(`/`,` that break a double-quoted printf arg (the corpus's
+        // nested-quote `#define` wall). In a heredoc those are all literal. Quoted delimiter `'_ACEOF'`
+        // => no shell expansion (AC_DEFINE is literal); AC_DEFINE_UNQUOTED uses a bare delimiter below so
+        // `$var` still expands. $1/$2 are substituted by m4 before the shell ever sees the heredoc.
         self.engine.macro_table.define(
             b"AC_DEFINE",
-            b"printf '%s\\n' \"#define $1 ifelse([$2],[],1,[$2])\" >> confdefs.h 2>/dev/null",
+            b"cat >>confdefs.h 2>/dev/null <<'_ACRSDEF_EOF'\n#define $1 ifelse([$2],[],1,[$2])\n_ACRSDEF_EOF",
         );
 
         // AC_CONFIG_COMMANDS — no output
@@ -973,7 +978,7 @@ impl M4Engine {
         // -> `syntax error near fi`.
         self.engine.macro_table.define(
             b"AC_DEFINE_UNQUOTED",
-            b"printf '%s\\n' \"#define $1 ifelse([$2],[],1,[$2])\" >> confdefs.h 2>/dev/null",
+            b"cat >>confdefs.h 2>/dev/null <<_ACRSDEF_EOF\n#define $1 ifelse([$2],[],1,[$2])\n_ACRSDEF_EOF",
         );
         self.engine
             .macro_table
