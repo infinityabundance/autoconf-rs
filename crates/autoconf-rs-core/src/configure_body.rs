@@ -690,10 +690,12 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     .map(|s| s.to_string())
     .collect();
     for var in state.substitutions.keys() {
-        // Skip macro-template artifacts: a var name with `$`/`{`/`@` is an unexpanded `$1`-class token
-        // captured from a prelude macro definition (e.g. AC_SUBST([$1_LIBS])). Emitting it yields a
-        // broken `s|@$1_LIBS@|${$1_LIBS}|g` -> bash "bad substitution" aborts AC_OUTPUT (no Makefile).
-        if var.contains('$') || var.contains('{') || var.contains('@') {
+        // Skip any var whose name is not a valid shell identifier: emitting `s|@V@|${V}|g` for a name
+        // with `$`/`{`/`@`/`[`/`]`/etc. yields a broken `${...}` -> bash "bad substitution" aborts
+        // AC_OUTPUT (no Makefile). E.g. gettext's `AC_SUBST([LTLIB]NAME)` text-extracts as `[LTLIB]NAME`
+        // (brackets kept) -> `${[LTLIB]NAME}`. The runtime conf_subst.sed already emits the real,
+        // m4-expanded name (LTLIBINTL), so dropping the broken static entry is safe.
+        if !var.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
             continue;
         }
         if !names.contains(var) {
