@@ -602,6 +602,18 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_PROG_AR", b"AR=${AR-ar}");
+        // Autoscan-database hint macros. Real autoconf's ar.m4/programs.m4 emit `AN_MAKEVAR([AR],
+        // [AC_PROG_AR])` / `AN_PROGRAM([ar], [AC_PROG_AR])` (and AN_IDENTIFIER/FUNCTION/HEADER/LITERAL)
+        // at the TOP LEVEL of the .m4 to register var/program->macro mappings for `autoscan`; they
+        // emit ZERO shell at configure time. Undefined, they leaked into configure as literal
+        // `AN_MAKEVAR(AR, AC_PROG_AR)` -> `./configure: syntax error near unexpected token 'AR,'`
+        // (blueness/sthttpd). Define them empty so the arg list is consumed.
+        for an in [
+            &b"AN_MAKEVAR"[..], b"AN_PROGRAM", b"AN_IDENTIFIER", b"AN_FUNCTION", b"AN_HEADER",
+            b"AN_LITERAL",
+        ] {
+            self.engine.macro_table.define(an, b"");
+        }
         self.engine
             .macro_table
             .define(b"AC_PROG_EGREP", b"EGREP=${EGREP-grep -E}");
