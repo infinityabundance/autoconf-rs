@@ -272,21 +272,29 @@ done
 case $mode in
 compile)
   comp=$1; shift
-  flags=; src=; lo=
-  while test $# -gt 0; do
-    case $1 in
-      -o) shift; lo=$1 ;;
-      -c) ;;
-      *) flags="$flags $1"; case $1 in *.c|*.cc|*.cpp|*.cxx|*.C|*.s|*.S) src=$1 ;; esac ;;
+  # Keep the compiler FLAGS in the positional params ("$@"), NOT a `flags="$flags $1"` string: a
+  # string is re-word-split when passed unquoted to $comp, which breaks a -D whose value contains a
+  # space. A header-less project's DEFS carries `-DPACKAGE_STRING=\"fts\ 0.2\"` (real autoconf escapes
+  # the space); at recipe-parse time the shell turns `\ ` into a literal space inside one argument, so
+  # `-DPACKAGE_STRING="fts 0.2"` arrives as ONE param — but `$comp $flags` would re-split it into
+  # `-DPACKAGE_STRING=fts` + a phantom `0.2` input file (cc: "linker input file not found: 0.2").
+  # Rotate every non -c/-o<obj> arg to the end of "$@" so it survives verbatim; drop -c and -o<obj>.
+  src=; lo=; _n=$#
+  while test $_n -gt 0; do
+    _a=$1; shift; _n=$((_n-1))
+    case $_a in
+      -o) lo=$1; shift; _n=$((_n-1)); continue ;;
+      -c) continue ;;
+      *.c|*.cc|*.cpp|*.cxx|*.C|*.s|*.S) src=$_a ;;
     esac
-    shift
+    set -- "$@" "$_a"
   done
   test -n "$lo" || lo=`echo "$src" | sed 's/\.[^.]*$/.lo/'`
   obj=`echo "$lo" | sed 's/\.lo$/.o/'`
   dir=`dirname "$lo"`; base=`basename "$obj"`
   mkdir -p "$dir/.libs"
-  $comp $flags -fPIC -DPIC -c -o "$dir/.libs/$base" || exit 1
-  $comp $flags -c -o "$obj" 2>/dev/null || cp "$dir/.libs/$base" "$obj"
+  $comp "$@" -fPIC -DPIC -c -o "$dir/.libs/$base" || exit 1
+  $comp "$@" -c -o "$obj" 2>/dev/null || cp "$dir/.libs/$base" "$obj"
   { echo "# $lo - libtool object (autoconf-rs)"
     echo "pic_object='.libs/$base'"
     echo "non_pic_object='$base'"; } > "$lo"

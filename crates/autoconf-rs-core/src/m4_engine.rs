@@ -3072,13 +3072,14 @@ impl M4Engine {
                         var_name, val_esc
                     ));
                 }
-                // No config header: the AC_DEFINEs must reach the compiler as -D flags in DEFS (that
-                // IS how a no-header project gets HAVE_* — e.g. tmux has no AC_CONFIG_HEADERS and never
-                // #includes config.h; without this `tty-term.c: OK undeclared` because -DHAVE_NCURSES_H
-                // was absent). Append every non-PACKAGE confdefs.h `#define X V` as `-DX=V` (values are
-                // typically 1; PACKAGE_* are already in DEFS, correctly quote-escaped). Runs at AC_OUTPUT
-                // after all (possibly conditional) AC_DEFINEs have populated confdefs.h.
-                output.push_str("DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
+                // No config header: rebuild DEFS from confdefs.h as -D flags so every #define reaches
+                // the compiler — a no-header project gets its defines ONLY this way (e.g. tmux has no
+                // AC_CONFIG_HEADERS and never #includes config.h; without this `tty-term.c: OK
+                // undeclared` because -DHAVE_NCURSES_H was absent). Uses real autoconf's per-define
+                // shell-escaping (DEFS_FROM_CONFDEFS): a string value with a space must emit
+                // `-DPACKAGE_STRING=\"fts\ 0.2\"`, else it word-splits into a phantom cc input at make.
+                // Runs at AC_OUTPUT after all (possibly conditional) AC_DEFINEs populated confdefs.h.
+                output.push_str(crate::shell_gen::DEFS_FROM_CONFDEFS);
             }
             // Add substitution and config.status from dynamic configure
             // Process config files, subdirs, and headers in the configure body

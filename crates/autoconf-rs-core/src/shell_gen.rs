@@ -51,6 +51,36 @@ pub const STD_VAR_DEFAULTS: &str = r#"  : ${srcdir=.}
 /// STD_VAR_DEFAULTS expand when config.status runs). Appended to config.status's `substitute()` sed.
 pub const STD_VAR_SED: &str = r#" -e "s|@top_srcdir@|$top_srcdir|g" -e "s|@top_builddir@|$top_builddir|g" -e "s|@builddir@|$builddir|g" -e "s|@abs_srcdir@|$abs_srcdir|g" -e "s|@abs_builddir@|$abs_builddir|g" -e "s|@abs_top_srcdir@|$abs_top_srcdir|g" -e "s|@abs_top_builddir@|$abs_top_builddir|g" -e "s|@CC@|$CC|g" -e "s|@CFLAGS@|$CFLAGS|g" -e "s|@CPPFLAGS@|$CPPFLAGS|g" -e "s|@LDFLAGS@|$LDFLAGS|g" -e "s|@LIBS@|$LIBS|g" -e "s|@CXX@|$CXX|g" -e "s|@CXXFLAGS@|$CXXFLAGS|g" -e "s|@CPP@|$CPP|g" -e "s|@AR@|$AR|g" -e "s|@ARFLAGS@|cr|g" -e "s|@RANLIB@|$RANLIB|g" -e "s|@STRIP@|$STRIP|g" -e "s|@AWK@|$AWK|g" -e "s|@LN_S@|$LN_S|g" -e "s|@OBJEXT@|$OBJEXT|g" -e "s|@EXEEXT@|$EXEEXT|g" -e "s|@SET_MAKE@|$SET_MAKE|g" -e "s|@YACC@|$YACC|g" -e "s|@YFLAGS@|$YFLAGS|g" -e "s|@LEX@|$LEX|g" -e "s|@LEXLIB@|$LEXLIB|g" -e "s|@LEX_OUTPUT_ROOT@|$LEX_OUTPUT_ROOT|g" -e "s|@GREP@|$GREP|g" -e "s|@EGREP@|$EGREP|g" -e "s|@FGREP@|$FGREP|g" -e "s|@SED@|$SED|g" -e "s|@SHELL@|$SHELL|g" -e "s|@MKDIR_P@|$MKDIR_P|g" -e "s|@DEPDIR@|$DEPDIR|g" -e "s|@INSTALL@|$INSTALL|g" -e "s|@INSTALL_PROGRAM@|$INSTALL_PROGRAM|g" -e "s|@INSTALL_DATA@|$INSTALL_DATA|g" -e "s|@INSTALL_SCRIPT@|$INSTALL_SCRIPT|g" -e "s|@am__leading_dot@|$am__leading_dot|g" -e "s|@DEFS@|$DEFS|g" -e "s|@ECHO_C@|$ECHO_C|g" -e "s|@ECHO_N@|$ECHO_N|g" -e "s|@ECHO_T@|$ECHO_T|g" -e "s|@LIBTOOL@|$LIBTOOL|g" -e "s|@LIBOBJS@|$LIBOBJS|g" -e "s|@LTLIBOBJS@|$LTLIBOBJS|g" -e "s|@ALLOCA@|$ALLOCA|g" -e "s|@build@|$build|g" -e "s|@host@|$host|g" -e "s|@target@|$target|g" -e "s|@build_alias@|$build_alias|g" -e "s|@host_alias@|$host_alias|g" -e "s|@target_alias@|$target_alias|g" -e "s|@build_cpu@|$build_cpu|g" -e "s|@build_vendor@|$build_vendor|g" -e "s|@build_os@|$build_os|g" -e "s|@host_cpu@|$host_cpu|g" -e "s|@host_vendor@|$host_vendor|g" -e "s|@host_os@|$host_os|g" -e "s|@configure_input@|$configure_input|g" -e "s|@bindir@|$bindir|g" -e "s|@sbindir@|$sbindir|g" -e "s|@libexecdir@|$libexecdir|g" -e "s|@datarootdir@|$datarootdir|g" -e "s|@datadir@|$datadir|g" -e "s|@sysconfdir@|$sysconfdir|g" -e "s|@sharedstatedir@|$sharedstatedir|g" -e "s|@localstatedir@|$localstatedir|g" -e "s|@runstatedir@|$runstatedir|g" -e "s|@includedir@|$includedir|g" -e "s|@oldincludedir@|$oldincludedir|g" -e "s|@libdir@|$libdir|g" -e "s|@infodir@|$infodir|g" -e "s|@localedir@|$localedir|g" -e "s|@mandir@|$mandir|g" -e "s|@docdir@|$docdir|g" -e "s|@htmldir@|$htmldir|g" -e "s|@dvidir@|$dvidir|g" -e "s|@pdfdir@|$pdfdir|g" -e "s|@psdir@|$psdir|g" -e "s|@lispdir@|$lispdir|g" -e "s|@AMDEP_TRUE@|$AMDEP_TRUE|g" -e "s|@AMDEP_FALSE@|$AMDEP_FALSE|g" -e "s|@am__include@|$am__include|g" -e "s|@am__quote@|$am__quote|g" -e "s|@am__isrc@|$am__isrc|g" -e "s|@am__nodep@|$am__nodep|g" -e "s|@am__fastdepCC_TRUE@|$am__fastdepCC_TRUE|g" -e "s|@am__fastdepCC_FALSE@|$am__fastdepCC_FALSE|g" -e "s|@am__fastdepCXX_TRUE@|$am__fastdepCXX_TRUE|g" -e "s|@am__fastdepCXX_FALSE@|$am__fastdepCXX_FALSE|g" -e "s|@ACLOCAL@|$ACLOCAL|g" -e "s|@AUTOCONF@|$AUTOCONF|g" -e "s|@AUTOMAKE@|$AUTOMAKE|g" -e "s|@AUTOHEADER@|$AUTOHEADER|g" -e "s|@MAKEINFO@|$MAKEINFO|g" -e "s|@install_sh@|$install_sh|g" -e "s|@AMTAR@|$AMTAR|g" -e "s|@am__tar@|$am__tar|g" -e "s|@am__untar@|$am__untar|g" -e "s|@CTAGS@|$CTAGS|g" -e "s|@ETAGS@|$ETAGS|g" -e "s|@CSCOPE@|$CSCOPE|g" -e "s|@ACLOCAL_AMFLAGS@|$ACLOCAL_AMFLAGS|g" -e "s|@MAINT@|$MAINT|g" -e "s|@MAINTAINER_MODE_TRUE@|$MAINTAINER_MODE_TRUE|g" -e "s|@MAINTAINER_MODE_FALSE@|$MAINTAINER_MODE_FALSE|g" -e "s|@pkgpyexecdir@|$pkgpyexecdir|g" -e "s|@pkgpythondir@|$pkgpythondir|g" -e "s|@pyexecdir@|$pyexecdir|g" -e "s|@pythondir@|$pythondir|g""#;
 
+/// Header-LESS DEFS builder, mirroring config.status's `ac_script` in real GNU autoconf. A project with
+/// no AC_CONFIG_HEADERS gets ALL its `#define`s (PACKAGE_*/HAVE_*/…) on the compiler command line via
+/// -D flags in DEFS. The values must be SHELL-ESCAPED per-define so a value with a space
+/// (`#define PACKAGE_STRING "fts 0.2"`) stays ONE cc argument. Real autoconf emits
+/// `-DPACKAGE_STRING=\"fts\ 0.2\"` (quote AND space backslash-escaped); the naive
+/// `-DPACKAGE_STRING="fts 0.2"` word-splits at make-time into `-DPACKAGE_STRING=fts` + a phantom `0.2`
+/// input file (cc: "linker input file not found: 0.2"). This rebuilds DEFS from confdefs.h with the
+/// same escaping (space→`\ `, quote→`\"`, `$`→`$$`), one #define per line so value-spaces are escaped
+/// but flag-separator spaces are not, then joins with `tr`. PACKAGE/VERSION (defined by
+/// AM_INIT_AUTOMAKE, NOT written to our confdefs.h) are prepended, matching real autoconf's set.
+/// FINALLY the whole string is sed-escaped (backslashes doubled) so the generic `s|@DEFS@|$DEFS|g` in
+/// STD_VAR_SED emits the single-backslash form literally into the Makefile instead of collapsing it.
+/// Runs at AC_OUTPUT (after every conditional AC_DEFINE has populated confdefs.h); config-HEADER
+/// projects skip this entirely (their DEFS is just `-DHAVE_CONFIG_H`).
+pub const DEFS_FROM_CONFDEFS: &str = r#"ac_defs_script='
+s/^#define \([A-Za-z_][A-Za-z0-9_]*\) \(.*\)$/-D\1=\2/
+t acq
+b
+:acq
+s/[ `~#$^&*(){}\\|;'\''"<>?]/\\&/g
+s/\[/\\&/g
+s/\]/\\&/g
+s/\$/$$/g
+p
+'
+DEFS=$(sed -n "$ac_defs_script" confdefs.h 2>/dev/null | tr '\n' ' ')
+DEFS="-DPACKAGE=\\\"$PACKAGE_TARNAME\\\" -DVERSION=\\\"$PACKAGE_VERSION\\\" $DEFS"
+DEFS=$(printf '%s' "$DEFS" | sed 's/[\\&|]/\\&/g')
+"#;
+
 /// Build a SAFE `-e 's|@VAR@|VALUE|g'` sed expr for embedding in a single-quoted shell word. VALUE is
 /// sed replacement text. Without care, an AC_SUBST value like `' -I$(srcdir)'` or `'$(MKDIR_P)'` (the
 /// surrounding single quotes are part of the captured value) produced `-e 's|@x@|'$(MKDIR_P)'|g'`, where

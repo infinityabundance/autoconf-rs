@@ -724,13 +724,15 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
     // is an autoconf placeholder, not Makefile `@silent`/`foo@host` syntax.)
     b.extend_from_slice(b" $_cs -e 's|@[A-Za-z_][A-Za-z0-9_]*@||g' \"$1\" > \"$2\"\n}\n\n");
 
-    // No config header: fold the runtime AC_DEFINEs (now in confdefs.h) into DEFS as `-DX=V` so they
-    // reach the compiler — a no-header project (e.g. tmux: no AC_CONFIG_HEADERS, never #includes
-    // config.h) gets HAVE_* ONLY via -D flags. Without this, `-DHAVE_NCURSES_H` was absent →
-    // `tty-term.c: OK undeclared`. PACKAGE_* are already in DEFS (correctly quote-escaped), so skip
-    // them here. Runs at AC_OUTPUT, after all (possibly conditional) AC_DEFINEs populated confdefs.h.
+    // No config header: rebuild DEFS from confdefs.h as `-DX=V` flags so every #define (PACKAGE_*,
+    // HAVE_*, …) reaches the compiler — a no-header project (e.g. tmux/fts-standalone: no
+    // AC_CONFIG_HEADERS, never #includes config.h) gets its defines ONLY via -D flags. Uses real
+    // autoconf's per-define shell-escaping (see DEFS_FROM_CONFDEFS): a string value with a space
+    // (`PACKAGE_STRING "fts 0.2"`) must emit `-DPACKAGE_STRING=\"fts\ 0.2\"`, else the naive
+    // `-DPACKAGE_STRING="fts 0.2"` word-splits at make-time into a phantom `0.2` cc input file.
+    // Runs at AC_OUTPUT, after all (possibly conditional) AC_DEFINEs populated confdefs.h.
     if state.config_headers.is_empty() {
-        b.extend_from_slice(b"DEFS=\"$DEFS $(sed -n 's/^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$/-D\\1=\\2/p' confdefs.h 2>/dev/null | grep -v '^-DPACKAGE' | tr '\\n' ' ')\"\n");
+        b.extend_from_slice(crate::shell_gen::DEFS_FROM_CONFDEFS.as_bytes());
     }
 
     // AC_CONFIG_LINKS — create each DEST from SOURCE (postgres: src/Makefile.port ->
