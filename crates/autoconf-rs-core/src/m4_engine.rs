@@ -480,13 +480,16 @@ impl M4Engine {
             b"printf %s \"checking for library containing $1... \"\n_acs_save_LIBS=$LIBS\nac_res=\nfor ac_lib in '' $2; do\n  if test -z \"$ac_lib\"; then LIBS=\"$5 $_acs_save_LIBS\"; else LIBS=\"-l$ac_lib $5 $_acs_save_LIBS\"; fi\n  cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\nifelse([$1],[main],[],[char $1 ();])\nint main() { return $1 (); }\n_ACEOF\n  if ac_fn_c_try_link; then\n    if test -z \"$ac_lib\"; then ac_res=\"none required\"; else ac_res=\"-l$ac_lib\"; fi\n    break\n  fi\ndone\nif test -n \"$ac_res\"; then\n  printf '%s\\n' \"$ac_res\"\n  :\n  $3\nelse\n  printf '%s\\n' \"no\"\n  LIBS=$_acs_save_LIBS\n  :\n  $4\nfi",
         );
 
-        // AC_CHECK_FUNCS — plural: check multiple functions. Use `for … in $1<newline>do` (not `; do`):
-        // a multi-line list (`AC_CHECK_FUNCS([ dirfd \<nl> … sysconf<nl> ])`) leaves $1 ending in a
-        // newline, so `; do` landed on its own line -> `syntax error near ;` (tmux). A bare newline
-        // before `do` is valid whether or not $1 ends in one.
+        // AC_CHECK_FUNCS/HEADERS — plural: check multiple items. `m4_normalize([$1])` flattens the
+        // list to ONE line (real autoconf does the same) so a multi-line list survives: a `\`
+        // continuation with a TRAILING SPACE (`AC_CHECK_HEADERS([ … stdlib.h \ <nl> string.h … ])`,
+        // awgn/brute) left a raw `\ <newline>` in `for ac_hdr in $1` -> the `\ ` escaped the space,
+        // the bare newline TERMINATED the `for…in` list -> `syntax error near 'string.h'`. Also use
+        // `for … in …<newline>do` (not `; do`): a list ending in a newline put `; do` on its own line
+        // -> `syntax error near ;` (tmux). A bare newline before `do` is valid either way.
         self.engine.macro_table.define(
             b"AC_CHECK_FUNCS",
-            b"for ac_func in $1\ndo :\nAC_CHECK_FUNC($ac_func)\ndone",
+            b"for ac_func in m4_normalize([$1])\ndo :\nAC_CHECK_FUNC($ac_func)\ndone",
         );
 
         // AC_CHECK_HEADERS — plural: check multiple headers.
@@ -496,7 +499,7 @@ impl M4Engine {
         // deep_expansion.conftest_corruption as the next root to defeat.
         self.engine.macro_table.define(
             b"AC_CHECK_HEADERS",
-            b"for ac_hdr in $1\ndo :\nAC_CHECK_HEADER($ac_hdr)\ndone",
+            b"for ac_hdr in m4_normalize([$1])\ndo :\nAC_CHECK_HEADER($ac_hdr)\ndone",
         );
 
         // AC_CANONICAL_HOST — detect host system type (CROSS.020: config.guess integration)
