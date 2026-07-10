@@ -261,6 +261,10 @@ impl M4Engine {
             "AC_CONFIG_TESTDIR", "AM_INIT_AUTOMAKE", "AM_MAINTAINER_MODE", "AM_SILENT_RULES",
             "AM_PROG_AR", "AM_PROG_CC_C_O", "AM_PROG_LEX", "AM_PROG_LIBTOOL", "AM_PROG_INSTALL_STRIP",
             "AM_PROG_MKDIR_P", "AM_SANITY_CHECK", "AM_SET_DEPDIR", "AM_DEP_TRACK",
+            // AM_SET_LEADING_DOT / _AM_SET_LEADING_DOT set am__leading_dot (already defaulted to `.`
+            // in STD_VAR_DEFAULTS). Undefined they leaked literal -> `fi AM_SET_LEADING_DOT` ->
+            // `AM_SET_LEADING_DOT: command not found` / syntax error (cooljeanius/mdnsd).
+            "AM_SET_LEADING_DOT", "_AM_SET_LEADING_DOT",
             "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_RUN_LOG", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
             "AM_GNU_GETTEXT_VERSION", "AM_ICONV", "LT_INIT", "AC_PROG_LIBTOOL", "LT_LANG",
             "LT_PREREQ",
@@ -404,13 +408,13 @@ impl M4Engine {
         // AC_PROG_CC — C compiler detection
         self.engine.macro_table.define(
             b"AC_PROG_CC",
-            b"# Check for C compiler\nac_ct_CC=${CC-cc}\nif test -n \"$CC\"; then\n  printf %s \"checking for C compiler... \"\n  printf '%s\\n' \"$CC\"\nelse\n  for ac_prog in cc gcc clang; do\n    if command -v \"$ac_prog\" >/dev/null 2>&1; then\n      CC=$ac_prog\n      break\n    fi\n  done\nfi",
+            b"# Check for C compiler\nac_ct_CC=${CC-cc}\nif test -n \"$CC\"; then\n  printf %s \"checking for C compiler... \"\n  printf '%s\\n' \"$CC\"\nelse\n  for ac_prog in cc gcc clang; do\n    if command -v \"$ac_prog\" >/dev/null 2>&1; then\n      CC=$ac_prog\n      break\n    fi\n  done\nfi\n",
         );
 
         // AC_PROG_CXX — C++ compiler detection
         self.engine.macro_table.define(
             b"AC_PROG_CXX",
-            b"# Check for C++ compiler\nac_ct_CXX=${CXX-g++}\nfor ac_prog in g++ c++ clang++; do\n  if command -v \"$ac_prog\" >/dev/null 2>&1; then\n    CXX=$ac_prog\n    break\n  fi\ndone",
+            b"# Check for C++ compiler\nac_ct_CXX=${CXX-g++}\nfor ac_prog in g++ c++ clang++; do\n  if command -v \"$ac_prog\" >/dev/null 2>&1; then\n    CXX=$ac_prog\n    break\n  fi\ndone\n",
         );
 
         // AC_PROG_CPP — C preprocessor detection
