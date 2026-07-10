@@ -1332,15 +1332,26 @@ impl M4Engine {
             b"AC_RUN_IFELSE",
             b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
         );
-        self.engine
-            .macro_table
-            .define(b"AC_TRY_COMPILE", b"# Try compile (obsolete)");
-        self.engine
-            .macro_table
-            .define(b"AC_TRY_LINK", b"# Try link (obsolete)");
-        self.engine
-            .macro_table
-            .define(b"AC_TRY_RUN", b"# Try run (obsolete)");
+        // AC_TRY_COMPILE/LINK/RUN — the obsolete forms of AC_{COMPILE,LINK,RUN}_IFELSE. The old
+        // `# Try X (obsolete)` comment stubs emitted ZERO shell AND discarded the test + actions, so
+        // a project guarding one in its own conditional (`if …; then AC_TRY_RUN(...) else … fi`,
+        // hnwfs/lighttpd-plus sendfile, eastzone/snmp) got an EMPTY `then` body -> `./configure:
+        // syntax error near unexpected token 'else'/'done'`. Inline the same proven bodies as the
+        // IFELSE forms above (`:`-guarded branches so an empty action isn't a syntax error), mapping
+        // the obsolete signatures: AC_TRY_COMPILE/LINK(INCLUDES, BODY, [TRUE], [FALSE]) wrap BODY in
+        // main(); AC_TRY_RUN(PROGRAM, [TRUE], [FALSE], [CROSS]) uses the whole PROGRAM verbatim.
+        self.engine.macro_table.define(
+            b"AC_TRY_COMPILE",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\nint main() { $2 ; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  :\n  $3\nelse\n  :\n  $4\nfi",
+        );
+        self.engine.macro_table.define(
+            b"AC_TRY_LINK",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\nint main() { $2 ; return 0; }\n_ACEOF\nif ac_fn_c_try_link; then\n  :\n  $3\nelse\n  :\n  $4\nfi",
+        );
+        self.engine.macro_table.define(
+            b"AC_TRY_RUN",
+            b"cat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n$1\n_ACEOF\nif ac_fn_c_try_run; then\n  :\n  $2\nelse\n  :\n  $3\nfi",
+        );
         // AC_TRY_COMMAND(COMMAND): run COMMAND, capture its exit status, succeed iff 0. The low-level
         // runner behind the old AC_TRY_* family; many hand-rolled cache checks call it directly (zfs
         // config/kernel/as-cfi: `if AC_TRY_COMMAND($CC -c $CFLAGS conftest.S -o conftest.o) >/dev/null …`).
