@@ -553,6 +553,21 @@ pub fn generate_configure_prologue(
     // feature-test section, so confdefs.h must already exist — otherwise `cat: confdefs.h: No such
     // file` (the single most common corpus failure, 36/138 repos) corrupts every early probe.
     h.extend_from_slice(b"test -f confdefs.h || printf '%s\\n' '/* confdefs.h */' > confdefs.h\n");
+    // Modern AC_INIT (autoconf >= 2.70) implies AC_CHECK_INCLUDES_DEFAULT: it checks the standard
+    // C89/C99/POSIX headers and unconditionally AC_DEFINEs their HAVE_* (STDC_HEADERS + stdio/stdlib/
+    // string/inttypes/stdint/strings/sys_stat/sys_types/unistd). Projects rely on these WITHOUT an
+    // explicit AC_CHECK_HEADERS — e.g. flow-tools guards `#include <inttypes.h>` (for PRIu32) on
+    // `#if HAVE_INTTYPES_H`; absent it, `PRIu32` is undeclared -> `expected ')' before 'PRIu32'` at
+    // make. These headers exist on every system that can compile C, so the checks always pass on a
+    // real build host; seed them into confdefs.h in the prologue (the universal config-gen path) ->
+    // folded into config.h (and DEFS for header-less projects). The config.h fold dedups, so a later
+    // explicit AC_CHECK_HEADERS of the same header is harmless.
+    for def in [
+        "STDC_HEADERS", "HAVE_STDIO_H", "HAVE_STDLIB_H", "HAVE_STRING_H", "HAVE_INTTYPES_H",
+        "HAVE_STDINT_H", "HAVE_STRINGS_H", "HAVE_SYS_STAT_H", "HAVE_SYS_TYPES_H", "HAVE_UNISTD_H",
+    ] {
+        h.extend_from_slice(format!("printf '%s\\n' '#define {def} 1' >>confdefs.h\n").as_bytes());
+    }
     h.extend_from_slice(b"# Sanitize environment\n");
     h.extend_from_slice(b"LC_ALL=C\nexport LC_ALL\nLANGUAGE=C\nexport LANGUAGE\n\nCDPATH=\n\n");
     // Identity of this package (set near the top, as GNU Autoconf does). These shell vars carry the
