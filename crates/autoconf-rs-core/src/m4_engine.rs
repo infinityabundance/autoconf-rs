@@ -449,18 +449,27 @@ impl M4Engine {
         crate::languages::register_go_macros(&mut self.engine.macro_table);
 
         // AC_CHECK_FUNC — check for C library function. On success record `#define HAVE_<CPP> 1` into
-        // confdefs.h (so config.h gets HAVE_MALLOC etc.), same as AC_CHECK_HEADER.
+        // confdefs.h (so config.h gets HAVE_MALLOC etc.), same as AC_CHECK_HEADER. ALSO set the
+        // `ac_cv_func_<name>` cache variable to yes/no: standard autoconf sets it, and configure.ac
+        // routinely READS it directly (netperf: `if test "$ac_cv_func_getaddrinfo..." != yesyes`).
+        // Without it the var is empty -> the hand-written test takes the wrong branch (netperf pulled
+        // in AC_LIBOBJ(getaddrinfo) on Linux where getaddrinfo EXISTS -> ar getaddrinfo.o: No such file).
+        // `eval` because AC_CHECK_FUNCS calls AC_CHECK_FUNC($ac_func) with a shell loop var, so `$1`
+        // (the name) is only known at runtime.
         self.engine.macro_table.define(
             b"AC_CHECK_FUNC",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nifelse([$1],[main],[],[char $1 ();])\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#ifdef __cplusplus\nextern \"C\"\n#endif\nifelse([$1],[main],[],[char $1 ();])\nint main() { return $1(); }\n_ACEOF\nif ac_fn_c_try_link; then\n  printf '%s\\n' \"yes\"\n  eval \"ac_cv_func_$1=yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\n  eval \"ac_cv_func_$1=no\"\nfi",
         );
 
         // AC_CHECK_HEADER — check for C header. On success record `#define HAVE_<CPP> 1` into confdefs.h
         // (the RUNTIME probe accumulator config.h is built from). Without this the check PRINTED "yes"
         // but config.h kept `#undef HAVE_STDIO_H` -> source `#ifdef HAVE_STDIO_H` never fired.
+        // Also set the `ac_cv_header_<mangled>` cache variable (non-alnum -> `_`), which configure.ac
+        // frequently reads directly (`if test "$ac_cv_header_foo_h" = yes`); mirrors AC_CHECK_FUNC's
+        // ac_cv_func_ fix. `eval` for the same reason (plural passes `$ac_hdr`, a runtime var).
         self.engine.macro_table.define(
             b"AC_CHECK_HEADER",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nac_hv=`printf 'ac_cv_header_%s' \"$1\" | tr './+- ' '_____'`\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  eval \"$ac_hv=yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\n  eval \"$ac_hv=no\"\nfi",
         );
 
         // AC_CHECK_LIB(LIBRARY, FUNCTION, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): link-test FUNCTION
@@ -3664,6 +3673,24 @@ mod tests {
         let output = engine.process(input).unwrap();
         // Output is the generated configure script, not M4 expansion
         assert!(output.contains("#! /bin/sh"));
+    }
+
+    #[test]
+    fn test_check_funcs_sets_ac_cv_func_cache_var() {
+        // AC_CHECK_FUNCS must set the `ac_cv_func_<name>` cache variable (yes/no), not only #define
+        // HAVE_<NAME>. configure.ac reads it directly (netperf: `test "$ac_cv_func_getaddrinfo..." !=
+        // yesyes` to gate AC_LIBOBJ). Without the assignment the var is empty -> wrong branch taken.
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_CHECK_FUNCS([getaddrinfo])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            output.contains("ac_cv_func_$ac_func=yes") || output.contains("ac_cv_func_getaddrinfo=yes"),
+            "AC_CHECK_FUNC must set the ac_cv_func_ cache variable on success"
+        );
+        assert!(
+            output.contains("ac_cv_func_$ac_func=no") || output.contains("ac_cv_func_getaddrinfo=no"),
+            "AC_CHECK_FUNC must set the ac_cv_func_ cache variable on failure"
+        );
     }
 
     #[test]
