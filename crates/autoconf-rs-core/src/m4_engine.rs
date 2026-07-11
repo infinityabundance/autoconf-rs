@@ -2049,6 +2049,8 @@ impl M4Engine {
             let trimmed: Vec<&str> = args.iter().map(|s| s.trim()).collect();
             if !trimmed.is_empty() {
                 let var = trimmed[0].to_string();
+                // Raw value; a bare-m4-macro value (e.g. `PKG_MINOR_VERSION`) is EXPANDED later in the
+                // post-expansion phase, once the configure.ac m4_defines are registered (see below).
                 let value = trimmed.get(1).map(|s| s.to_string()).unwrap_or_default();
                 self.state.substitutions.insert(var, value);
             }
@@ -2848,6 +2850,26 @@ impl M4Engine {
         if let Some(nm) = self.state.package_name.clone() {
             if looks_computed(&nm) {
                 self.state.package_name = Some(self.expand_fragment(&nm));
+            }
+        }
+        // Re-expand any AC_SUBST([NAME], VALUE) whose VALUE is a bare m4 macro reference (all
+        // uppercase/`_`/digit, not digit-first — e.g. `PKG_MINOR_VERSION`, `m4_define`'d to `0`). Real
+        // autoconf expands the unquoted value; captured raw by the prescan (which ran BEFORE the
+        // configure.ac m4_defines were registered), the literal macro NAME would reach the generated
+        // header via @NAME@ -> `#define X PKG_MINOR_VERSION` -> C "undeclared" (CAIDA/libparsebgp). Now
+        // (post-expansion) the defines are live. Shell values (`$prefix`, `-I$(srcdir)`, `${X}`) fail
+        // the shape test and are untouched; a non-macro identifier expands to itself (harmless).
+        let subst_names: Vec<String> = self.state.substitutions.keys().cloned().collect();
+        for name in subst_names {
+            let raw = self.state.substitutions.get(&name).cloned().unwrap_or_default();
+            if !raw.is_empty()
+                && raw.chars().next().map(|c| c.is_ascii_uppercase() || c == '_').unwrap_or(false)
+                && raw.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_')
+            {
+                let exp = self.expand_fragment(&raw);
+                if !exp.is_empty() && exp != raw {
+                    self.state.substitutions.insert(name, exp);
+                }
             }
         }
         let m4_output =
