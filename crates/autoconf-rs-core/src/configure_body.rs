@@ -710,7 +710,17 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
             // -> `$(MKDIR_P)` ran as a command -> the whole sed died -> EMPTY Makefile.
             b.extend_from_slice(crate::shell_gen::sed_subst_expr(v, val).as_bytes());
         } else {
-            b.extend_from_slice(format!(" -e \"s|@{v}@|${{{v}}}|g\"").as_bytes());
+            // Runtime value: SANITIZE it for the sed replacement like the AC_SUBST macro does —
+            // escape `\ & |` and turn embedded newlines into `\`+newline continuation. An unescaped
+            // `${VAR}` with a `|` or a multi-line value (e.g. @LIBTOOL_EXTRA_FLAGS@, or any AX_ make-rule
+            // subst) produced `sed: -e expression: unterminated 's' command` -> sed aborted -> EVERY
+            // config file EMPTY -> `make: No targets` (libsodium).
+            b.extend_from_slice(
+                format!(
+                    " -e \"s|@{v}@|$(printf '%s' \"${{{v}}}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//')|g\""
+                )
+                .as_bytes(),
+            );
         }
     }
     // The comprehensive standard-var pass (SET_MAKE/builddir/abs_*/AR/RANLIB/install-dirs/am__*/host-

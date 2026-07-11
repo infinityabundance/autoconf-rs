@@ -346,7 +346,15 @@ impl M4Engine {
         // where `eval ...` became extra ARGS to the PACKAGE `printf` -> literal `eval`/`_acrs_sv=...`
         // lines written into conf_subst.sed -> sed aborts on the bad command -> EMPTY Makefile. The `;`
         // makes `...2>/dev/null; eval ...` parse as two statements regardless of the missing newline.
-        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;");
+        // The value is SANITIZED for the `s|@VAR@|VALUE|g` sed line: (1) escape sed-special chars
+        // `\ & |` (an unescaped `|` would close the delimiter, `&`/`\` alter the replacement); (2) turn
+        // each EMBEDDED NEWLINE into a `\`+newline continuation (append `\` to every line, strip it off
+        // the last) so a MULTI-LINE value stays ONE sed command. Without (2) a multi-line AC_SUBST value
+        // (AX_VALGRIND_CHECK's `VALGRIND_CHECK_RULES` = a `check-valgrind:` make rule) wrote a bare
+        // `s|@VALGRIND_CHECK_RULES@|` with no closing delimiter -> `sed: unterminated 's' command` ->
+        // sed aborted -> EVERY config file emitted EMPTY -> `make: No targets` (libsodium, and any AX_
+        // macro that substitutes a make-rule fragment).
+        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; _acrs_sv=$(printf '%s' \"${_acrs_sv}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//'); printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;");
 
         // AM_CONDITIONAL(NAME, CONDITION): run CONDITION; set NAME_TRUE='' / NAME_FALSE='#' when true
         // (and swapped when false), then SUBST both. automake gates conditional Makefile lines with a
@@ -3681,6 +3689,22 @@ mod tests {
         let output = engine.process(input).unwrap();
         // Output is the generated configure script, not M4 expansion
         assert!(output.contains("#! /bin/sh"));
+    }
+
+    #[test]
+    fn test_ac_subst_sanitizes_value_for_sed() {
+        // AC_SUBST must sanitize the value before writing `s|@VAR@|VALUE|g` to conf_subst.sed: escape
+        // sed-special chars and turn embedded newlines into `\`+newline continuation. A multi-line
+        // value (AX_VALGRIND_CHECK's VALGRIND_CHECK_RULES = a make rule) otherwise wrote a bare
+        // `s|@VAR@|` with no closing delimiter -> `sed: unterminated 's' command` -> all files empty.
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_SUBST([FOO])\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        // The AC_SUBST expansion must run the value through the escaping/newline-continuation sed.
+        assert!(
+            output.contains("s/$/\\\\/") && output.contains("s/[\\\\&|]/\\\\&/g"),
+            "AC_SUBST must sanitize the value (escape sed-special chars + newline continuation)"
+        );
     }
 
     #[test]
