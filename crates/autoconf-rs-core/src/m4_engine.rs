@@ -2137,7 +2137,17 @@ impl M4Engine {
             }
         }
 
-        // Extract AC_DEFINE calls
+        // Extract AC_DEFINE calls. EVERY textually-scanned AC_DEFINE also expands to a gated runtime
+        // `printf '#define ...' >> confdefs.h`, so the runtime confdefs.h -> config.h projection
+        // (generic sed + the untemplated-define fold) authoritatively reflects ALL shell control flow
+        // (top-level, AC_ARG_ENABLE actions, plain `if`/AS_IF/case blocks). Record each in
+        // `conditional_defines` so the STATIC per-symbol sed rules + fallback append (configure_body /
+        // shell_gen / config.status) SKIP it — those ignore conditionals and would force a define that
+        // did not run (advancecomp USE_BZIP2 in AC_ARG_ENABLE; netperf `socklen_t int` inside
+        // `if test "$ac_cv_type_socklen_t" != yes`). They remain in `defines` for autoheader templating,
+        // and unconditional user defines are still projected — just via the runtime confdefs path, not
+        // the static bake. (Programmatic defines like AC_USE_SYSTEM_EXTENSIONS' _GNU_SOURCE are NOT
+        // textually scanned, so they keep static baking.)
         for args in extract_all_macro_args(input, "AC_DEFINE") {
             let trimmed: Vec<&str> = args.iter().map(|s| s.trim()).collect();
             if !trimmed.is_empty() {
@@ -2146,15 +2156,13 @@ impl M4Engine {
                     .get(1)
                     .map(|s| s.to_string())
                     .unwrap_or_else(|| "1".to_string());
+                self.state.conditional_defines.insert(var.clone());
                 self.state.defines.push((var, value));
             }
         }
 
-        // Mark AC_DEFINEs that sit inside AC_ARG_ENABLE/AC_ARG_WITH action arguments as CONDITIONAL.
-        // Those actions run only when `--enable-FEATURE`/`--with-PKG` is given, so their defines must
-        // not be baked unconditionally into config.h — the gated runtime emission + confdefs-driven
-        // sed already handle them. (advancecomp: `AC_ARG_ENABLE(bzip2,..., AC_DEFINE(USE_BZIP2,1)
-        // AC_CHECK_LIB(...))` wrongly defined USE_BZIP2 for a plain ./configure -> unresolved BZ2_*.)
+        // (retained for clarity though now subsumed by the blanket marking above) AC_DEFINEs inside
+        // AC_ARG_ENABLE/AC_ARG_WITH action arguments are conditional.
         for macro_name in ["AC_ARG_ENABLE", "AC_ARG_WITH"] {
             for args in extract_all_macro_args(input, macro_name) {
                 for action in args.iter().skip(2).take(2) {
@@ -3673,6 +3681,31 @@ mod tests {
         let output = engine.process(input).unwrap();
         // Output is the generated configure script, not M4 expansion
         assert!(output.contains("#! /bin/sh"));
+    }
+
+    #[test]
+    fn test_ac_define_in_plain_shell_if_not_static_baked() {
+        // AC_DEFINE inside a plain shell `if ... fi` (not just AC_ARG_ENABLE) must not be baked
+        // unconditionally into config.h. netperf: `if test "$ac_cv_type_socklen_t" != yes; then
+        // AC_DEFINE(socklen_t,int); fi` wrongly emitted `#define socklen_t int` -> `two or more data
+        // types`. The gated runtime printf + confdefs sed handle it; the static -e sed must be skipped.
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_CONFIG_HEADERS([config.h])\n\
+            if test \"$x\" != yes; then\n  AC_DEFINE([socklen_t],[int])\nfi\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            engine.state.conditional_defines.contains("socklen_t"),
+            "socklen_t must be marked runtime-covered"
+        );
+        assert!(
+            !output.contains("#undef socklen_t$|#define socklen_t int"),
+            "socklen_t must NOT be static-baked via sed"
+        );
+        // The gated runtime emission must still be present.
+        assert!(
+            output.contains("#define socklen_t int"),
+            "the gated runtime printf for socklen_t must remain"
+        );
     }
 
     #[test]
