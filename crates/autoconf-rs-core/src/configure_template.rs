@@ -35,6 +35,9 @@ pub fn generate_config_status_subst_section(
     if !state.defines.is_empty() {
         s.push_str("cat >>$CONFIG_STATUS <<\\_ACEOF || ac_write_fail=1\n");
         for (var, value) in &state.defines {
+            if state.conditional_defines.contains(var) {
+                continue;
+            }
             s.push_str(&format!("s|#undef {}|#define {} {}|g\n", var, var, value));
         }
         s.push_str("_ACEOF\n");

@@ -88,6 +88,13 @@ pub struct AutoconfState {
     pub has_ifelse_checks: bool,
     /// m4_set tracking: set name → element names (for set_size/list/empty without M4 recursion)
     pub m4_sets: std::collections::HashMap<String, std::collections::HashSet<String>>,
+    /// Names of AC_DEFINEs that occur inside a conditional macro context (e.g. AC_ARG_ENABLE /
+    /// AC_ARG_WITH action-if-given/not-given). These MUST NOT be baked unconditionally into the
+    /// generated config.h — their gated runtime `printf >> confdefs.h` + the generic confdefs-driven
+    /// sed already project them correctly only when the branch actually runs. Baking them statically
+    /// defined `USE_BZIP2` for a plain `./configure` (advancecomp), pulling in code that then failed
+    /// to link (`undefined reference to BZ2_*`). They remain in `defines` for autoheader templating.
+    pub conditional_defines: std::collections::HashSet<String>,
 }
 
 impl AutoconfState {

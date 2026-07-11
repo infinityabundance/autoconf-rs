@@ -365,6 +365,11 @@ pub fn generate_dynamic_configure(
         s.push_str("sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null\n");
         s.push_str("sed -f conf_defs$$.sed");
         for (var, value) in &state.defines {
+            // Conditional defines (AC_ARG_ENABLE/AC_ARG_WITH actions) are projected only by the
+            // confdefs-driven sed above, when their gated runtime branch actually ran.
+            if state.conditional_defines.contains(var) {
+                continue;
+            }
             s.push_str(&format!(
                 " -e 's|#undef {}|#define {} {}|g'",
                 var, var, value

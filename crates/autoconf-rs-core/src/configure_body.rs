@@ -800,6 +800,11 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         b.extend_from_slice(b"sed -n 's|^#define \\([A-Za-z_][A-Za-z0-9_]*\\) \\(.*\\)$|s\x01#undef \\1$\x01#define \\1 \\2\x01|p' confdefs.h > conf_defs$$.sed 2>/dev/null; ");
         b.extend_from_slice(b"sed -f conf_defs$$.sed");
         for (var, value) in &state.defines {
+            // Conditional defines (inside AC_ARG_ENABLE/AC_ARG_WITH actions) are projected ONLY by the
+            // confdefs-driven generic sed above when their gated runtime branch actually ran.
+            if state.conditional_defines.contains(var) {
+                continue;
+            }
             b.extend_from_slice(
                 format!(" -e 's|#undef {var}$|#define {var} {}|g'", esc(value)).as_bytes(),
             );
@@ -829,6 +834,9 @@ pub fn generate_configure_body(state: &AutoconfState) -> Vec<u8> {
         // not in confdefs.h either (e.g. AC_USE_SYSTEM_EXTENSIONS' _GNU_SOURCE captured at gen-time). The
         // static -e seds above only fire when the template carries the matching `#undef`.
         for (var, value) in &state.defines {
+            if state.conditional_defines.contains(var) {
+                continue;
+            }
             b.extend_from_slice(
                 format!("grep -q '^#define {var} ' '{h}' || printf '%s\\n' '#define {var} {value}' >> '{h}'; ").as_bytes(),
             );

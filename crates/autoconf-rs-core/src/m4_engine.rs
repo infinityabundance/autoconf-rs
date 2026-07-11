@@ -2141,6 +2141,26 @@ impl M4Engine {
             }
         }
 
+        // Mark AC_DEFINEs that sit inside AC_ARG_ENABLE/AC_ARG_WITH action arguments as CONDITIONAL.
+        // Those actions run only when `--enable-FEATURE`/`--with-PKG` is given, so their defines must
+        // not be baked unconditionally into config.h — the gated runtime emission + confdefs-driven
+        // sed already handle them. (advancecomp: `AC_ARG_ENABLE(bzip2,..., AC_DEFINE(USE_BZIP2,1)
+        // AC_CHECK_LIB(...))` wrongly defined USE_BZIP2 for a plain ./configure -> unresolved BZ2_*.)
+        for macro_name in ["AC_ARG_ENABLE", "AC_ARG_WITH"] {
+            for args in extract_all_macro_args(input, macro_name) {
+                for action in args.iter().skip(2).take(2) {
+                    for def_args in extract_all_macro_args(action, "AC_DEFINE") {
+                        if let Some(var) = def_args.first() {
+                            let var = var.trim();
+                            if !var.is_empty() {
+                                self.state.conditional_defines.insert(var.to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // Extract AC_PREFIX_DEFAULT
         for args in extract_all_macro_args(input, "AC_PREFIX_DEFAULT") {
             for arg in &args {
@@ -3644,6 +3664,37 @@ mod tests {
         let output = engine.process(input).unwrap();
         // Output is the generated configure script, not M4 expansion
         assert!(output.contains("#! /bin/sh"));
+    }
+
+    #[test]
+    fn test_arg_enable_ac_define_is_conditional_not_baked() {
+        // AC_DEFINE inside AC_ARG_ENABLE's action-if-given must NOT be baked unconditionally into the
+        // generated config.h — it only runs with --enable-FEATURE. The gated runtime `printf >>
+        // confdefs.h` projects it correctly. (advancecomp: a plain ./configure wrongly got
+        // `#define USE_BZIP2 1` -> pulled in code needing -lbz2 that was never linked.)
+        let mut engine = M4Engine::new();
+        let input = "AC_INIT([p],[1])\nAC_CONFIG_HEADERS([config.h])\n\
+            AC_ARG_ENABLE([bzip2], [help],\n  AC_DEFINE([USE_BZIP2],1)\n  , )\nAC_OUTPUT\n";
+        let output = engine.process(input).unwrap();
+        assert!(
+            engine.state.conditional_defines.contains("USE_BZIP2"),
+            "USE_BZIP2 must be marked conditional"
+        );
+        // The static baking rule (`-e 's|#undef USE_BZIP2$|#define USE_BZIP2 1|g'`) and the fallback
+        // append must NOT be emitted for the conditional define.
+        assert!(
+            !output.contains("#undef USE_BZIP2$|#define USE_BZIP2"),
+            "conditional USE_BZIP2 must not be static-baked via sed"
+        );
+        assert!(
+            !output.contains("printf '%s\\n' '#define USE_BZIP2 1' >> 'config.h'"),
+            "conditional USE_BZIP2 must not be static-appended to config.h"
+        );
+        // But the gated runtime emission inside the AC_ARG_ENABLE branch MUST still be present.
+        assert!(
+            output.contains("#define USE_BZIP2"),
+            "the gated runtime printf for USE_BZIP2 must remain"
+        );
     }
 
     #[test]
