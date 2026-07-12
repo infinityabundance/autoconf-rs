@@ -317,7 +317,13 @@ impl M4SugarBuiltins {
     /// trims leading and trailing whitespace.
     pub fn m4_normalize(text: &[u8]) -> Vec<u8> {
         let s = String::from_utf8_lossy(text);
-        let normalized: String = s.split_whitespace().collect::<Vec<&str>>().join(" ");
+        // A `\`-newline is a line continuation (ubiquitous in multi-line AC_CHECK_FUNCS/HEADERS
+        // lists). Drop the backslash entirely — split_whitespace() would otherwise keep the lone
+        // `\` as its own token, so `dup2 getcwd \<nl> socket` normalizes to `dup2 getcwd \ socket`
+        // and the stray `\` becomes an empty iteration -> `ac_cv_func_: command not found` + a
+        // polluted cache var on every continued check list.
+        let joined = s.replace("\\\r\n", " ").replace("\\\n", " ");
+        let normalized: String = joined.split_whitespace().collect::<Vec<&str>>().join(" ");
         normalized.into_bytes()
     }
 
@@ -553,6 +559,18 @@ mod tests {
         let text = b"  hello   world  \n  foo  bar  ";
         let result = M4SugarBuiltins::m4_normalize(text);
         assert_eq!(String::from_utf8_lossy(&result), "hello world foo bar");
+    }
+
+    #[test]
+    fn test_m4_normalize_backslash_continuation() {
+        // `\`-newline continuations (AC_CHECK_FUNCS lists) must collapse to a single space with
+        // NO stray backslash token — else the shell `for` loop gets an empty iteration.
+        let text = b"dup2 ftruncate getcwd \\\n\tgethostbyname \\\n    socket";
+        let result = M4SugarBuiltins::m4_normalize(text);
+        assert_eq!(
+            String::from_utf8_lossy(&result),
+            "dup2 ftruncate getcwd gethostbyname socket"
+        );
     }
 
     #[test]

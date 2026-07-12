@@ -1101,9 +1101,13 @@ impl M4Engine {
         self.engine.macro_table.define(b"m4_expand", b"$1");
         self.engine.macro_table.define(b"m4_do", b"$1");
         // Text formatting
+        // A `\`-newline continuation (ubiquitous in multi-line AC_CHECK_FUNCS/HEADERS lists) must
+        // have the BACKSLASH removed, not just the newline: turning `getcwd \<nl> socket` into
+        // `getcwd \ socket` leaves a stray `\` token -> an empty `for` iteration ->
+        // `ac_cv_func_: command not found` + a polluted cache var. Strip `\`+newline first.
         self.engine.macro_table.define(
             b"m4_normalize",
-            b"patsubst(patsubst([$1], [\r?\n], [ ]), [^[\t ]+], [])",
+            b"patsubst(patsubst(patsubst([$1], [\\\\[\t \r\n]], [ ]), [\r?\n], [ ]), [^[\t ]+], [])",
         );
         self.engine.macro_table.define(b"m4_text_wrap", b"$1");
         // Conditionals: m4_if / m4_ifval / m4_ifblank
