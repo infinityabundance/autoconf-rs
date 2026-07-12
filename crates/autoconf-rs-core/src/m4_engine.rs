@@ -477,7 +477,7 @@ impl M4Engine {
         // ac_cv_func_ fix. `eval` for the same reason (plural passes `$ac_hdr`, a runtime var).
         self.engine.macro_table.define(
             b"AC_CHECK_HEADER",
-            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nac_hv=`printf 'ac_cv_header_%s' \"$1\" | tr './+- ' '_____'`\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  eval \"$ac_hv=yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\n  eval \"$ac_hv=no\"\nfi",
+            b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <$1>\n_ACEOF\nac_hv=`printf 'ac_cv_header_%s' \"$1\" | tr './+ -' '_____'`\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\n  eval \"$ac_hv=yes\"\n  ac_def=`printf 'HAVE_%s' \"$1\" | tr 'a-z./-' 'A-Z___'`\n  printf '%s\\n' \"#define $ac_def 1\" >> confdefs.h\nelse\n  printf '%s\\n' \"no\"\n  eval \"$ac_hv=no\"\nfi",
         );
 
         // AC_CHECK_LIB(LIBRARY, FUNCTION, [IF-FOUND], [IF-NOT], [OTHER-LIBS]): link-test FUNCTION
@@ -592,10 +592,15 @@ impl M4Engine {
             b"printf %s \"checking for $1... \"\ncat confdefs.h 2>/dev/null - <<_ACEOF >conftest.$ac_ext\n#include <sys/types.h>\n#include <stdint.h>\nint main() { $1 x; return 0; }\n_ACEOF\nif ac_fn_c_try_compile; then\n  printf '%s\\n' \"yes\"\nelse\n  printf '%s\\n' \"no\"\nfi",
         );
 
-        // AC_CHECK_TYPES — plural
+        // AC_CHECK_TYPES — plural. $1 is a COMMA-separated list of possibly-multiword types
+        // (`struct sockaddr, struct sockaddr_in6, socklen_t`), often spanning several lines. A shell
+        // `for ac_type in $1` word-splits that on whitespace (breaking `struct sockaddr` in two) and
+        // chokes on the literal commas -> `syntax error near unexpected token 'struct'`. Split on
+        // top-level commas at m4-time with m4_foreach (same pattern as AC_CHECK_DECLS below), so each
+        // type expands to its own standalone AC_CHECK_TYPE block (heredoc at column 0, no runtime loop).
         self.engine.macro_table.define(
             b"AC_CHECK_TYPES",
-            b"for ac_type in $1; do AC_CHECK_TYPE($ac_type); done",
+            b"m4_foreach([_acrs_type], [$1], [AC_CHECK_TYPE(_acrs_type)\n])",
         );
 
         // AC_CHECK_MEMBER — check for struct member
