@@ -265,7 +265,7 @@ impl M4Engine {
             // in STD_VAR_DEFAULTS). Undefined they leaked literal -> `fi AM_SET_LEADING_DOT` ->
             // `AM_SET_LEADING_DOT: command not found` / syntax error (cooljeanius/mdnsd).
             "AM_SET_LEADING_DOT", "_AM_SET_LEADING_DOT",
-            "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_RUN_LOG", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
+            "AM_OUTPUT_DEPENDENCY_COMMANDS", "AM_MISSING_PROG", "AM_GNU_GETTEXT",
             "AM_GNU_GETTEXT_VERSION", "AM_ICONV", "LT_INIT", "AC_PROG_LIBTOOL", "LT_LANG",
             "LT_PREREQ",
             // Common pure-setup Autoconf macros that otherwise leak literal (their vars/defines are
@@ -410,17 +410,29 @@ impl M4Engine {
         self.engine
             .macro_table
             .define(b"AC_MSG_RESULT", b"printf '%s\\n' \"$1\"");
+        // Escape BACKTICK and `"` in the message (real autoconf AS_ESCAPEs it): the message is emitted
+        // inside a shell `"..."`, so a literal backtick opens an unterminated command-substitution
+        // (automake's `AC_MSG_WARN([`missing' script is too old or missing])` -> `WARNING: `missing'...`
+        // swallowed the rest of configure until the next backtick -> `syntax error near unexpected token |`
+        // hundreds of lines later) and a literal `"` closes the string early.
         self.engine.macro_table.define(
             b"AC_MSG_WARN",
-            b"printf '%s\\n' \"configure: WARNING: $1\" >&2",
+            b"printf '%s\\n' \"configure: WARNING: patsubst(patsubst([$1], [`], [\\`]), [\"], [\\\"])\" >&2",
         );
-        // patsubst-escape `"` in the message so a message containing literal double quotes (e.g. tmux's
-        // `AC_MSG_ERROR("unsuitable TERM (must be screen* or tmux*)")`) doesn't break the enclosing
-        // shell `"..."` -> `syntax error near (`. (Real autoconf AS_ESCAPEs the message.)
+        // Same escaping for AC_MSG_ERROR: `"` (tmux's `AC_MSG_ERROR("unsuitable TERM...")`) closes the
+        // string, and a literal backtick opens a command-substitution. Both are escaped before emit.
         self.engine.macro_table.define(
             b"AC_MSG_ERROR",
-            b"printf '%s\\n' \"configure: error: patsubst([$1], [\"], [\\\"])\" >&2\nexit 1",
+            b"printf '%s\\n' \"configure: error: patsubst(patsubst([$1], [`], [\\`]), [\"], [\\\"])\" >&2\nexit 1",
         );
+        // AM_RUN_LOG([CMD]) RUNS its command argument and returns CMD's exit status (automake uses it as
+        // `AM_RUN_LOG([$_am_tar --version]) && break` in _AM_PROG_TAR). Neutralized to empty it left a
+        // dangling `&& break` -> `syntax error near unexpected token &&`. Real automake also logs CMD to
+        // config.log (fd 5); we run it and discard output, which is behaviourally equivalent for the
+        // control flow that depends on the exit status.
+        self.engine
+            .macro_table
+            .define(b"AM_RUN_LOG", b"{ ($1) >/dev/null 2>&1; }");
 
         // AC_PROG_CC — C compiler detection
         self.engine.macro_table.define(
@@ -1024,7 +1036,7 @@ impl M4Engine {
         // preventing double expansion when the same macro is also called directly (postgres python).
         self.engine
             .macro_table
-            .define(b"AC_REQUIRE", b"m4_ifdef([_m4_provided_$1], [], [$1])");
+            .define(b"AC_REQUIRE", b"m4_ifdef([_m4_provided_$1], [], [$1\n])");
         self.engine
             .macro_table
             .define(b"AC_PROVIDE", b"m4_define([_m4_provided_$1], [1])");
