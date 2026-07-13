@@ -417,13 +417,13 @@ impl M4Engine {
         // hundreds of lines later) and a literal `"` closes the string early.
         self.engine.macro_table.define(
             b"AC_MSG_WARN",
-            b"printf '%s\\n' \"configure: WARNING: patsubst(patsubst([$1], [`], [\\`]), [\"], [\\\"])\" >&2",
+            b"printf '%s\\n' \"configure: WARNING: patsubst(m4_dquote(patsubst([$1], [`], [\\`])), [\"], [\\\"])\" >&2",
         );
         // Same escaping for AC_MSG_ERROR: `"` (tmux's `AC_MSG_ERROR("unsuitable TERM...")`) closes the
         // string, and a literal backtick opens a command-substitution. Both are escaped before emit.
         self.engine.macro_table.define(
             b"AC_MSG_ERROR",
-            b"printf '%s\\n' \"configure: error: patsubst(patsubst([$1], [`], [\\`]), [\"], [\\\"])\" >&2\nexit 1",
+            b"printf '%s\\n' \"configure: error: patsubst(m4_dquote(patsubst([$1], [`], [\\`])), [\"], [\\\"])\" >&2\nexit 1",
         );
         // AM_RUN_LOG([CMD]) RUNS its command argument and returns CMD's exit status (automake uses it as
         // `AM_RUN_LOG([$_am_tar --version]) && break` in _AM_PROG_TAR). Neutralized to empty it left a
@@ -1128,7 +1128,7 @@ impl M4Engine {
         );
         // Quoting helpers
         self.engine.macro_table.define(b"m4_quote", b"`[$1]'");
-        self.engine.macro_table.define(b"m4_dquote", b"[[$1]]");
+        self.engine.macro_table.define(b"m4_dquote", b"[[$@]]");
         self.engine.macro_table.define(b"m4_expand", b"$1");
         self.engine.macro_table.define(b"m4_do", b"$1");
         // Text formatting
@@ -1252,9 +1252,15 @@ impl M4Engine {
             b"_m4_foreach",
             b"pushdef([$1], [$3])$2[]ifelse([$#], [3], [popdef([$1])], [_m4_foreach([$1], [$2], m4_shift3($@))])",
         );
+        // The list MUST be quoted: m4_foreach breaks when its 2nd arg is an UNQUOTED macro call
+        // (our arg-collection expands it and the expansion's commas wrongly become arg boundaries, so
+        // `m4_foreach([o], m4_split([a b],[ ]), [(o)])` collapses to just `b`). Quoting `[m4_split(...)]`
+        // defers the split to inside the body where it iterates correctly. Without this, automake's
+        // `_AM_SET_OPTIONS([foreign -Wall])` (m4_foreach_w over the options) mis-fired and `-Wall`
+        // leaked as literal shell -> `-Wall: command not found` on every AM_INIT_AUTOMAKE([... -Wall]).
         self.engine.macro_table.define(
             b"m4_foreach_w",
-            b"m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])",
+            b"m4_foreach([$1], [m4_split(m4_normalize([$2]), [ ])], [$3])",
         );
         self.engine
             .macro_table
@@ -1544,7 +1550,7 @@ impl M4Engine {
             .define(b"AC_MSG_NOTICE", b"printf '%s\\n' \"configure: $1\"");
         self.engine.macro_table.define(
             b"AC_MSG_FAILURE",
-            b"printf '%s\\n' \"configure: error: $1\" >&2\nexit 1",
+            b"printf '%s\\n' \"configure: error: patsubst(m4_dquote(patsubst([$1], [`], [\\`])), [\"], [\\\"])\" >&2\nexit 1",
         );
 
         // --- AC_DIAGNOSE / AC_WARNING / AC_FATAL ---
