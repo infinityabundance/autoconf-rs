@@ -354,19 +354,16 @@ impl M4Engine {
         // `s|@VALGRIND_CHECK_RULES@|` with no closing delimiter -> `sed: unterminated 's' command` ->
         // sed aborted -> EVERY config file emitted EMPTY -> `make: No targets` (libsodium, and any AX_
         // macro that substitutes a make-rule fragment).
-        // LEADING newline is defensive against the statement-glue class: AC_SUBST is emitted inline as
-        // shell, and it is the universal *victim* of glue — an upstream macro whose trailing newline was
-        // eaten (e.g. AM_INIT_AUTOMAKE's AC_REQUIRE chain: `MKDIR_P='mkdir -p'` glued onto this `eval`)
-        // produces `...'eval "_acrs_sv=..."` -> `syntax error near unexpected token`. Starting the
-        // emission on its own line makes AC_SUBST unglueable regardless of the preceding macro. Blank
-        // lines are inert shell; real autoconf emits nothing here at all, so this is strictly safe.
-        // Bracket the inline emission with newlines on BOTH sides so AC_SUBST can neither be glued
-        // onto (leading \n) nor have the NEXT macro-body token glued after it (trailing \n). The
-        // trailing case is real: AM_PROG_INSTALL_STRIP emits `AC_SUBST([install_sh])` immediately
-        // followed by a `# Installed binaries...strip'...` comment whose apostrophe/backtick, once
-        // glued via `;`, expose the sed `|` downstream -> `syntax error near unexpected token |`.
-        // Keep the terminating `;` (some call sites depend on it) and add the newline after it.
-        self.engine.macro_table.define(b"AC_SUBST", b"\neval \"_acrs_sv=\\${$1}\"; _acrs_sv=$(printf '%s' \"${_acrs_sv}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//'); printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;\n");
+        // Do NOT bracket this emission with raw newlines to defend against statement-glue: AC_SUBST is
+        // frequently reached INSIDE a `#` shell-comment where a macro name leaks (e.g. the
+        // AC_CANONICAL_HOST template's `# AC_SUBST the canonical variables`), and a leading/trailing
+        // newline EJECTS the emitted `eval ...` out of the comment onto its own line, where it runs and
+        // fails (`${}: bad substitution`, empty conf_subst.sed -> no Makefile). That regressed 37 repos
+        // that built fine before. Keep the emission inline (as in <=0.1.68); glue is fixed at the SOURCE
+        // instead (newline-terminated AC_PROG_INSTALL / AC_PROG_MKDIR_P stubs). The `ifelse` empty-guard
+        // makes a leaked/argless AC_SUBST a hard no-op so `${}` can never appear even if a bare AC_SUBST
+        // token leaks from a comment.
+        self.engine.macro_table.define(b"AC_SUBST", b"ifelse([$1],[],[],[eval \"_acrs_sv=\\${$1}\"; _acrs_sv=$(printf '%s' \"${_acrs_sv}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//'); printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;])");
 
         // AM_CONDITIONAL(NAME, CONDITION): run CONDITION; set NAME_TRUE='' / NAME_FALSE='#' when true
         // (and swapped when false), then SUBST both. automake gates conditional Makefile lines with a
@@ -945,7 +942,14 @@ impl M4Engine {
         // --- Additional AC_PROG_* macros ---
         self.engine
             .macro_table
-            .define(b"AC_PROG_MKDIR_P", b"MKDIR_P='mkdir -p'\n");
+            // Terminate with `;` (a real statement separator) NOT just `\n`: AC_PROG_MKDIR_P is
+            // reached via AM_INIT_AUTOMAKE's nested AC_REQUIRE chain, whose expansion path strips
+            // trailing whitespace/newlines of the required-macro body -> the `\n` vanished and
+            // `MKDIR_P='mkdir -p'` glued onto the following AC_SUBST([mkdir_p]) `eval` (`...'eval`).
+            // A `;` is not whitespace so it survives the trim; `MKDIR_P='mkdir -p';eval...` parses.
+            // Unlike a leading/trailing newline on AC_SUBST it can never eject anything out of a
+            // `#` comment (the whole thing stays on one line).
+            .define(b"AC_PROG_MKDIR_P", b"MKDIR_P='mkdir -p';\n");
         self.engine.macro_table.define(b"AC_CHECK_PROG", b"# Check for program $2 in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_PROGS", b"# Check for programs in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_TOOL", b"# Check for tool $2 (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in \"${ac_tool_prefix}$2\" \"$2\"; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
