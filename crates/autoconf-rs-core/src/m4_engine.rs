@@ -354,7 +354,19 @@ impl M4Engine {
         // `s|@VALGRIND_CHECK_RULES@|` with no closing delimiter -> `sed: unterminated 's' command` ->
         // sed aborted -> EVERY config file emitted EMPTY -> `make: No targets` (libsodium, and any AX_
         // macro that substitutes a make-rule fragment).
-        self.engine.macro_table.define(b"AC_SUBST", b"eval \"_acrs_sv=\\${$1}\"; _acrs_sv=$(printf '%s' \"${_acrs_sv}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//'); printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;");
+        // LEADING newline is defensive against the statement-glue class: AC_SUBST is emitted inline as
+        // shell, and it is the universal *victim* of glue — an upstream macro whose trailing newline was
+        // eaten (e.g. AM_INIT_AUTOMAKE's AC_REQUIRE chain: `MKDIR_P='mkdir -p'` glued onto this `eval`)
+        // produces `...'eval "_acrs_sv=..."` -> `syntax error near unexpected token`. Starting the
+        // emission on its own line makes AC_SUBST unglueable regardless of the preceding macro. Blank
+        // lines are inert shell; real autoconf emits nothing here at all, so this is strictly safe.
+        // Bracket the inline emission with newlines on BOTH sides so AC_SUBST can neither be glued
+        // onto (leading \n) nor have the NEXT macro-body token glued after it (trailing \n). The
+        // trailing case is real: AM_PROG_INSTALL_STRIP emits `AC_SUBST([install_sh])` immediately
+        // followed by a `# Installed binaries...strip'...` comment whose apostrophe/backtick, once
+        // glued via `;`, expose the sed `|` downstream -> `syntax error near unexpected token |`.
+        // Keep the terminating `;` (some call sites depend on it) and add the newline after it.
+        self.engine.macro_table.define(b"AC_SUBST", b"\neval \"_acrs_sv=\\${$1}\"; _acrs_sv=$(printf '%s' \"${_acrs_sv}\" | sed -e 's/[\\\\&|]/\\\\&/g' -e 's/$/\\\\/' -e '$s/\\\\$//'); printf '%s\\n' \"s|@$1@|${_acrs_sv}|g\" >> conf_subst.sed 2>/dev/null;\n");
 
         // AM_CONDITIONAL(NAME, CONDITION): run CONDITION; set NAME_TRUE='' / NAME_FALSE='#' when true
         // (and swapped when false), then SUBST both. automake gates conditional Makefile lines with a
@@ -437,10 +449,13 @@ impl M4Engine {
             b"# Check for C preprocessor (warnings as errors)\nCPP=${CPP-cc -E}",
         );
 
-        // AC_PROG_INSTALL
+        // AC_PROG_INSTALL — the trailing newline is load-bearing: AM_INIT_AUTOMAKE's srcdir check
+        // (`if test ... ; then`) expands immediately after with no separator, so without it the
+        // `INSTALL=...` assignment glues onto `if test` -> `syntax error near unexpected token 'then'`
+        // (the single most common configure-run failure in the corpus, ~121 repos).
         self.engine.macro_table.define(
             b"AC_PROG_INSTALL",
-            b"# Find a good install program\nINSTALL=${INSTALL-/usr/bin/install -c}",
+            b"# Find a good install program\nINSTALL=${INSTALL-/usr/bin/install -c}\n",
         );
 
         // AC_PROG_MAKE_SET
@@ -930,7 +945,7 @@ impl M4Engine {
         // --- Additional AC_PROG_* macros ---
         self.engine
             .macro_table
-            .define(b"AC_PROG_MKDIR_P", b"MKDIR_P='mkdir -p'");
+            .define(b"AC_PROG_MKDIR_P", b"MKDIR_P='mkdir -p'\n");
         self.engine.macro_table.define(b"AC_CHECK_PROG", b"# Check for program $2 in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_PROGS", b"# Check for programs in PATH\nfor ac_prog in $2; do if command -v \"$ac_prog\" >/dev/null 2>&1; then $1=$ac_prog; break; fi; done");
         self.engine.macro_table.define(b"AC_CHECK_TOOL", b"# Check for tool $2 (cross builds try the ${ac_tool_prefix} variant first)\ntest \"x${ac_tool_prefix+set}\" = xset || { if test \"x$host_alias\" != x && test \"x$host_alias\" != \"x$build_alias\"; then ac_tool_prefix=\"$host_alias-\"; else ac_tool_prefix=; fi; }\nfor ac_tool in \"${ac_tool_prefix}$2\" \"$2\"; do if command -v \"$ac_tool\" >/dev/null 2>&1; then $1=$ac_tool; break; fi; done");
