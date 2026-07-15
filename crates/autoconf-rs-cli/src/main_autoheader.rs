@@ -6,13 +6,13 @@
 //! Receipt family: AC.CLI.AUTOHEADER.*
 //! Status: Phase 4 — trace-driven, autom4te --trace integrated.
 
-use autoconf_rs_cli::read_input;
+use crate::read_input;
 use autoconf_rs_core::trace::AutoconfEvent;
 use autoconf_rs_core::M4Engine;
 use std::env;
 use std::process::ExitCode;
 
-fn main() -> ExitCode {
+pub fn run_autoheader() -> ExitCode {
     let args: Vec<String> = env::args().collect();
     let input_path = args.get(1).map(|s| s.as_str()).unwrap_or("configure.ac");
 

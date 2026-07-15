@@ -1,6 +1,6 @@
 [package]
 name = "autoconf-rs-cli"
-version = "0.1.79"
+version = "0.1.80"
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
@@ -9,11 +9,11 @@ description = "CLI harness for autoconf-rs tools: autoconf, autoheader, autom4te
 
 [[bin]]
 name = "autoconf"
-path = "src/main_autoconf.rs"
+path = "src/bin_autoconf.rs"
 
 [[bin]]
 name = "autoheader"
-path = "src/main_autoheader.rs"
+path = "src/bin_autoheader.rs"
 
 [[bin]]
 name = "autom4te"

@@ -8,14 +8,14 @@
 //! Court: AC.AUTOM4TE.CACHE.1 — caching integrated
 //! Current status: Phase 5 — caching + template dispatch + trace events.
 
-use autoconf_rs_cli::read_input;
+use crate::read_input;
 use autoconf_rs_core::autom4te::Autom4teCache;
 use autoconf_rs_core::{ConfigureAc, M4Engine};
 use std::env;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-fn main() -> ExitCode {
+pub fn run_autoconf() -> ExitCode {
     // Deeply-nested M4 quotes/macros expand via recursion; run on a large stack so a pathological but
     // finite input fails gracefully (or completes) instead of overflowing the 8 MB default and aborting.
     std::thread::Builder::new()

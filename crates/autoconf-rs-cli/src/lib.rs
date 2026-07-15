@@ -38,3 +38,14 @@ pub struct CommonOpts {
     pub verbose: bool,
     pub output_file: Option<PathBuf>,
 }
+
+// The autoconf / autoheader entrypoints live in their (formerly-bin) source files; expose them as
+// library functions so the `autotools-rs` umbrella (and anyone else) can wrap them. The thin bin
+// targets in src/bin_*.rs just call these.
+#[path = "main_autoconf.rs"]
+mod autoconf_main;
+pub use autoconf_main::run_autoconf;
+
+#[path = "main_autoheader.rs"]
+mod autoheader_main;
+pub use autoheader_main::run_autoheader;
